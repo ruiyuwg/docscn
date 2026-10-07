@@ -11,7 +11,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   const MDX = page.data.body;
 
   return (
-    <article>
+    <article className="mx-auto w-full max-w-3xl px-4 py-8 md:px-8 md:py-12">
       <h1 className="text-3xl font-semibold tracking-tight">
         {page.data.title}
       </h1>

@@ -484,6 +484,127 @@
           "target": "@components/docs/mdx.tsx"
         }
       ]
+    },
+    {
+      "name": "tree-context",
+      "type": "registry:component",
+      "title": "Page tree context",
+      "description": "TreeContextProvider and hooks for the current page tree, the path to the current page, layout tab groups and the linear page list used for previous/next links.",
+      "dependencies": ["fumadocs-core@^16.16.2"],
+      "registryDependencies": ["@docscn/layout-shared"],
+      "files": [
+        {
+          "path": "registry/base/docs/contexts/tree.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/contexts/tree.tsx"
+        },
+        {
+          "path": "registry/base/docs/utils/use-footer-items.ts",
+          "type": "registry:lib",
+          "target": "@components/docs/utils/use-footer-items.ts"
+        }
+      ]
+    },
+    {
+      "name": "docs-sidebar",
+      "type": "registry:component",
+      "title": "Docs sidebar",
+      "description": "SidebarPageTree renders a Fumadocs page tree (pages, folders, separators, icons, external links) with the shadcn/ui sidebar menu, and SidebarLinkItem renders layout links.",
+      "dependencies": [
+        "cn",
+        "fumadocs-core@^16.16.2",
+        "lucide-react",
+        "scroll-into-view-if-needed"
+      ],
+      "registryDependencies": [
+        "sidebar",
+        "collapsible",
+        "@docscn/tree-context",
+        "@docscn/layout-shared",
+        "@docscn/docs-utils"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/components/sidebar/page-tree.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/sidebar/page-tree.tsx"
+        },
+        {
+          "path": "registry/base/docs/components/sidebar/link-item.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/sidebar/link-item.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sidebar-tabs",
+      "type": "registry:component",
+      "title": "Sidebar tabs",
+      "description": "getSidebarTabs and SidebarTabsDropdown: switch between root folders of the page tree from a dropdown in the sidebar.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "registryDependencies": [
+        "dropdown-menu",
+        "sidebar",
+        "@docscn/tree-context",
+        "@docscn/layout-shared"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/components/sidebar/tabs/index.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/sidebar/tabs/index.tsx"
+        },
+        {
+          "path": "registry/base/docs/components/sidebar/tabs/dropdown.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/sidebar/tabs/dropdown.tsx"
+        }
+      ]
+    },
+    {
+      "name": "docs-layout",
+      "type": "registry:component",
+      "title": "Docs layout",
+      "description": "DocsLayout: the docs layout on the shadcn/ui sidebar, with the page tree, search, layout tabs, links, a theme switch and a mobile navbar.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2"],
+      "registryDependencies": [
+        "sidebar",
+        "button",
+        "@docscn/docs-sidebar",
+        "@docscn/sidebar-tabs",
+        "@docscn/theme-switch",
+        "@docscn/search-trigger",
+        "@docscn/tree-context",
+        "@docscn/layout-shared",
+        "@docscn/docs-utils"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/layouts/docs/index.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/index.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/docs/client.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/client.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/docs/slots/header.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/slots/header.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/docs/slots/sidebar.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/slots/sidebar.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/docs/slots/container.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/slots/container.tsx"
+        }
+      ]
     }
   ]
 }
