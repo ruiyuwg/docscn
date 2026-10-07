@@ -76,7 +76,13 @@ try {
     console.log("\nThe registry has no items. Checking the base app only.");
   }
 
-  await run("pnpm", ["run", "lint"], app);
+  // Lint docscn's files only: shadcn/ui's own hooks/use-mobile.ts fails
+  // eslint-config-next's react-hooks rules in a fresh app.
+  await run(
+    "pnpm",
+    ["exec", "eslint", "--max-warnings", "0", "components/docs"],
+    app,
+  );
   await run("pnpm", ["run", "build"], app);
   console.log(`\nInstalled and built ${items.length} registry item(s).`);
 } finally {
