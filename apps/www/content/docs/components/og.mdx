@@ -1,0 +1,35 @@
+---
+title: OG images
+description: Generate Open Graph images for docs pages.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/og
+```
+
+## Usage
+
+```tsx title="app/og/docs/[...slug]/route.tsx"
+import { notFound } from "next/navigation";
+import { generateOGImage } from "@/components/docs/og";
+import { source } from "@/lib/source";
+
+export async function GET(
+  _req: Request,
+  { params }: RouteContext<"/og/docs/[...slug]">,
+) {
+  const { slug } = await params;
+  const page = source.getPage(slug.slice(0, -1));
+  if (!page) notFound();
+
+  return generateOGImage({
+    title: page.data.title,
+    description: page.data.description,
+    site: "My App",
+  });
+}
+```
+
+`generateOGImage` returns a 1200×630 `ImageResponse` from `next/og`. It takes `title`, `description`, `site`, `icon`, `primaryColor` and `primaryTextColor`, plus `ImageResponse` options such as `fonts`. `generate` returns the image's JSX, to render with your own `ImageResponse`.

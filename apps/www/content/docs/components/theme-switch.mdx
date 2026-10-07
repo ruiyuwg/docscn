@@ -1,0 +1,23 @@
+---
+title: Theme switch
+description: Switch between light, dark and system themes.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/theme-switch
+```
+
+## Usage
+
+The docs and home layouts show a theme switch. Configure it with the layout's `themeSwitch` option, or use it on its own inside `RootProvider`:
+
+```tsx
+import { ThemeSwitch } from "@/components/docs/layouts/shared/slots/theme-switch";
+
+<ThemeSwitch />
+<ThemeSwitch mode="light-dark-system" />
+```
+
+`mode="light-dark"` (the default) is a button that toggles between light and dark. `mode="light-dark-system"` is a shadcn/ui `toggle-group` with a system option.

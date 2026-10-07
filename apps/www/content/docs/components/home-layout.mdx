@@ -1,0 +1,43 @@
+---
+title: HomeLayout
+description: A layout for landing pages, with a navbar.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/home-layout
+```
+
+## Usage
+
+```tsx title="app/(home)/layout.tsx"
+import { HomeLayout } from "@/components/docs/layouts/home";
+import { baseOptions } from "@/lib/layout.shared";
+
+export default function Layout({ children }: LayoutProps<"/">) {
+  return <HomeLayout {...baseOptions()}>{children}</HomeLayout>;
+}
+```
+
+The navbar shows the title, links (with navigation menus for `type: "menu"` links), search and the theme switch. On small screens, links move into a menu that opens below the navbar.
+
+It takes the same `nav`, `links`, `githubUrl`, `themeSwitch` and `searchToggle` options as [`DocsLayout`](/docs/components/docs-layout), plus `nav.enableHoverToOpen` to open the mobile menu on hover. Other props are passed to its `<main>`.
+
+## Not found page
+
+`DefaultNotFound` is a ready-made 404 message with a link home:
+
+```tsx title="app/not-found.tsx"
+import { HomeLayout } from "@/components/docs/layouts/home";
+import { DefaultNotFound } from "@/components/docs/layouts/home/not-found";
+import { baseOptions } from "@/lib/layout.shared";
+
+export default function NotFound() {
+  return (
+    <HomeLayout {...baseOptions()}>
+      <DefaultNotFound />
+    </HomeLayout>
+  );
+}
+```

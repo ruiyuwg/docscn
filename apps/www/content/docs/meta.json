@@ -1,3 +1,11 @@
 {
-  "pages": ["index", "installation"]
+  "pages": [
+    "index",
+    "getting-started",
+    "migrating-from-fumadocs-ui",
+    "theming",
+    "compatibility",
+    "---Components---",
+    "...components"
+  ]
 }

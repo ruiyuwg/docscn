@@ -1,0 +1,46 @@
+---
+title: Theming and typography
+description: How docscn components use your shadcn/ui theme.
+---
+
+docscn has no colour themes of its own. Every component is styled with your shadcn/ui theme tokens, so changing your theme (or [picking a new one](https://ui.shadcn.com/themes)) changes your docs too.
+
+## Theme tokens
+
+| Part                                   | Tokens                                                                           |
+| -------------------------------------- | -------------------------------------------------------------------------------- |
+| Page background and text               | `--background`, `--foreground`, `--muted-foreground`                             |
+| Sidebar                                | `--sidebar`, `--sidebar-foreground`, `--sidebar-accent`, `--sidebar-border`, ... |
+| Code blocks, cards and callouts        | `--card`, `--muted`, `--border`, `--radius`                                      |
+| Links, active TOC items and highlights | `--foreground`, `--primary`                                                      |
+| Search dialog and menus                | `--popover`, `--accent`                                                          |
+
+Callouts add their own colours for the info, warning, success and idea types, and use `--destructive` for errors. Change them in `components/docs/components/callout.tsx`.
+
+## Dark mode
+
+`RootProvider` sets up [next-themes](https://github.com/pacocoursey/next-themes) with the same defaults as shadcn/ui's dark mode guide: the `class` attribute, the system theme by default, and no transitions while switching. Pass options with the `theme` prop:
+
+```tsx
+<RootProvider theme={{ defaultTheme: "dark" }}>{children}</RootProvider>
+```
+
+Press <kbd>D</kbd> to switch between light and dark mode (pass `theme={{ hotKey: false }}` to turn this off), or use the `ThemeSwitch` in the sidebar and navbar.
+
+## Typography
+
+`DocsBody` adds the `docs-typeset` class, which styles the Markdown content inside it: headings, paragraphs, lists, links, inline code, blockquotes, tables, images and keyboard keys. The styles are built from your theme tokens, and the CLI added them to your global stylesheet inside `@layer components`, so utility classes still override them.
+
+To keep an element and its children unstyled, add `not-docs-typeset`:
+
+```mdx
+<div className="not-docs-typeset">
+  <MyWidget />
+</div>
+```
+
+The class name is docscn's own, so it doesn't clash with `prose` from `@tailwindcss/typography` or with shadcn/typeset if your project uses them.
+
+## Code highlighting
+
+Code blocks show Fumadocs MDX's default Shiki output, with light and dark themes. The `codeblock` component added the CSS that switches between them, plus the styles for [notations](https://shiki.style/packages/transformers) such as `// [!code highlight]`, `// [!code ++]`, `// [!code focus]` and line numbers. To change the Shiki themes, configure `rehypeCodeOptions` in Fumadocs MDX.

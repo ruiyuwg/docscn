@@ -1,0 +1,16 @@
+---
+title: Utilities
+description: Building blocks the other components share.
+---
+
+These items are installed as dependencies of the components above. You rarely install them yourself, but they're useful for custom layouts and pages.
+
+| Item             | Module                                    | Exports                                                                                                               |
+| ---------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `layout-shared`  | `layouts/shared`                          | `BaseLayoutProps`, `NavOptions`, `LinkItemType`, `LayoutTab`, `getLayoutTabs`, `useLinkItems`, `LinkItem`, `NavTitle` |
+| `tree-context`   | `contexts/tree`, `utils/use-footer-items` | `TreeContextProvider`, `useTreeContext`, `useTreePath`, `useTabsGroups`, `useFooterItems`                             |
+| `search-context` | `contexts/search`                         | `SearchProvider`, `useSearchContext`, `SearchOnly`, `SharedProps`, `SearchLink`, `TagItem`                            |
+| `docs-utils`     | `utils/*`                                 | `isActive`, `normalize`, `mergeRefs`, `useHotKey`, `useCopyButton`, `useIsScrollTop`                                  |
+| `typography`     | Your global stylesheet                    | The [`docs-typeset`](/docs/theming#typography) class                                                                  |
+
+All modules install under `components/docs/`, so `layouts/shared` is `@/components/docs/layouts/shared`.
