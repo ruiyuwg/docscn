@@ -734,6 +734,160 @@
           "target": "@components/docs/components/dialog/search-default.tsx"
         }
       ]
+    },
+    {
+      "name": "home-layout",
+      "type": "registry:component",
+      "title": "Home layout",
+      "description": "HomeLayout: a layout for landing pages with a navbar (links, navigation menus, search, theme switch) and a mobile menu, plus DefaultNotFound for 404 pages.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "cn",
+        "fumadocs-core@^16.16.2",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "collapsible",
+        "@docscn/layout-shared",
+        "@docscn/theme-switch",
+        "@docscn/search-trigger",
+        "@docscn/docs-utils"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/layouts/home/index.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/home/index.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/home/navbar.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/home/navbar.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/home/not-found.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/home/not-found.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/home/slots/header.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/home/slots/header.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/home/slots/container.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/home/slots/container.tsx"
+        }
+      ]
+    },
+    {
+      "name": "og",
+      "type": "registry:component",
+      "title": "OG image",
+      "description": "generateOGImage: a default Open Graph image for docs pages, rendered with next/og.",
+      "files": [
+        {
+          "path": "registry/base/docs/og.tsx",
+          "type": "registry:lib",
+          "target": "@components/docs/og.tsx"
+        }
+      ]
+    },
+    {
+      "name": "docs",
+      "type": "registry:block",
+      "title": "Docs",
+      "description": "Docs for a new Next.js project: every docscn component, Fumadocs MDX content in content/docs, the /docs routes and a search API.",
+      "dependencies": [
+        "fumadocs-core@^16.16.2",
+        "fumadocs-mdx@^15.4.6",
+        "lucide-react"
+      ],
+      "devDependencies": ["@types/mdx"],
+      "registryDependencies": [
+        "@docscn/root-provider",
+        "@docscn/docs-layout",
+        "@docscn/docs-page",
+        "@docscn/mdx",
+        "@docscn/layout-shared"
+      ],
+      "files": [
+        {
+          "path": "registry/base/blocks/docs/lib/source.ts",
+          "type": "registry:lib",
+          "target": "lib/source.ts"
+        },
+        {
+          "path": "registry/base/blocks/docs/lib/layout.shared.tsx",
+          "type": "registry:lib",
+          "target": "lib/layout.shared.tsx"
+        },
+        {
+          "path": "registry/base/blocks/docs/components/mdx.tsx",
+          "type": "registry:component",
+          "target": "components/mdx.tsx"
+        },
+        {
+          "path": "registry/base/blocks/docs/app/docs/layout.tsx",
+          "type": "registry:page",
+          "target": "app/docs/layout.tsx"
+        },
+        {
+          "path": "registry/base/blocks/docs/app/docs/[[...slug]]/page.tsx",
+          "type": "registry:page",
+          "target": "app/docs/[[...slug]]/page.tsx"
+        },
+        {
+          "path": "registry/base/blocks/docs/app/api/search/route.ts",
+          "type": "registry:page",
+          "target": "app/api/search/route.ts"
+        },
+        {
+          "path": "registry/base/blocks/docs/content/docs/index.mdx",
+          "type": "registry:file",
+          "target": "~/content/docs/index.mdx"
+        },
+        {
+          "path": "registry/base/blocks/docs/content/docs/meta.json",
+          "type": "registry:file",
+          "target": "~/content/docs/meta.json"
+        }
+      ],
+      "docs": "Finish the setup with two edits. 1) In app/layout.tsx, import { RootProvider } from \"@/components/docs/provider/next\" and wrap {children} in <RootProvider>. RootProvider includes next-themes, so it replaces the ThemeProvider from shadcn/ui's template or dark mode guide. Keep suppressHydrationWarning on <html>. 2) In next.config.ts, import { createMDX } from \"fumadocs-mdx/next\" and change the export to export default createMDX()(nextConfig). Then start the dev server and open /docs. See https://docscn.dev/docs/getting-started."
+    },
+    {
+      "name": "fumadocs-ui",
+      "type": "registry:item",
+      "title": "Fumadocs UI",
+      "description": "Every docscn component, for migrating from Fumadocs UI: replace fumadocs-ui/ with @/components/docs/ in your imports.",
+      "registryDependencies": [
+        "@docscn/docs-utils",
+        "@docscn/search-context",
+        "@docscn/root-provider",
+        "@docscn/theme-switch",
+        "@docscn/search-trigger",
+        "@docscn/layout-shared",
+        "@docscn/typography",
+        "@docscn/heading",
+        "@docscn/codeblock",
+        "@docscn/card",
+        "@docscn/callout",
+        "@docscn/mdx",
+        "@docscn/tree-context",
+        "@docscn/docs-sidebar",
+        "@docscn/sidebar-tabs",
+        "@docscn/docs-layout",
+        "@docscn/toc",
+        "@docscn/page-actions",
+        "@docscn/docs-page",
+        "@docscn/search-dialog",
+        "@docscn/search-dialog-default",
+        "@docscn/home-layout",
+        "@docscn/og"
+      ]
     }
   ]
 }

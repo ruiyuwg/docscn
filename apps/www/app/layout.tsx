@@ -24,7 +24,7 @@ export default function RootLayout({
       className={cn("font-sans", geist.variable)}
       suppressHydrationWarning
     >
-      <body>
+      <body className="flex min-h-svh flex-col">
         <RootProvider>{children}</RootProvider>
       </body>
     </html>
