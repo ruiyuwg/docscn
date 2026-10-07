@@ -4,13 +4,21 @@
 
 import { DirectionProvider } from "@base-ui/react/direction-provider";
 import { ThemeProvider, type ThemeProviderProps, useTheme } from "next-themes";
-import type { ReactNode } from "react";
+import { lazy, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import type { DefaultSearchDialogProps } from "../components/dialog/search-default";
 import { SearchProvider, type SearchProviderProps } from "../contexts/search";
 import { useHotKey } from "../utils/hotkey";
 
-interface SearchOptions extends Omit<SearchProviderProps, "children"> {
+const DefaultSearchDialog = lazy(
+  () => import("../components/dialog/search-default"),
+);
+
+interface SearchOptions extends Omit<
+  SearchProviderProps<DefaultSearchDialogProps>,
+  "children"
+> {
   /**
    * Enable search functionality
    *
@@ -101,7 +109,11 @@ export function RootProvider({
   let body = children;
 
   if (search?.enabled !== false) {
-    body = <SearchProvider {...search}>{body}</SearchProvider>;
+    body = (
+      <SearchProvider SearchDialog={DefaultSearchDialog} {...search}>
+        {body}
+      </SearchProvider>
+    );
   }
 
   if (theme?.enabled !== false) {
