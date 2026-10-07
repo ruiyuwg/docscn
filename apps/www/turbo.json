@@ -12,6 +12,10 @@
     "test:registry": {
       "dependsOn": ["registry:build"],
       "cache": false
+    },
+    "test:migration": {
+      "dependsOn": ["registry:build"],
+      "cache": false
     }
   }
 }
