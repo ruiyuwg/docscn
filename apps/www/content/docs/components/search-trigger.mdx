@@ -1,0 +1,26 @@
+---
+title: Search trigger
+description: Buttons that open the search dialog.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/search-trigger
+```
+
+## Usage
+
+The layouts show these for you. To add one elsewhere inside `RootProvider`:
+
+```tsx
+import {
+  FullSearchTrigger,
+  SearchTrigger,
+} from "@/components/docs/layouts/shared/slots/search-trigger";
+
+<SearchTrigger />
+<FullSearchTrigger className="w-60" />
+```
+
+`SearchTrigger` is an icon button, and accepts shadcn/ui `Button`'s `variant` and `size`. `FullSearchTrigger` looks like a search field and shows the hotkey with shadcn/ui `kbd`. Pass `hideIfDisabled` to hide either when search is turned off in `RootProvider`.

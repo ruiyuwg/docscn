@@ -1,0 +1,94 @@
+---
+title: Search dialog
+description: Search your docs with ⌘K.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/search-dialog-default
+```
+
+## Usage
+
+`RootProvider` opens the default search dialog with <kbd>⌘</kbd> <kbd>K</kbd> (<kbd>Ctrl</kbd> <kbd>K</kbd> on Windows and Linux), or from the search triggers in the layouts. It queries `/api/search`, which you create with Fumadocs Core's search server:
+
+```ts title="app/api/search/route.ts"
+import { createFromSource } from "fumadocs-core/search/server";
+import { source } from "@/lib/source";
+
+export const { GET } = createFromSource(source);
+```
+
+Results show pages, headings and text with the matches highlighted. Use the arrow keys and <kbd>Enter</kbd> to open one, and <kbd>Esc</kbd> to close the dialog.
+
+## Options
+
+Pass options to the default dialog through `RootProvider`:
+
+```tsx
+<RootProvider
+  search={{
+    options: {
+      api: "/api/search",
+      delayMs: 100,
+      tags: [{ name: "Guides", value: "guides" }],
+    },
+    links: [["Getting started", "/docs/getting-started"]],
+  }}
+>
+```
+
+| Option       | Type             | Description                                    |
+| ------------ | ---------------- | ---------------------------------------------- |
+| `api`        | `string`         | The search API URL. Defaults to `/api/search`. |
+| `delayMs`    | `number`         | Debounce delay before searching.               |
+| `tags`       | `TagItem[]`      | Tag filters shown below the results.           |
+| `defaultTag` | `string`         | The tag selected at first.                     |
+| `allowClear` | `boolean`        | Allow deselecting the tag.                     |
+| `footer`     | `ReactNode`      | Extra content at the bottom of the dialog.     |
+| `links`      | `[name, href][]` | Links shown before the reader types a query.   |
+
+## Build your own dialog
+
+The `search-dialog` component exports the parts the default dialog is made of, for other search clients:
+
+```tsx
+import { useDocsSearch } from "fumadocs-core/search/client";
+import {
+  SearchDialog,
+  SearchDialogClose,
+  SearchDialogContent,
+  SearchDialogHeader,
+  SearchDialogIcon,
+  SearchDialogInput,
+  SearchDialogList,
+  SearchDialogOverlay,
+  type SharedProps,
+} from "@/components/docs/components/dialog/search";
+
+export default function CustomSearchDialog(props: SharedProps) {
+  const { search, setSearch, query } = useDocsSearch({ client: myClient });
+
+  return (
+    <SearchDialog
+      search={search}
+      onSearchChange={setSearch}
+      isLoading={query.isLoading}
+      {...props}
+    >
+      <SearchDialogOverlay />
+      <SearchDialogContent>
+        <SearchDialogHeader>
+          <SearchDialogIcon />
+          <SearchDialogInput />
+          <SearchDialogClose />
+        </SearchDialogHeader>
+        <SearchDialogList items={query.data !== "empty" ? query.data : null} />
+      </SearchDialogContent>
+    </SearchDialog>
+  );
+}
+```
+
+Pass it to `RootProvider` as `search={{ SearchDialog: CustomSearchDialog }}`. The dialog is built on Base UI's `Dialog`, the primitive under shadcn/ui's `dialog`, with shadcn/ui `kbd`.

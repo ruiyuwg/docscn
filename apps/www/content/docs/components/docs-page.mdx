@@ -1,0 +1,68 @@
+---
+title: DocsPage
+description: A docs page with a table of contents, breadcrumb and previous/next links.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/docs-page
+```
+
+## Usage
+
+```tsx title="app/docs/[[...slug]]/page.tsx"
+import { notFound } from "next/navigation";
+import { getMDXComponents } from "@/components/mdx";
+import {
+  DocsBody,
+  DocsDescription,
+  DocsPage,
+  DocsTitle,
+} from "@/components/docs/layouts/docs/page";
+import { createRelativeLink } from "@/components/docs/mdx";
+import { source } from "@/lib/source";
+
+export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
+  const params = await props.params;
+  const page = source.getPage(params.slug);
+  if (!page) notFound();
+
+  const MDX = page.data.body;
+
+  return (
+    <DocsPage toc={page.data.toc} full={page.data.full}>
+      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsDescription>{page.data.description}</DocsDescription>
+      <DocsBody>
+        <MDX
+          components={getMDXComponents({ a: createRelativeLink(source, page) })}
+        />
+      </DocsBody>
+    </DocsPage>
+  );
+}
+```
+
+Use it inside [`DocsLayout`](/docs/components/docs-layout). `DocsBody` adds the [`docs-typeset`](/docs/theming#typography) class.
+
+## Props
+
+| Prop                    | Type                                                          | Description                                                                               |
+| ----------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `toc`                   | `TOCItemType[]`                                               | The page's headings, usually `page.data.toc`.                                             |
+| `full`                  | `boolean`                                                     | Use the full width and hide the desktop TOC.                                              |
+| `tableOfContent`        | `{ enabled?, single?, header?, footer?, container?, list? }`  | The TOC beside the page on wide screens. `single: true` highlights one heading at a time. |
+| `tableOfContentPopover` | `{ enabled?, header?, footer?, ... }`                         | The TOC popover at the top of the page on smaller screens.                                |
+| `breadcrumb`            | `{ enabled?, includeRoot?, includePage?, includeSeparator? }` | The breadcrumb above the page, on shadcn/ui `breadcrumb`.                                 |
+| `footer`                | `{ enabled?, items? }`                                        | Previous and next page links, taken from the page tree unless you pass `items`.           |
+
+The rest are passed to the page's `<article>`.
+
+## Other exports
+
+- `EditOnGitHub`: a link button, e.g. `<EditOnGitHub href="https://github.com/…/edit/main/content/docs/index.mdx" />`.
+- `PageLastUpdate`: shows `Last updated on <date>` in the reader's locale, from a `date` prop.
+- `PageBreadcrumb` and `PageFooter`: the breadcrumb and footer on their own.
+- `MarkdownCopyButton` and `ViewOptionsPopover`: the [page actions](/docs/components/page-actions).
+- `useDocsPage()`: returns `{ full }`.

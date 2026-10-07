@@ -1,0 +1,36 @@
+---
+title: Page actions
+description: Copy a page as Markdown, or open it in GitHub and AI tools.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/page-actions
+```
+
+## Usage
+
+Both actions need a route that serves the page's Markdown. With Fumadocs MDX, enable `includeProcessedMarkdown` and add a route as in the [Fumadocs docs](https://fumadocs.dev/docs/integrations/llms). Then add the actions to your page:
+
+```tsx title="app/docs/[[...slug]]/page.tsx"
+import {
+  MarkdownCopyButton,
+  ViewOptionsPopover,
+} from "@/components/docs/layouts/docs/page";
+
+<div className="flex flex-row items-center gap-2 border-b pb-6">
+  <MarkdownCopyButton markdownUrl={markdownUrl} />
+  <ViewOptionsPopover
+    markdownUrl={markdownUrl}
+    githubUrl={`https://github.com/user/repo/blob/main/content/docs/${page.path}`}
+  />
+</div>;
+```
+
+| Component            | Props                                    | Description                                                                                                                     |
+| -------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `MarkdownCopyButton` | `markdownUrl`                            | Copies the page's Markdown to the clipboard.                                                                                    |
+| `ViewOptionsPopover` | `markdownUrl?`, `githubUrl?`, `pageUrl?` | A popover with links to the source on GitHub, the Markdown, and ChatGPT, Claude, Cursor and Scira with a prompt about the page. |
+
+Both are built on shadcn/ui `button` and `popover`, and are also exported from `components/docs/layouts/shared/page-actions`.

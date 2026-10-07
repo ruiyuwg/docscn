@@ -1,0 +1,28 @@
+---
+title: Sidebar tabs
+description: Switch between root folders of the page tree.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/sidebar-tabs
+```
+
+## Usage
+
+Mark folders as root folders in their `meta.json`:
+
+```json title="content/docs/guides/meta.json"
+{
+  "title": "Guides",
+  "description": "Learn the basics",
+  "root": true
+}
+```
+
+[`DocsLayout`](/docs/components/docs-layout) then shows a dropdown at the top of the sidebar to switch between them, built on shadcn/ui `dropdown-menu`. Only the current root folder's pages show in the sidebar.
+
+Customise the tabs with the layout's `tabs` option: an array of `LayoutTab` (`title`, `url`, `icon`, `description`), `{ transform }` to change the generated tabs, or `false` to turn them off.
+
+`getSidebarTabs(tree)` and `SidebarTabsDropdown` are exported for custom layouts.

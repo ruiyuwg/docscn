@@ -1,0 +1,53 @@
+---
+title: Code block
+description: Code blocks and code tabs for Shiki output.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/codeblock
+```
+
+## Usage
+
+`defaultMdxComponents` renders every code block in your MDX with `CodeBlock`. Fumadocs MDX's syntax works as usual:
+
+````mdx
+```ts title="greet.ts"
+export function greet(name: string) {
+  return `Hello, ${name}!`; // [!code highlight]
+}
+```
+````
+
+```ts title="greet.ts"
+export function greet(name: string) {
+  return `Hello, ${name}!`; // [!code highlight]
+}
+```
+
+- `title="..."` adds a title bar, with an icon for the language.
+- The copy button copies the code.
+- Shiki's notations add highlighted (`[!code highlight]`), added and removed (`[!code ++]`, `[!code --]`), focused (`[!code focus]`) and highlighted-word (`[!code word:x]`) styles, and `lineNumbers` shows line numbers.
+
+Code blocks with `tab="..."` and ` ```npm ` blocks become code tabs, on shadcn/ui `tabs`:
+
+```npm
+npm install next-themes
+```
+
+## Props
+
+| Prop             | Type                   | Description                                              |
+| ---------------- | ---------------------- | -------------------------------------------------------- |
+| `title`          | `ReactNode`            | The title bar's text.                                    |
+| `icon`           | `ReactNode`            | The title bar's icon. A string is treated as SVG markup. |
+| `allowCopy`      | `boolean`              | Show the copy button. Defaults to `true`.                |
+| `keepBackground` | `boolean`              | Keep the background colour of the Shiki theme.           |
+| `viewportProps`  | `HTMLAttributes`       | Props for the scrolling area.                            |
+| `Actions`        | `(props) => ReactNode` | Replace the area that holds the copy button.             |
+
+`CodeBlockTabs` also accepts `groupId` and `persist`, to keep the same tab selected across code tabs and page loads.
+
+The component's CSS (the light and dark Shiki themes and the notation styles) was added to your global stylesheet. Add `not-docs-codeblock` to an element to opt it out.

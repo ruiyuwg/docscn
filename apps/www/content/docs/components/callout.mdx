@@ -1,0 +1,48 @@
+---
+title: Callout
+description: Highlight notes, tips and warnings.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/callout
+```
+
+## Usage
+
+```mdx
+<Callout title="Note">The default type is info.</Callout>
+
+<Callout type="warn" title="Warning">
+  Be careful with this.
+</Callout>
+```
+
+<Callout title="Note">The default type is info.</Callout>
+
+<Callout type="warn" title="Warning">
+  Be careful with this.
+</Callout>
+
+<Callout type="error" title="Error">
+  Something went wrong.
+</Callout>
+
+<Callout type="success" title="Success">
+  It worked.
+</Callout>
+
+<Callout type="idea" title="Idea">
+  Try this.
+</Callout>
+
+## Props
+
+| Prop    | Type                                                              | Description              |
+| ------- | ----------------------------------------------------------------- | ------------------------ |
+| `type`  | `"info" \| "warn" \| "warning" \| "error" \| "success" \| "idea"` | Defaults to `"info"`.    |
+| `title` | `ReactNode`                                                       | An optional title.       |
+| `icon`  | `ReactNode`                                                       | Replace the type's icon. |
+
+`Callout` is built on shadcn/ui `alert`. `CalloutContainer`, `CalloutTitle` and `CalloutDescription` are exported to compose your own.
