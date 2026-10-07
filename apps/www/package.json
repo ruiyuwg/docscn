@@ -38,7 +38,7 @@
     "eslint-config-next": "16.3.8",
     "eslint-config-prettier": "10.1.8",
     "eslint-config-turbo": "2.11.7",
-    "shadcn": "4.21.2",
+    "shadcn": "4.21.3",
     "tailwindcss": "4.3.3",
     "typescript": "npm:@typescript/typescript6@6.0.2"
   }
