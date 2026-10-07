@@ -23,7 +23,7 @@ docscn is a shadcn/ui registry of documentation components (docs layouts, sideba
 
 - `apps/www`: the docscn.dev site and the registry host. Its `turbo.json` makes `build` depend on `registry:build`, which writes `public/r/` (gitignored).
 - `apps/www/registry/<item>/`: source for each registry item, declared in `apps/www/registry.json`.
-- `apps/www/components/ui/`: shadcn/ui primitives installed with the shadcn CLI. The site and registry items both use them.
+- `apps/www/components/ui/` and `apps/www/hooks/use-mobile.ts`: shadcn/ui primitives installed with the shadcn CLI. The site and registry items both use them. Don't edit them, so they stay comparable with upstream. They're excluded from Prettier, and any lint exceptions go in `apps/www/eslint.config.js`.
 - `apps/www/content/docs/`: docscn's documentation, loaded by Fumadocs MDX (`lib/source.ts`) and served at `/docs`. The docs layout and MDX components are temporary until docscn's own components replace them.
 
 ## Registry conventions
@@ -34,9 +34,15 @@ docscn is a shadcn/ui registry of documentation components (docs layouts, sideba
 - Import `cn` from the `cn` package and list it in `dependencies`.
 - Import within registry source using `@/registry/...` paths, and give every item a clear `description`.
 
+## Tooling
+
+- ESLint uses `eslint-config-next`, the config `create-next-app` generates, so registry source is linted with the rules most users run. It stays on ESLint 9 because `eslint-config-next`'s React, import and jsx-a11y plugins don't support ESLint 10.
+- `apps/www` installs TypeScript 6.0 as `typescript` (the API that `typescript-eslint` and Next.js load) and TypeScript 7 as `@typescript/native` (provides `tsc`). TypeScript 7 has no JS API until 7.1, and `typescript-eslint` doesn't support it yet. Revisit once both do.
+- Prettier sorts Tailwind classes with `prettier-plugin-tailwindcss`, including inside `cn()` and `cva()`.
+
 ## Checks
 
-Run `pnpm build`, `pnpm lint` and `pnpm check-types` from the root, and `pnpm exec shadcn registry validate` in `apps/www`. `pnpm lint` doesn't cover TypeScript files yet (https://github.com/ruiyuwg/docscn/issues/2).
+Run `pnpm build`, `pnpm lint` and `pnpm check-types` from the root, and `pnpm exec shadcn registry validate` in `apps/www`. Run `pnpm format` (or `pnpm format:check`) before committing.
 
 After changing registry items, run `pnpm test:registry`. It scaffolds a fresh shadcn/ui (Base UI) Next.js app in a temp directory, installs every item from the locally built registry, then lints and builds the app. Pass `-- --keep` to keep the app for inspection.
 

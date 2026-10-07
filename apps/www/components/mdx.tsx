@@ -34,10 +34,7 @@ export function getMDXComponents(components?: MDXComponents) {
         {...props}
       />
     ),
-    pre: ({
-      icon: _icon,
-      ...props
-    }: ComponentProps<"pre"> & { icon?: string }) => (
+    pre: ({ icon, ...props }: ComponentProps<"pre"> & { icon?: string }) => (
       <pre
         className="mt-4 overflow-x-auto rounded-lg border p-4 text-sm [&_code]:bg-transparent [&_code]:p-0"
         {...props}
