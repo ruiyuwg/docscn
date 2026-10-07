@@ -45,3 +45,29 @@ jobs:
 
       - name: Test registry install
         run: pnpm test:registry
+
+  # Migrates a stock create-fumadocs-app project to docscn and builds it.
+  # Needs network access for create-fumadocs-app and its install.
+  migration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: pnpm
+
+      - name: Restore Turborepo cache
+        uses: actions/cache@v6
+        with:
+          path: .turbo/cache
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Test migrating from Fumadocs UI
+        run: pnpm test:migration

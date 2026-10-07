@@ -13,7 +13,7 @@ export function run(
   command: string,
   args: string[],
   cwd: string,
-  env?: NodeJS.ProcessEnv,
+  env?: Record<string, string>,
 ) {
   console.log(`\n$ ${command} ${args.join(" ")}`);
   return new Promise<void>((resolve, reject) => {
