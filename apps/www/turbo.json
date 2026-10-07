@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "registry:build": {
+      "inputs": ["registry.json", "registry/**"],
+      "outputs": ["public/r/**"]
+    },
+    "build": {
+      "dependsOn": ["$TURBO_EXTENDS$", "registry:build"]
+    }
+  }
+}
