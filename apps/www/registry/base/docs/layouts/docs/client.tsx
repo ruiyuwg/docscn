@@ -107,7 +107,11 @@ export function LayoutBody(
             {sidebarEnabled && (
               <Sidebar collapsible={collapsible} {...sidebarProps} />
             )}
-            <Container navEnabled={navEnabled} {...containerProps}>
+            <Container
+              navEnabled={navEnabled}
+              sidebarCollapsible={sidebarEnabled && collapsible}
+              {...containerProps}
+            >
               {navEnabled && <Header />}
               {sidebarEnabled && collapsible && <CollapsedSidebarPanel />}
               {tabMode === "top" && tabs.length > 0 && (

@@ -18,6 +18,17 @@ export default defineConfig([
     },
   },
   {
+    // Registry source runs in users' apps, where these are set by Next.js
+    // rather than by Turborepo tasks.
+    files: ["registry/**"],
+    rules: {
+      "turbo/no-undeclared-env-vars": [
+        "error",
+        { allowList: ["^NODE_ENV$", "^__NEXT_ROUTER_BASEPATH$"] },
+      ],
+    },
+  },
+  {
     // Upstream shadcn/ui file, kept unmodified.
     files: ["hooks/use-mobile.ts"],
     rules: {

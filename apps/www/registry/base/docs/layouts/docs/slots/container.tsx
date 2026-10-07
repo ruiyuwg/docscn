@@ -8,13 +8,18 @@ import { SidebarInset } from "@/components/ui/sidebar";
 
 /**
  * The area beside the sidebar. It sets `--docs-header-height`, the height of the
- * mobile navbar, which pages use to offset sticky elements.
+ * mobile navbar, which pages use to offset sticky elements, and
+ * `--docs-page-offset`, the space taken by the collapsed sidebar's panel.
  */
 export function Container({
   navEnabled = true,
+  sidebarCollapsible = true,
   className,
   ...props
-}: ComponentProps<"main"> & { navEnabled?: boolean }) {
+}: ComponentProps<"main"> & {
+  navEnabled?: boolean;
+  sidebarCollapsible?: boolean;
+}) {
   return (
     <SidebarInset
       id="nd-docs-layout"
@@ -22,6 +27,9 @@ export function Container({
       className={cn(
         "min-w-0 [--docs-header-height:0px]",
         navEnabled && "max-md:[--docs-header-height:--spacing(14)]",
+        // room for the panel that reopens a collapsed sidebar
+        sidebarCollapsible &&
+          "md:peer-data-[state=collapsed]:[--docs-page-offset:--spacing(10)]",
         className,
       )}
     />
