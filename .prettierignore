@@ -1,0 +1,5 @@
+pnpm-lock.yaml
+
+# Upstream shadcn/ui files, kept unmodified.
+apps/www/components/ui/
+apps/www/hooks/use-mobile.ts

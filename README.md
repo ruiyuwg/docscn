@@ -33,7 +33,6 @@ This is a [Turborepo](https://turborepo.dev) monorepo using pnpm.
 | `apps/www/registry.json`     | The registry definition                                                  |
 | `apps/www/registry/`         | Source for registry items                                                |
 | `apps/www/content/docs/`     | docscn's documentation (MDX)                                             |
-| `packages/eslint-config`     | Shared ESLint configuration                                              |
 | `packages/typescript-config` | Shared TypeScript configuration                                          |
 
 ```sh
@@ -44,4 +43,5 @@ pnpm registry:build   # build the registry only
 pnpm test:registry    # install every registry item into a fresh app and build it
 pnpm lint
 pnpm check-types
+pnpm format          # format with Prettier (pnpm format:check to check only)
 ```
