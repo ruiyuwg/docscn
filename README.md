@@ -27,13 +27,13 @@ docscn targets Next.js projects using shadcn/ui with [Base UI](https://base-ui.c
 
 This is a [Turborepo](https://turborepo.dev) monorepo using pnpm.
 
-| Path                         | Description                                                              |
-| ---------------------------- | ------------------------------------------------------------------------ |
-| `apps/www`                   | The [docscn.dev](https://docscn.dev) site, which also hosts the registry |
-| `apps/www/registry.json`     | The registry definition                                                  |
-| `apps/www/registry/`         | Source for registry items                                                |
-| `apps/www/content/docs/`     | docscn's documentation (MDX)                                             |
-| `packages/typescript-config` | Shared TypeScript configuration                                          |
+| Path                           | Description                                                              |
+| ------------------------------ | ------------------------------------------------------------------------ |
+| `apps/www`                     | The [docscn.dev](https://docscn.dev) site, which also hosts the registry |
+| `apps/www/registry.json`       | The registry definition                                                  |
+| `apps/www/registry/base/docs/` | Source for registry items                                                |
+| `apps/www/content/docs/`       | docscn's documentation (MDX)                                             |
+| `packages/typescript-config`   | Shared TypeScript configuration                                          |
 
 ```sh
 pnpm install
