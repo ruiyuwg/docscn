@@ -55,7 +55,7 @@
       "name": "root-provider",
       "type": "registry:component",
       "title": "Root provider",
-      "description": "RootProvider for the root layout: theme (next-themes) with a `d` hotkey, search, tooltips, text direction and Next.js framework adapters.",
+      "description": "RootProvider for the root layout: theme (next-themes) with a `d` hotkey, the default search dialog, tooltips, text direction and Next.js framework adapters.",
       "dependencies": [
         "@base-ui/react",
         "fumadocs-core@^16.16.2",
@@ -64,7 +64,8 @@
       "registryDependencies": [
         "tooltip",
         "@docscn/search-context",
-        "@docscn/docs-utils"
+        "@docscn/docs-utils",
+        "@docscn/search-dialog-default"
       ],
       "files": [
         {
@@ -683,6 +684,54 @@
           "path": "registry/base/docs/layouts/docs/page/slots/toc.tsx",
           "type": "registry:component",
           "target": "@components/docs/layouts/docs/page/slots/toc.tsx"
+        }
+      ]
+    },
+    {
+      "name": "search-dialog",
+      "type": "registry:component",
+      "title": "Search dialog",
+      "description": "The search dialog's parts (SearchDialog, SearchDialogContent, SearchDialogInput, SearchDialogList, TagsList, ...) for building a search dialog for any Fumadocs search client, with highlighted matches and keyboard navigation.",
+      "dependencies": [
+        "@base-ui/react",
+        "class-variance-authority",
+        "cn",
+        "fumadocs-core@^16.16.2",
+        "lucide-react",
+        "rehype-raw",
+        "scroll-into-view-if-needed",
+        "unified",
+        "unist-util-visit"
+      ],
+      "devDependencies": ["@types/hast"],
+      "registryDependencies": [
+        "kbd",
+        "@docscn/search-context",
+        "@docscn/docs-utils"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/components/dialog/search.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/dialog/search.tsx"
+        }
+      ]
+    },
+    {
+      "name": "search-dialog-default",
+      "type": "registry:component",
+      "title": "Default search dialog",
+      "description": "DefaultSearchDialog: the search dialog for Fumadocs' built-in search server (createFromSource), with tag filters and default links. RootProvider loads it by default.",
+      "dependencies": ["fumadocs-core@^16.16.2"],
+      "registryDependencies": [
+        "@docscn/search-dialog",
+        "@docscn/search-context"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/components/dialog/search-default.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/dialog/search-default.tsx"
         }
       ]
     }
