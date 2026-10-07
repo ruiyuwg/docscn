@@ -21,7 +21,7 @@ docscn is a shadcn/ui registry of documentation components (docs layouts, sideba
 
 ## Fumadocs UI compatibility
 
-docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumadocs/base-ui`). Use Fumadocs UI's source as the reference for behaviour and APIs.
+docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumadocs/base-ui`). Use Fumadocs UI's source as the reference for behaviour and APIs, taken from the Fumadocs release tag that matches the installed `fumadocs-core` (currently [`fumadocs@16.16.2`](https://github.com/fuma-nama/fumadocs/tree/fumadocs@16.16.2/packages/base-ui/src)), not the `dev` branch. When upgrading `fumadocs-core`, check upstream changes to the components docscn has adapted.
 
 - **Content must render unchanged.** Support every element Fumadocs MDX's default preset emits: Shiki `pre` blocks (including the `icon` attribute), `CodeBlockTabs` / `CodeBlockTabsList` / `CodeBlockTabsTrigger` / `CodeBlockTab` (from `remark-code-tab` and `remark-npm`), headings with ids, images and GFM tables. Also support the opt-in plugins' output: `Callout` (`remark-admonition`), `Files` / `Folder` / `File` (`remark-mdx-files`) and the `fd-steps` / `fd-step` classes (`remark-steps`).
 - **The public API matches.** Keep Fumadocs UI's component names and main props, so migrating means changing import paths: `RootProvider`, `DocsLayout` (`tree`, `nav`, `links`, `githubUrl`, `sidebar`, `tabs`), `DocsPage` (`toc`, `full`, `tableOfContent`, `footer`, `breadcrumb`), `DocsTitle`, `DocsDescription`, `DocsBody`, `BaseLayoutProps`, `defaultMdxComponents`, `createRelativeLink`, the search dialog parts, and the MDX components (`Card`, `Cards`, `Callout`, `Tabs`, `Tab`, `Steps`, `Step`, `Accordion`, `Accordions`, `Files`, `TypeTable`, ...).
@@ -61,6 +61,13 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - Import other docscn modules with `@/registry/base/docs/...` and shadcn/ui primitives with `@/components/ui/...`. The CLI rewrites both to the user's aliases. Relative imports also work, but stick to the alias form.
 - Reference other docscn items in `registryDependencies` as `@docscn/<name>`.
 - Give every item a clear `description`.
+- Ship CSS (typography, Shiki styles, ...) through the registry item's `css` field, so it merges into the user's global stylesheet. Fall back to a CSS file with a `target` plus a `docs` note only when `css` can't express it.
+- Files adapted from Fumadocs UI start with this comment, which is installed into users' projects with the code. The full licence texts are in `NOTICE`.
+
+  ```ts
+  // Adapted from Fumadocs UI (https://github.com/fuma-nama/fumadocs)
+  // Copyright (c) 2023 Fuma, MIT License
+  ```
 
 ## Tooling
 

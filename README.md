@@ -45,3 +45,7 @@ pnpm lint
 pnpm check-types
 pnpm format          # format with Prettier (pnpm format:check to check only)
 ```
+
+## License
+
+[MIT](LICENSE). docscn builds on [Fumadocs](https://github.com/fuma-nama/fumadocs) and [shadcn/ui](https://github.com/shadcn-ui/ui), both MIT-licensed, and includes code adapted from them. See [NOTICE](NOTICE).
