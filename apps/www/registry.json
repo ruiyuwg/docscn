@@ -605,6 +605,86 @@
           "target": "@components/docs/layouts/docs/slots/container.tsx"
         }
       ]
+    },
+    {
+      "name": "toc",
+      "type": "registry:component",
+      "title": "Table of contents",
+      "description": "TOCProvider, TOCScrollArea and the default TOC items, with a thumb that follows the headings in view.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2"],
+      "registryDependencies": ["@docscn/docs-utils"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/toc/index.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/toc/index.tsx"
+        },
+        {
+          "path": "registry/base/docs/components/toc/default.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/toc/default.tsx"
+        }
+      ]
+    },
+    {
+      "name": "page-actions",
+      "type": "registry:component",
+      "title": "Page actions",
+      "description": "MarkdownCopyButton copies the page as Markdown, and ViewOptionsPopover links to the source on GitHub, the Markdown, and ChatGPT, Claude, Cursor and Scira.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "registryDependencies": ["button", "popover", "@docscn/docs-utils"],
+      "files": [
+        {
+          "path": "registry/base/docs/layouts/shared/page-actions.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/shared/page-actions.tsx"
+        }
+      ]
+    },
+    {
+      "name": "docs-page",
+      "type": "registry:component",
+      "title": "Docs page",
+      "description": "DocsPage, DocsTitle, DocsDescription and DocsBody, with the breadcrumb, previous/next links, the table of contents (a popover on small screens), EditOnGitHub and PageLastUpdate.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "registryDependencies": [
+        "breadcrumb",
+        "button",
+        "collapsible",
+        "@docscn/toc",
+        "@docscn/typography",
+        "@docscn/page-actions",
+        "@docscn/docs-layout",
+        "@docscn/tree-context",
+        "@docscn/docs-utils"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/layouts/docs/page/index.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/page/index.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/docs/page/slots/breadcrumb.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/page/slots/breadcrumb.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/docs/page/slots/container.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/page/slots/container.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/docs/page/slots/footer.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/page/slots/footer.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/docs/page/slots/toc.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/docs/page/slots/toc.tsx"
+        }
+      ]
     }
   ]
 }
