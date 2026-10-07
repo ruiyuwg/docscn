@@ -1,0 +1,92 @@
+---
+title: Kitchen sink
+description: Every element Fumadocs MDX's default preset emits, plus the docscn MDX components.
+---
+
+This page is copied into test apps by `scripts/test-registry-install.ts`. It uses **bold**, _italic_, `inline code`, <kbd>Ctrl</kbd> and a [relative link](./index.mdx).
+
+## Code blocks
+
+```ts title="greet.ts"
+export function greet(name: string) {
+  return `Hello, ${name}!`; // [!code highlight]
+}
+```
+
+```js
+const removed = true; // [!code --]
+const added = true; // [!code ++]
+const focused = "yes"; // [!code focus]
+const word = "highlight"; // [!code word:highlight]
+```
+
+```py lineNumbers
+def add(a, b):
+    return a + b
+```
+
+```bash tab="pnpm"
+pnpm add fumadocs-core
+```
+
+```bash tab="npm"
+npm install fumadocs-core
+```
+
+```npm
+npm install next-themes
+```
+
+### Lists and quotes
+
+- First item
+- Second item
+  - Nested item
+
+1. One
+2. Two
+
+> A blockquote with a [link](https://fumadocs.dev).
+
+---
+
+#### Table
+
+| Prop   | Type            | Default |
+| ------ | --------------- | ------- |
+| `full` | `boolean`       | `false` |
+| `toc`  | `TOCItemType[]` | `[]`    |
+
+![A gradient](./kitchen-sink.png)
+
+## Callouts
+
+<Callout>The default type is info.</Callout>
+
+<Callout type="warn" title="Warning">
+  Text with `code` and a [link](https://fumadocs.dev).
+</Callout>
+
+<Callout type="error" title="Error">
+  Something went wrong.
+</Callout>
+
+<Callout type="success" title="Success">
+  It worked.
+</Callout>
+
+<Callout type="idea" title="Idea">
+  Try this.
+</Callout>
+
+## Cards
+
+<Cards>
+  <Card
+    title="Fumadocs"
+    href="https://fumadocs.dev"
+    description="The framework docscn builds on."
+  />
+  <Card title="Internal" href="/docs" description="A link within the site." />
+  <Card title="No link">A card with children.</Card>
+</Cards>

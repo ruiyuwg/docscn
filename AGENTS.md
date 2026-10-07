@@ -33,7 +33,7 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 
 - **Layout:** build `DocsLayout` on the shadcn/ui `sidebar` (`SidebarProvider` / `SidebarInset`), not Fumadocs UI's CSS grid, so docs match the sidebars in the rest of the user's app.
 - **Building blocks:** search on `command` + `kbd` + `useDocsSearch` (`fumadocs-core/search/client`). Breadcrumb on `breadcrumb` + `getBreadcrumbItems` (`fumadocs-core/breadcrumb`). TOC on `fumadocs-core/toc` + `scroll-area`. Prev/next footer on `findNeighbour` (`fumadocs-core/page-tree`). Callout on `alert` extended with Fumadocs' types. Cards on `card`, tabs on `tabs`, accordions on `accordion`, files on `collapsible`.
-- **Typography:** `DocsBody` uses a typeset-style CSS file (in the style of shadcn/typeset) that docscn ships, built from the user's theme tokens. It replaces Fumadocs UI's `prose` styles.
+- **Typography:** `DocsBody` applies the `docs-typeset` class, typeset-style CSS (in the style of shadcn/typeset) that docscn ships, built from the user's theme tokens. It replaces Fumadocs UI's `prose` styles. Components opt out with `not-docs-typeset` (Fumadocs UI's `not-prose`). The name is docscn-specific so it can't clash with a user's own `prose` or `typeset` styles.
 - **Code highlighting:** keep Fumadocs MDX's default `rehype-code` (Shiki) output. The code block component ships the Shiki CSS it needs.
 - **Theme:** use `next-themes`, as shadcn/ui's dark mode guide does.
 - **Layouts:** the docs layout first, then home and notebook. Add flux, glass or spacious only if users ask.
@@ -57,11 +57,14 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - Style with shadcn/ui theme tokens (`bg-background`, `text-muted-foreground`, `--sidebar-*`, ...), not Fumadocs UI's `--color-fd-*` variables.
 - Use `fumadocs-core` headless APIs (`page-tree`, `toc`, `breadcrumb`, `search`, `link`, ...). Never depend on `fumadocs-ui` or `@fumadocs/base-ui`. Use their source only as a reference.
 - Import `cn` from the `cn` package and list it in `dependencies`.
-- Put source at `apps/www/registry/base/docs/<path>` and give each file `"target": "@components/docs/<path>"`, where `<path>` mirrors Fumadocs UI's module path (e.g. `layouts/docs/page/index.tsx`). `base` is a shadcn style folder: when rewriting imports between items, the CLI drops the first folder after `registry/`, so source must not sit directly in `registry/docs/`.
-- Import other docscn modules with `@/registry/base/docs/...` and shadcn/ui primitives with `@/components/ui/...`. The CLI rewrites both to the user's aliases. Relative imports also work, but stick to the alias form.
+- Put source at `apps/www/registry/base/docs/<path>` and give each file `"target": "@components/docs/<path>"`, where `<path>` mirrors Fumadocs UI's module path (e.g. `layouts/docs/page/index.tsx`). Keep upstream's file names inside each module, including `slots/` folders, so every file stays comparable with its upstream counterpart.
+- Name items in kebab-case after the Fumadocs UI component or module, with a `docs-` prefix where the plain name would read as a shadcn/ui primitive (`docs-layout`, `docs-page`, `docs-sidebar`).
+- Import other docscn modules with relative paths (`../utils/urls`), which the CLI leaves unchanged and which resolve because files install with the same layout. Don't use `@/registry/base/docs/...`: the CLI rewrites any such path containing a `/components`, `/lib`, `/hooks` or `/ui` segment to the matching alias and drops `docs/`, so `@/registry/base/docs/components/card` would become `@/components/card`.
+- Import shadcn/ui primitives with `@/components/ui/...`. The CLI rewrites them to the user's `ui` alias.
+- Files outside `components/docs/` (the `docs` block's routes and `lib/` files) use plain targets such as `app/docs/layout.tsx` or `lib/source.ts`, which the CLI places under `src/` when the project has one. Content uses `~/content/docs/...`, because Fumadocs MDX resolves `content/docs` from the project root.
 - Reference other docscn items in `registryDependencies` as `@docscn/<name>`.
 - Give every item a clear `description`.
-- Ship CSS (typography, Shiki styles, ...) through the registry item's `css` field, so it merges into the user's global stylesheet. Fall back to a CSS file with a `target` plus a `docs` note only when `css` can't express it.
+- Ship CSS (typography, Shiki styles, ...) through the registry item's `css` field, so it merges into the user's global stylesheet. Write it as a plain stylesheet in `apps/www/registry/base/docs/styles/`, list it in `scripts/sync-registry-css.ts`, and run `pnpm registry:css` to copy it into `registry.json` (`registry:build` fails while they differ). docscn.dev imports the same stylesheets from `app/globals.css`. The CLI mangles nested (`&`) selectors and moves `@keyframes` into `@theme`, so use flat rules inside `@layer components`, and pseudo-elements outside `:where()`.
 - Files adapted from Fumadocs UI start with this comment, which is installed into users' projects with the code. The full licence texts are in `NOTICE`.
 
   ```ts

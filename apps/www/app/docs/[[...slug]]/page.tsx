@@ -20,7 +20,7 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
           {page.data.description}
         </p>
       )}
-      <div className="mt-8">
+      <div className="docs-typeset mt-8">
         <MDX components={getMDXComponents()} />
       </div>
     </article>
