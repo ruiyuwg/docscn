@@ -24,6 +24,7 @@ docscn is a shadcn/ui registry of documentation components (docs layouts, sideba
 - `apps/www`: the docscn.dev site and the registry host. Its `turbo.json` makes `build` depend on `registry:build`, which writes `public/r/` (gitignored).
 - `apps/www/registry/<item>/`: source for each registry item, declared in `apps/www/registry.json`.
 - `apps/www/components/ui/`: shadcn/ui primitives installed with the shadcn CLI. The site and registry items both use them.
+- `apps/www/content/docs/`: docscn's documentation, loaded by Fumadocs MDX (`lib/source.ts`) and served at `/docs`. The docs layout and MDX components are temporary until docscn's own components replace them.
 
 ## Registry conventions
 
@@ -35,6 +36,10 @@ docscn is a shadcn/ui registry of documentation components (docs layouts, sideba
 
 ## Checks
 
-Run `pnpm build`, `pnpm lint` and `pnpm check-types` from the root, and `pnpm exec shadcn registry validate` in `apps/www`.
+Run `pnpm build`, `pnpm lint` and `pnpm check-types` from the root, and `pnpm exec shadcn registry validate` in `apps/www`. `pnpm lint` doesn't cover TypeScript files yet (https://github.com/ruiyuwg/docscn/issues/2).
+
+After changing registry items, run `pnpm test:registry`. It scaffolds a fresh shadcn/ui (Base UI) Next.js app in a temp directory, installs every item from the locally built registry, then lints and builds the app. Pass `-- --keep` to keep the app for inspection.
 
 pnpm enforces a minimum release age, so a package version published in the last day fails to install. Pin the previous version instead of adding entries to `minimumReleaseAgeExclude`.
+
+pnpm also blocks dependency install scripts by default. Record each decision under `allowBuilds` in `pnpm-workspace.yaml`, and use `false` unless the package breaks without its script.

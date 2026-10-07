@@ -32,6 +32,7 @@ This is a [Turborepo](https://turborepo.dev) monorepo using pnpm.
 | `apps/www`                   | The [docscn.dev](https://docscn.dev) site, which also hosts the registry |
 | `apps/www/registry.json`     | The registry definition                                                  |
 | `apps/www/registry/`         | Source for registry items                                                |
+| `apps/www/content/docs/`     | docscn's documentation (MDX)                                             |
 | `packages/eslint-config`     | Shared ESLint configuration                                              |
 | `packages/typescript-config` | Shared TypeScript configuration                                          |
 
@@ -40,6 +41,7 @@ pnpm install
 pnpm dev              # start the site at http://localhost:3000
 pnpm build            # build the registry into apps/www/public/r, then the site
 pnpm registry:build   # build the registry only
+pnpm test:registry    # install every registry item into a fresh app and build it
 pnpm lint
 pnpm check-types
 ```

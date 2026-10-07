@@ -127,3 +127,20 @@
     @apply font-sans;
   }
 }
+
+@layer base {
+  .shiki {
+    background-color: var(--shiki-light-bg);
+  }
+  .shiki,
+  .shiki span {
+    color: var(--shiki-light);
+  }
+  .dark .shiki {
+    background-color: var(--shiki-dark-bg);
+  }
+  .dark .shiki,
+  .dark .shiki span {
+    color: var(--shiki-dark);
+  }
+}
