@@ -47,7 +47,7 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 ## Layout
 
 - `apps/www`: the docscn.dev site and the registry host. Its `turbo.json` makes `build` depend on `registry:build`, which writes `public/r/` (gitignored).
-- `apps/www/registry/<item>/`: source for each registry item, declared in `apps/www/registry.json`.
+- `apps/www/registry/base/docs/`: source for all registry items, declared in `apps/www/registry.json`. It mirrors the install layout (see Registry conventions). The docscn.dev site imports this source directly.
 - `apps/www/components/ui/` and `apps/www/hooks/use-mobile.ts`: shadcn/ui primitives installed with the shadcn CLI. The site and registry items both use them. Don't edit them, so they stay comparable with upstream. They're excluded from Prettier, and any lint exceptions go in `apps/www/eslint.config.js`.
 - `apps/www/content/docs/`: docscn's documentation, loaded by Fumadocs MDX (`lib/source.ts`) and served at `/docs`. The docs layout and MDX components are temporary until docscn's own components replace them.
 
@@ -57,7 +57,10 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - Style with shadcn/ui theme tokens (`bg-background`, `text-muted-foreground`, `--sidebar-*`, ...), not Fumadocs UI's `--color-fd-*` variables.
 - Use `fumadocs-core` headless APIs (`page-tree`, `toc`, `breadcrumb`, `search`, `link`, ...). Never depend on `fumadocs-ui` or `@fumadocs/base-ui`. Use their source only as a reference.
 - Import `cn` from the `cn` package and list it in `dependencies`.
-- Import within registry source using `@/registry/...` paths, and give every item a clear `description`.
+- Put source at `apps/www/registry/base/docs/<path>` and give each file `"target": "@components/docs/<path>"`, where `<path>` mirrors Fumadocs UI's module path (e.g. `layouts/docs/page/index.tsx`). `base` is a shadcn style folder: when rewriting imports between items, the CLI drops the first folder after `registry/`, so source must not sit directly in `registry/docs/`.
+- Import other docscn modules with `@/registry/base/docs/...` and shadcn/ui primitives with `@/components/ui/...`. The CLI rewrites both to the user's aliases. Relative imports also work, but stick to the alias form.
+- Reference other docscn items in `registryDependencies` as `@docscn/<name>`.
+- Give every item a clear `description`.
 
 ## Tooling
 
