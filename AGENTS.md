@@ -11,13 +11,38 @@ This block is written and re-added by `turbo` before repository-scoped commands 
 
 # docscn
 
-docscn is a shadcn/ui registry of documentation components (docs layouts, sidebars, tables of contents, search, etc.) built on Fumadocs Core. It replaces Fumadocs UI with the shadcn/ui model: users install source into their own app with the shadcn CLI.
+docscn is a shadcn/ui registry of documentation components (docs layouts, sidebars, tables of contents, search, etc.) built on Fumadocs Core. It is a drop-in replacement for Fumadocs UI built the shadcn/ui way: users install source into their own app with the shadcn CLI, styled with their shadcn/ui primitives and theme.
 
 ## Decisions
 
 - **Base UI only.** Components target shadcn/ui projects using Base UI (`base-*` styles). No Radix or React Aria variants.
 - **Next.js only.** Components may use `next/link`, `next/navigation`, etc.
 - **`@docscn` namespace.** The registry is served from `https://docscn.dev/r/{name}.json`, built by `shadcn build` from `apps/www/registry.json`.
+
+## Fumadocs UI compatibility
+
+docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumadocs/base-ui`). Use Fumadocs UI's source as the reference for behaviour and APIs.
+
+- **Content must render unchanged.** Support every element Fumadocs MDX's default preset emits: Shiki `pre` blocks (including the `icon` attribute), `CodeBlockTabs` / `CodeBlockTabsList` / `CodeBlockTabsTrigger` / `CodeBlockTab` (from `remark-code-tab` and `remark-npm`), headings with ids, images and GFM tables. Also support the opt-in plugins' output: `Callout` (`remark-admonition`), `Files` / `Folder` / `File` (`remark-mdx-files`) and the `fd-steps` / `fd-step` classes (`remark-steps`).
+- **The public API matches.** Keep Fumadocs UI's component names and main props, so migrating means changing import paths: `RootProvider`, `DocsLayout` (`tree`, `nav`, `links`, `githubUrl`, `sidebar`, `tabs`), `DocsPage` (`toc`, `full`, `tableOfContent`, `footer`, `breadcrumb`), `DocsTitle`, `DocsDescription`, `DocsBody`, `BaseLayoutProps`, `defaultMdxComponents`, `createRelativeLink`, the search dialog parts, and the MDX components (`Card`, `Cards`, `Callout`, `Tabs`, `Tab`, `Steps`, `Step`, `Accordion`, `Accordions`, `Files`, `TypeTable`, ...).
+- **Mirror Fumadocs UI's module paths.** Install everything under `components/docs/` (target `@components/docs/...`), laid out like `fumadocs-ui`'s import paths, so migration is one find-and-replace of `fumadocs-ui/` with `@/components/docs/`. For example, `fumadocs-ui/layouts/docs/page` becomes `@/components/docs/layouts/docs/page`, and `fumadocs-ui/provider/next` becomes `@/components/docs/provider/next`.
+- **Inputs are Fumadocs Core types** (`PageTree.Root`, `TOCItemType`, ...), so any content source Fumadocs supports works.
+- **Deliberately not compatible:** the `slots` API (users edit their own copy instead), `--color-fd-*` variables and `fd-*` utility classes, Fumadocs UI's colour themes and CSS presets, non-Next.js providers, Radix, and deprecated props. Document each in the migration guide.
+
+## Architecture
+
+- **Layout:** build `DocsLayout` on the shadcn/ui `sidebar` (`SidebarProvider` / `SidebarInset`), not Fumadocs UI's CSS grid, so docs match the sidebars in the rest of the user's app.
+- **Building blocks:** search on `command` + `kbd` + `useDocsSearch` (`fumadocs-core/search/client`). Breadcrumb on `breadcrumb` + `getBreadcrumbItems` (`fumadocs-core/breadcrumb`). TOC on `fumadocs-core/toc` + `scroll-area`. Prev/next footer on `findNeighbour` (`fumadocs-core/page-tree`). Callout on `alert` extended with Fumadocs' types. Cards on `card`, tabs on `tabs`, accordions on `accordion`, files on `collapsible`.
+- **Typography:** `DocsBody` uses a typeset-style CSS file (in the style of shadcn/typeset) that docscn ships, built from the user's theme tokens. It replaces Fumadocs UI's `prose` styles.
+- **Code highlighting:** keep Fumadocs MDX's default `rehype-code` (Shiki) output. The code block component ships the Shiki CSS it needs.
+- **Theme:** use `next-themes`, as shadcn/ui's dark mode guide does.
+- **Layouts:** the docs layout first, then home and notebook. Add flux, glass or spacious only if users ask.
+
+## Packaging
+
+- **Components:** one registry item per Fumadocs UI component or module, depending on shadcn/ui primitives and other docscn items through `registryDependencies`.
+- **`@docscn/docs`:** a block for new projects. It installs the components plus `lib/source.ts`, `lib/layout.shared.tsx`, the `app/docs` routes and `app/api/search/route.ts`. Use the item's `docs` field to explain wrapping the root layout in `RootProvider`.
+- **`@docscn/fumadocs-ui`:** a bundle for migrating from Fumadocs UI. It installs every component but no routes.
 
 ## Layout
 
