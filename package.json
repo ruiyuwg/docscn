@@ -1,6 +1,7 @@
 {
   "name": "docscn",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "turbo run build",
     "registry:build": "turbo run registry:build",
