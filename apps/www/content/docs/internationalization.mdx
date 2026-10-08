@@ -1,0 +1,122 @@
+---
+title: Internationalization
+description: Translate docscn's UI strings, and add a language switcher.
+---
+
+docscn's components show their UI strings ("Search", "On this page", "Copy Markdown", ...) in English. To show them in other languages, pass translations to `RootProvider`. The API is Fumadocs UI's, so its [translation](https://fumadocs.dev/docs/ui/translations) and [internationalization](https://fumadocs.dev/docs/internationalization) guides apply, with imports from `@/components/docs/` instead of `fumadocs-ui/`.
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/i18n
+```
+
+`@docscn/fumadocs-ui` already includes it. `RootProvider` and the layouts support translations without it; it adds the helpers below.
+
+## One language
+
+To translate the UI into a single language, define the translations with Fumadocs Core and pass them to `RootProvider`:
+
+```tsx title="lib/layout.shared.tsx"
+import { defineTranslations } from "fumadocs-core/i18n";
+import { uiTranslations } from "@/components/docs/i18n";
+
+export const translations = defineTranslations().extend(uiTranslations()).add({
+  "Search(search trigger)": "搜索文档",
+  "On this page(table of contents)": "本页目录",
+});
+```
+
+```tsx title="app/layout.tsx"
+import { i18nProvider } from "@/components/docs/i18n";
+import { RootProvider } from "@/components/docs/provider/next";
+import { translations } from "@/lib/layout.shared";
+
+// ...
+<RootProvider i18n={i18nProvider(translations)}>{children}</RootProvider>;
+```
+
+Each key is the English string, followed by notes in parentheses that say where it appears. `uiTranslations()` registers the keys, so TypeScript checks them; the full list is in `components/docs/.translations/index.ts`.
+
+## Several languages
+
+For docs in several languages, follow Fumadocs' [Next.js internationalization guide](https://fumadocs.dev/docs/internationalization/next): it defines the languages in `lib/i18n.ts`, adds the locale middleware, moves your routes under `app/[lang]`, and passes `i18n` to `loader()`. Then add the translations for each language, and pass the current one to `RootProvider`:
+
+```tsx title="lib/layout.shared.tsx"
+import { uiTranslations } from "@/components/docs/i18n";
+import { i18n } from "@/lib/i18n";
+
+export const translations = i18n
+  .translations()
+  .extend(uiTranslations())
+  .add({
+    en: { displayName: "English" },
+    cn: {
+      displayName: "中文",
+      "Search(search trigger)": "搜索文档",
+    },
+  });
+```
+
+```tsx title="app/[lang]/layout.tsx"
+import { i18nProvider } from "@/components/docs/i18n";
+import { RootProvider } from "@/components/docs/provider/next";
+import { translations } from "@/lib/layout.shared";
+
+export default async function Layout({
+  params,
+  children,
+}: LayoutProps<"/[lang]">) {
+  const { lang } = await params;
+
+  return (
+    <html lang={lang} suppressHydrationWarning>
+      <body>
+        <RootProvider i18n={i18nProvider(translations, lang)}>
+          {children}
+        </RootProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+With more than one language, the docs, notebook and home layouts show a [language switcher](/docs/components/language-select). Choosing a language swaps the locale at the start of the URL, following the `hideLocale` option.
+
+`defineI18nUI(i18n, translations)` from `@/components/docs/i18n` also works, as in Fumadocs UI: pass `i18nUI.provider(lang)` to `RootProvider`.
+
+## Language packs
+
+Fumadocs' language packs ([`@fumadocs/language`](https://fumadocs.dev/docs/ui/translations#language-packs)) use the same keys, so they translate docscn too:
+
+```ts
+import { zhCN } from "@fumadocs/language/zh-cn";
+
+export const translations = i18n
+  .translations()
+  .extend(uiTranslations())
+  .preset("cn", zhCN());
+```
+
+docscn has two strings of its own, which language packs don't include: the labels of the sidebar's folder toggles, `Collapse(sidebar)(aria-label)` and `Expand(sidebar)(aria-label)`. Add them with `.add()`.
+
+## Your own components
+
+The components read their strings with `useTranslations()` from [`@fuma-translate/react`](https://www.npmjs.com/package/@fuma-translate/react), the package Fumadocs UI uses. Use it for strings you add to your copies:
+
+```tsx
+import { useTranslations } from "@fuma-translate/react";
+
+const t = useTranslations({ note: "page footer" });
+t("Report an issue"); // looks up "Report an issue(page footer)"
+```
+
+Register the new keys before translating them:
+
+```ts
+i18n
+  .translations()
+  .extend(uiTranslations())
+  .extend({ keys: ["Report an issue(page footer)"] })
+  .add({ cn: { "Report an issue(page footer)": "报告问题" } });
+```

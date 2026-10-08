@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import {
   type ComponentProps,
   createContext,
@@ -22,9 +23,14 @@ import {
   FullSearchTrigger,
   SearchTrigger,
 } from "../../shared/slots/search-trigger";
+import {
+  LanguageSelect,
+  LanguageSelectText,
+} from "../../shared/slots/language-select";
 import { ThemeSwitch } from "../../shared/slots/theme-switch";
 import { buttonVariants } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Languages } from "lucide-react";
+import { useI18n } from "../../../contexts/i18n";
 import { useIsScrollTop } from "../../../utils/use-is-scroll-top";
 import { useHomeLayout } from "..";
 import {
@@ -69,6 +75,9 @@ export function Header({ ref, className, ...props }: ComponentProps<"header">) {
   const headerRef = useRef<HTMLElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const [open, setOpen] = useState(false);
+  const t = useTranslations({ note: "home layout header" });
+  const { locales = [] } = useI18n();
+  const languageSelect = locales.length > 1;
   const transparentMode = nav?.transparentMode ?? "none";
   const isTop = useIsScrollTop({ enabled: transparentMode === "top" }) ?? true;
   const isNavTransparent =
@@ -119,6 +128,11 @@ export function Header({ ref, className, ...props }: ComponentProps<"header">) {
           />
         )}
         {themeSwitchEnabled && <ThemeSwitch {...themeSwitchProps} />}
+        {languageSelect && (
+          <LanguageSelect className="text-muted-foreground">
+            <Languages />
+          </LanguageSelect>
+        )}
         <ul className="flex flex-row items-center gap-2 empty:hidden">
           {navItems.filter(isSecondary).map((item, i) => (
             <NavigationMenuLinkItem
@@ -134,7 +148,7 @@ export function Header({ ref, className, ...props }: ComponentProps<"header">) {
       <div className="ms-auto -me-1.5 flex flex-row items-center lg:hidden">
         {searchEnabled && <SearchTrigger hideIfDisabled {...searchToggle.sm} />}
         <CollapsibleTrigger
-          aria-label="Toggle Menu"
+          aria-label={t("Toggle Menu", { note: "aria-label" })}
           className={cn(
             buttonVariants({
               size: "icon",
@@ -206,6 +220,13 @@ export function Header({ ref, className, ...props }: ComponentProps<"header">) {
                       />
                     ))}
                     <div role="separator" className="flex-1" />
+                    {languageSelect && (
+                      <LanguageSelect className="text-muted-foreground">
+                        <Languages />
+                        <LanguageSelectText />
+                        <ChevronDown className="size-3" />
+                      </LanguageSelect>
+                    )}
                     {themeSwitchEnabled && (
                       <ThemeSwitch {...themeSwitchProps} />
                     )}

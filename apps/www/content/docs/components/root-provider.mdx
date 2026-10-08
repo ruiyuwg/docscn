@@ -1,6 +1,6 @@
 ---
 title: RootProvider
-description: Theme, search and framework providers for the root layout.
+description: Theme, search, translation and framework providers for the root layout.
 ---
 
 ## Installation
@@ -37,6 +37,7 @@ It provides:
 - search, with the [default search dialog](/docs/components/search-dialog) opened by <kbd>⌘</kbd> <kbd>K</kbd> or <kbd>Ctrl</kbd> <kbd>K</kbd>
 - shadcn/ui's `TooltipProvider`, which the sidebar uses
 - Base UI's `DirectionProvider`
+- translations of the UI strings, with the `i18n` prop
 - Fumadocs Core's Next.js adapter, for links, images and routing
 
 ## Props
@@ -62,6 +63,16 @@ It provides:
         </>
       ),
       type: "{ enabled?, SearchDialog?, options?, links?, hotKey? }",
+    },
+    i18n: {
+      description: (
+        <>
+          The UI strings' translations and the available languages. Build it
+          with <code>{"i18nProvider()"}</code>; see{" "}
+          <a href="/docs/internationalization">Internationalization</a>.
+        </>
+      ),
+      type: "{ locale?, locales?, translations?, defaultLanguage?, hideLocale?, onLocaleChange? }",
     },
     dir: {
       description: <>Text direction for Base UI components.</>,

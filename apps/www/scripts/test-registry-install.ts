@@ -16,6 +16,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import {
   addFixturePage,
+  addI18n,
   addNotebookRoute,
   allowBuild,
   getOption,
@@ -161,6 +162,7 @@ try {
     app,
     'nav={{ ...baseOptions().nav, mode: "top" }} tabMode="navbar"',
   );
+  await addI18n(app, "@/components/docs");
 
   // Lint docscn's files only: shadcn/ui's own hooks/use-mobile.ts fails
   // eslint-config-next's react-hooks rules in a fresh app. The monorepo
@@ -178,6 +180,8 @@ try {
         "components/mdx.tsx",
         "lib/source.ts",
         "lib/layout.shared.tsx",
+        "lib/i18n.ts",
+        "app/layout.tsx",
         "app/docs",
         "app/notebook",
         "app/api",
@@ -186,7 +190,7 @@ try {
     );
   }
   await run("pnpm", ["run", "build"], app);
-  await smokeTest(app);
+  await smokeTest(app, { i18n: true });
   console.log(
     `\nInstalled, built and smoke-tested ${items.length} registry item(s)${monorepo ? " in a monorepo" : ""}.`,
   );

@@ -1,0 +1,43 @@
+---
+title: Language select
+description: Switch between the languages of your docs.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/language-select
+```
+
+## Usage
+
+When `RootProvider`'s `i18n` prop lists more than one language, the docs, notebook and home layouts show a language switcher: in the docs layout's sidebar, and in the navbar of the notebook and home layouts. See [Internationalization](/docs/internationalization) to set up the languages.
+
+`LanguageSelect` is a button that opens a popover with the languages. Its children are the button's content, and `LanguageSelectText` shows the current language's name:
+
+```tsx
+import { Languages } from "lucide-react";
+import {
+  LanguageSelect,
+  LanguageSelectText,
+} from "@/components/docs/layouts/shared/slots/language-select";
+
+<LanguageSelect>
+  <Languages />
+  <LanguageSelectText />
+</LanguageSelect>;
+```
+
+Choosing a language calls `i18n.onLocaleChange` if you passed one to `RootProvider`. Otherwise it swaps the locale at the start of the URL, following your i18n config's `hideLocale` option.
+
+## Props
+
+<TypeTable
+  type={{
+    variant: {
+      description: <>The shadcn/ui button variant.</>,
+      type: "ButtonVariant",
+      default: '"ghost"',
+    },
+  }}
+/>

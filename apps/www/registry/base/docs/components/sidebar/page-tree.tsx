@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
 import { usePathname } from "fumadocs-core/framework";
 import Link from "fumadocs-core/link";
@@ -197,6 +198,7 @@ export function SidebarFolder({
   const { defaultOpenLevel = 0, prefetch } = use(OptionsContext);
   const closeOnNavigate = useCloseOnNavigate();
   const ref = useScrollIntoView(index?.active ?? false);
+  const t = useTranslations({ note: "sidebar" });
   const [open, setOpen] = useState(
     () => active || (defaultOpen ?? depth < defaultOpenLevel),
   );
@@ -249,7 +251,11 @@ export function SidebarFolder({
                 className={cn(depth > 0 && "top-0.5 right-0.5")}
               />
             }
-            aria-label={open ? "Collapse" : "Expand"}
+            aria-label={
+              open
+                ? t("Collapse", { note: "aria-label" })
+                : t("Expand", { note: "aria-label" })
+            }
           >
             {chevron}
           </CollapsibleTrigger>

@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { T, useTranslations } from "@fuma-translate/react";
 import { ChevronRight, Hash, SearchIcon } from "lucide-react";
 import {
   type ComponentProps,
@@ -244,18 +245,19 @@ export function SearchDialogHeader(props: ComponentProps<"div">) {
 
 export function SearchDialogInput(props: ComponentProps<"input">) {
   const { search, onSearchChange } = useSearch();
+  const t = useTranslations({ note: "search dialog" });
 
   return (
     <input
       data-fd-search-dialog-input=""
       role="combobox"
       aria-expanded={false}
-      aria-label="Search"
+      aria-label={t("Search")}
       aria-autocomplete="list"
       aria-controls="fd-search-list"
       value={search}
       onChange={(e) => onSearchChange(e.target.value)}
-      placeholder="Search"
+      placeholder={t("Search")}
       {...props}
       className={cn(
         "w-0 flex-1 bg-transparent text-lg placeholder:text-muted-foreground focus-visible:outline-none",
@@ -271,11 +273,12 @@ export function SearchDialogClose({
   ...props
 }: ComponentProps<"button">) {
   const { onOpenChange } = useSearch();
+  const t = useTranslations({ note: "search dialog" });
 
   return (
     <button
       type="button"
-      aria-label="Close Search"
+      aria-label={t("Close Search", { note: "aria-label" })}
       onClick={() => onOpenChange(false)}
       className={cn(
         "rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -320,6 +323,7 @@ export function SearchDialogContent({
   className,
   ...props
 }: ComponentProps<typeof Dialog.Popup>) {
+  const t = useTranslations({ note: "search dialog" });
   const localRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -347,7 +351,7 @@ export function SearchDialogContent({
         }
         {...props}
       >
-        <Dialog.Title className="hidden">Search</Dialog.Title>
+        <Dialog.Title className="hidden">{t("Search")}</Dialog.Title>
         {children}
       </Dialog.Popup>
     </Dialog.Portal>
@@ -361,7 +365,7 @@ export function SearchDialogList({
       role="status"
       className="py-12 text-center text-sm text-muted-foreground"
     >
-      No results found
+      <T text="No results found" note="search dialog" />
     </div>
   ),
   Item = (props) => <SearchDialogListItem {...props} />,
@@ -378,6 +382,7 @@ export function SearchDialogList({
   Item?: (props: { item: SearchItemType; onClick: () => void }) => ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
+  const t = useTranslations({ note: "search dialog" });
   const { onSelect } = useSearch();
   const [active, setActive] = useState<string | null>(
     () => items?.[0]?.id ?? null,
@@ -460,7 +465,7 @@ export function SearchDialogList({
         id="fd-search-list"
         // an empty listbox is invalid, expose it only with options
         role={items?.length ? "listbox" : undefined}
-        aria-label={items?.length ? "Search" : undefined}
+        aria-label={items?.length ? t("Search") : undefined}
         className={cn(
           "flex max-h-[460px] w-full flex-col overflow-y-auto p-1",
           !items && "hidden",

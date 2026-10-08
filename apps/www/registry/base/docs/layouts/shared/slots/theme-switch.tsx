@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { Airplay, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { type ComponentProps, useSyncExternalStore } from "react";
@@ -29,6 +30,7 @@ export function ThemeSwitch({
   ...props
 }: ThemeSwitchProps) {
   const { setTheme, theme, resolvedTheme } = useTheme();
+  const t = useTranslations({ note: "theme switcher" });
   // `false` on the server and during hydration
   const mounted = useSyncExternalStore(
     noop,
@@ -44,7 +46,7 @@ export function ThemeSwitch({
         variant="ghost"
         size="icon-sm"
         className={className}
-        aria-label="Toggle Theme"
+        aria-label={t("Toggle Theme", { note: "aria-label" })}
         onClick={() =>
           changeTheme(setTheme, value === "light" ? "dark" : "light")
         }
@@ -68,13 +70,22 @@ export function ThemeSwitch({
           if (values[0]) changeTheme(setTheme, values[0]);
         }}
       >
-        <ToggleGroupItem value="light" aria-label="Light">
+        <ToggleGroupItem
+          value="light"
+          aria-label={t("Light", { note: "aria-label" })}
+        >
           <Sun />
         </ToggleGroupItem>
-        <ToggleGroupItem value="dark" aria-label="Dark">
+        <ToggleGroupItem
+          value="dark"
+          aria-label={t("Dark", { note: "aria-label" })}
+        >
           <Moon />
         </ToggleGroupItem>
-        <ToggleGroupItem value="system" aria-label="System">
+        <ToggleGroupItem
+          value="system"
+          aria-label={t("System", { note: "aria-label" })}
+        >
           <Airplay />
         </ToggleGroupItem>
       </ToggleGroup>

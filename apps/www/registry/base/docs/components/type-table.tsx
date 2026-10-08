@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { cva } from "class-variance-authority";
 import { cn } from "cn";
 import Link from "fumadocs-core/link";
@@ -66,6 +67,8 @@ export function TypeTable({
   className,
   ...props
 }: { type: Record<string, TypeNode> } & ComponentProps<"div">) {
+  const t = useTranslations({ note: "type table" });
+
   return (
     <div
       id={id}
@@ -76,8 +79,8 @@ export function TypeTable({
       {...props}
     >
       <div className="not-docs-typeset flex items-center px-3 py-1 font-medium text-muted-foreground">
-        <p className="w-1/4">Prop</p>
-        <p className="@max-xl:hidden">Type</p>
+        <p className="w-1/4">{t("Prop")}</p>
+        <p className="@max-xl:hidden">{t("Type")}</p>
       </div>
       {Object.entries(type).map(([key, value]) => (
         <Item key={key} parentId={id} name={key} item={value} />
@@ -105,6 +108,7 @@ function Item({
   name: string;
   item: TypeNode;
 }) {
+  const t = useTranslations({ note: "type table" });
   const [open, setOpen] = useState(false);
   const id = parentId ? `${parentId}-${name}` : undefined;
 
@@ -164,19 +168,19 @@ function Item({
           </div>
           {typeDescription && (
             <>
-              <p className={cn(fieldVariants())}>Type</p>
+              <p className={cn(fieldVariants())}>{t("Type")}</p>
               <p className="not-docs-typeset my-auto">{typeDescription}</p>
             </>
           )}
           {defaultValue && (
             <>
-              <p className={cn(fieldVariants())}>Default</p>
+              <p className={cn(fieldVariants())}>{t("Default")}</p>
               <p className="not-docs-typeset my-auto">{defaultValue}</p>
             </>
           )}
           {parameters.length > 0 && (
             <>
-              <p className={cn(fieldVariants())}>Parameters</p>
+              <p className={cn(fieldVariants())}>{t("Parameters")}</p>
               <div className="flex flex-col gap-2">
                 {parameters.map((param) => (
                   <div
@@ -194,7 +198,7 @@ function Item({
           )}
           {returns && (
             <>
-              <p className={cn(fieldVariants())}>Returns</p>
+              <p className={cn(fieldVariants())}>{t("Returns")}</p>
               <div className={cn(proseVariants(), "my-auto")}>{returns}</div>
             </>
           )}

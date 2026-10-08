@@ -3,6 +3,7 @@
 "use client";
 
 import { cn } from "cn";
+import { ChevronDown, Languages } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -13,16 +14,20 @@ import {
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarRail,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { SidebarRail, SidebarTrigger } from "../../../components/sidebar/base";
 import { SidebarLinkItem } from "../../../components/sidebar/link-item";
 import {
   SidebarPageTree,
   type SidebarPageTreeComponents,
 } from "../../../components/sidebar/page-tree";
 import { SidebarTabsDropdown } from "../../../components/sidebar/tabs/dropdown";
+import { useI18n } from "../../../contexts/i18n";
 import { LinkItem, NavTitle } from "../../shared/client";
+import {
+  LanguageSelect,
+  LanguageSelectText,
+} from "../../shared/slots/language-select";
 import { FullSearchTrigger } from "../../shared/slots/search-trigger";
 import { ThemeSwitch } from "../../shared/slots/theme-switch";
 import { useDocsLayout } from "../client";
@@ -61,6 +66,8 @@ export function Sidebar({
     themeSwitch ?? {};
   const { enabled: searchEnabled = true, full: searchProps } =
     searchToggle ?? {};
+  const { locales = [] } = useI18n();
+  const languageSelect = locales.length > 1;
 
   return (
     <SidebarRoot
@@ -109,8 +116,21 @@ export function Sidebar({
         )}
         <SidebarPageTree {...components} />
       </SidebarContent>
-      {(iconLinks.length > 0 || themeSwitchEnabled || footer) && (
+      {(languageSelect ||
+        iconLinks.length > 0 ||
+        themeSwitchEnabled ||
+        footer) && (
         <SidebarFooter className="p-4 pt-2">
+          {languageSelect && (
+            <LanguageSelect
+              variant="outline"
+              className="justify-start text-muted-foreground"
+            >
+              <Languages />
+              <LanguageSelectText />
+              <ChevronDown className="ms-auto size-3.5" />
+            </LanguageSelect>
+          )}
           {(iconLinks.length > 0 || themeSwitchEnabled) && (
             <div className="flex items-center text-muted-foreground">
               {iconLinks.map((item, i) => (

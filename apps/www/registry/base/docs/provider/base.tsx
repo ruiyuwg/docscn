@@ -8,6 +8,7 @@ import { lazy, type ReactNode } from "react";
 import { flushSync } from "react-dom";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { DefaultSearchDialogProps } from "../components/dialog/search-default";
+import { I18nProvider, type I18nProviderProps } from "../contexts/i18n";
 import { SearchProvider, type SearchProviderProps } from "../contexts/search";
 import { useHotKey } from "../utils/hotkey";
 
@@ -61,6 +62,8 @@ export interface RootProviderProps {
    */
   theme?: ThemeOptions;
 
+  i18n?: Omit<I18nProviderProps, "children">;
+
   children?: ReactNode;
 }
 
@@ -105,6 +108,7 @@ export function RootProvider({
   dir = "ltr",
   theme = {},
   search,
+  i18n,
 }: RootProviderProps) {
   let body = children;
 
@@ -131,6 +135,10 @@ export function RootProvider({
         {body}
       </ThemeProvider>
     );
+  }
+
+  if (i18n) {
+    body = <I18nProvider {...i18n}>{body}</I18nProvider>;
   }
 
   return (

@@ -3,6 +3,7 @@
 "use client";
 
 import { cn } from "cn";
+import { Languages } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -13,16 +14,17 @@ import {
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarRail,
-  SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { SidebarRail, SidebarTrigger } from "../../../components/sidebar/base";
 import { SidebarLinkItem } from "../../../components/sidebar/link-item";
 import {
   SidebarPageTree,
   type SidebarPageTreeComponents,
 } from "../../../components/sidebar/page-tree";
 import { SidebarTabsDropdown } from "../../../components/sidebar/tabs/dropdown";
+import { useI18n } from "../../../contexts/i18n";
 import { LinkItem, NavTitle } from "../../shared/client";
+import { LanguageSelect } from "../../shared/slots/language-select";
 import { ThemeSwitch } from "../../shared/slots/theme-switch";
 import { useNotebookLayout } from "../client";
 
@@ -59,7 +61,10 @@ export function Sidebar({
   const links = menuItems.filter((item) => item.type !== "icon");
   const { enabled: themeSwitchEnabled = true, ...themeSwitchProps } =
     themeSwitch ?? {};
-  // the navbar shows links from `lg` and the theme switch from `md`
+  const { locales = [] } = useI18n();
+  const languageSelect = locales.length > 1;
+  // the navbar shows links from `lg`, and the language and theme switches
+  // from `md`
   const footerItemsHidden = iconLinks.length > 0 ? "lg:hidden" : "md:hidden";
 
   return (
@@ -112,9 +117,12 @@ export function Sidebar({
         )}
         <SidebarPageTree {...components} />
       </SidebarContent>
-      {(iconLinks.length > 0 || themeSwitchEnabled || footer) && (
+      {(iconLinks.length > 0 ||
+        languageSelect ||
+        themeSwitchEnabled ||
+        footer) && (
         <SidebarFooter className={cn("p-4 pt-2", !footer && footerItemsHidden)}>
-          {(iconLinks.length > 0 || themeSwitchEnabled) && (
+          {(iconLinks.length > 0 || languageSelect || themeSwitchEnabled) && (
             <div
               className={cn(
                 "flex items-center text-muted-foreground",
@@ -134,11 +142,17 @@ export function Sidebar({
                   {item.icon}
                 </LinkItem>
               ))}
+              {languageSelect && (
+                <LanguageSelect className="ms-auto md:hidden">
+                  <Languages />
+                </LanguageSelect>
+              )}
               {themeSwitchEnabled && (
                 <ThemeSwitch
                   {...themeSwitchProps}
                   className={cn(
-                    "ms-auto md:hidden",
+                    "md:hidden",
+                    !languageSelect && "ms-auto",
                     themeSwitchProps.className,
                   )}
                 />

@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
 import { Check, LinkIcon } from "lucide-react";
 import {
@@ -111,6 +112,7 @@ export function Accordion({
 }
 
 function CopyButton({ id }: { id: string }) {
+  const t = useTranslations({ note: "accordion" });
   const [checked, onClick] = useCopyButton(() => {
     const url = new URL(window.location.href);
     url.hash = id;
@@ -128,7 +130,11 @@ function CopyButton({ id }: { id: string }) {
       onClick={onClick}
     >
       {checked ? <Check /> : <LinkIcon />}
-      <span className="sr-only">{checked ? "Copied Link" : "Copy Link"}</span>
+      <span className="sr-only">
+        {checked
+          ? t("Copied Link", { note: "aria-label" })
+          : t("Copy Link", { note: "aria-label" })}
+      </span>
     </Button>
   );
 }
