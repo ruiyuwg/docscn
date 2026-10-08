@@ -24,6 +24,7 @@ import type { DocsLayoutProps } from ".";
 import { Container } from "./slots/container";
 import { CollapsedSidebarPanel, Header } from "./slots/header";
 import { Sidebar } from "./slots/sidebar";
+import { findLast } from "../../utils/array";
 
 interface LayoutProps extends Pick<
   DocsLayoutProps,
@@ -137,11 +138,13 @@ function LayoutTabs({
 }) {
   const pathname = usePathname();
   const path = useTreePath();
-  const group = useTabsGroups(allTabs).findLast(
+  const group = findLast(
+    useTabsGroups(allTabs),
     (group) => typeof group.active?.root !== "string",
   );
   const selected = useMemo(() => {
-    return group?.options.findLast((option) =>
+    if (!group) return;
+    return findLast(group.options, (option) =>
       isLayoutTabActive(option, path, pathname),
     );
   }, [group, path, pathname]);

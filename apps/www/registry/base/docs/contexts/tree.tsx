@@ -6,6 +6,7 @@ import { usePathname } from "fumadocs-core/framework";
 import { type ReactNode, useMemo, useRef, createContext, use } from "react";
 import { searchPath } from "fumadocs-core/breadcrumb";
 import type { LayoutTab } from "../layouts/shared";
+import { findLast } from "../utils/array";
 
 type MakeRequired<O, K extends keyof O> = Omit<O, K> & Pick<Required<O>, K>;
 
@@ -40,7 +41,7 @@ export function TreeContextProvider({
   }, [tree, pathname]);
 
   const root =
-    path.findLast((item) => item.type === "folder" && item.root) ?? tree;
+    findLast(path, (item) => item.type === "folder" && item.root) ?? tree;
   root.$id ??= String(nextIdRef.current++);
 
   return (
@@ -102,7 +103,7 @@ export function useTabsGroups(tabs: LayoutTab[]): TabsGroup[] {
 
     const custom = tabs.filter((tab) => !tab.$folder);
     if (custom.length > 0) {
-      const group = out.findLast((group) => group.active?.root === true);
+      const group = findLast(out, (group) => group.active?.root === true);
       if (group) group.options.push(...custom);
       else out.push({ options: custom });
     }

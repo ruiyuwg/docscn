@@ -25,6 +25,7 @@ import {
   CollapsibleContent,
 } from "@/components/ui/collapsible";
 import { useDocsLayout } from "../../client";
+import { findLastIndex } from "../../../../utils/array";
 
 const variants = { normal: TocDefault, clerk: TocClerk, block: TocBlock };
 
@@ -244,7 +245,7 @@ function PageTOCPopoverTrigger({
     >
       <ProgressCircle
         value={
-          (items.findLastIndex((item) => item.active) + 1) /
+          (findLastIndex(items, (item) => item.active) + 1) /
           Math.max(1, items.length)
         }
         max={1}
