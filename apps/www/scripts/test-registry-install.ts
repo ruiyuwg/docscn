@@ -7,6 +7,9 @@
 // inspection, and `--registry <url>` to install from a deployed registry
 // (e.g. https://docscn.dev/r/{name}.json) instead of the local build. For a
 // protected Vercel preview, also set VERCEL_AUTOMATION_BYPASS_SECRET.
+//
+// Pass `--monorepo` to install into the app of a shadcn/ui monorepo instead,
+// following the extra steps in the "Monorepos" section of Getting started.
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -24,6 +27,7 @@ import {
 } from "./utils.ts";
 
 const keep = process.argv.includes("--keep");
+const monorepo = process.argv.includes("--monorepo");
 const registryOption = getOption("--registry");
 
 const registry = JSON.parse(
@@ -35,7 +39,64 @@ const local = registryOption ? undefined : await serveRegistry();
 const registryUrl = registryOption ?? local!.url;
 
 const tempDir = await mkdtemp(path.join(tmpdir(), "docscn-install-"));
-const app = path.join(tempDir, "app");
+const workspace = path.join(tempDir, "app");
+const app = monorepo ? path.join(workspace, "apps/web") : workspace;
+const uiPackage = path.join(workspace, "packages/ui");
+
+interface SourceItem {
+  dependencies?: string[];
+  devDependencies?: string[];
+}
+
+/**
+ * The commands in Getting started's "Monorepos" section, after checking that
+ * its install commands list every dependency of docscn's items. The section
+ * works around shadcn CLI bugs: in a monorepo, it installs the sidebar's
+ * use-mobile hook into the app, and dependencies into packages/ui only.
+ */
+async function getMonorepoSteps() {
+  const page = await readFile(
+    path.join(root, "content/docs/getting-started.mdx"),
+    "utf8",
+  );
+  const section = page.split(/^## Monorepos$/m)[1]?.split(/^## /m)[0] ?? "";
+  const lines = section.split("\n").map((line) => line.trim());
+  const sidebar = lines.find((line) =>
+    line.startsWith("npx shadcn@latest add"),
+  );
+  const installs = lines.filter((line) => line.startsWith("npm install "));
+  const install = installs.find((line) => !line.includes(" -D "));
+  const installDev = installs.find((line) => line.includes(" -D "));
+  if (!sidebar || !install || !installDev) {
+    throw new Error("Getting started has no Monorepos section to follow");
+  }
+
+  const source = JSON.parse(
+    await readFile(path.join(root, "registry.json"), "utf8"),
+  ) as { items: SourceItem[] };
+  const listed = (line: string) => new Set(line.split(" ").slice(2));
+  for (const [line, key] of [
+    [install, "dependencies"],
+    [installDev, "devDependencies"],
+  ] as const) {
+    const missing = source.items
+      .flatMap((item) => item[key] ?? [])
+      .filter((dependency) => !listed(line).has(dependency));
+    if (missing.length > 0) {
+      throw new Error(
+        `Getting started's monorepo install command is missing ${[...new Set(missing)].join(", ")}`,
+      );
+    }
+  }
+
+  // `npx shadcn@latest add sidebar` → the local shadcn CLI, and `npm install`
+  // → `pnpm add`, as the docs' package manager tabs show it.
+  const toPnpm = (line: string) => ["add", ...line.split(" ").slice(2)];
+  return {
+    sidebarArgs: sidebar.split(" ").slice(2),
+    installArgs: [toPnpm(install), toPnpm(installDev)],
+  };
+}
 
 /** The two edits the `docs` block's notes ask users to make. */
 async function applyDocsBlockNotes() {
@@ -64,6 +125,8 @@ async function applyDocsBlockNotes() {
 }
 
 try {
+  const monorepoSteps = monorepo ? await getMonorepoSteps() : undefined;
+
   await run(
     shadcn,
     [
@@ -72,7 +135,7 @@ try {
       "--base=base",
       "--preset=nova",
       "--name=app",
-      "--no-monorepo",
+      monorepo ? "--monorepo" : "--no-monorepo",
       "--yes",
       `--cwd=${tempDir}`,
     ],
@@ -80,36 +143,46 @@ try {
   );
 
   await setRegistry(app, registryUrl);
-  await allowBuild(app, "esbuild", false);
+  await allowBuild(workspace, "esbuild", false);
+  if (monorepoSteps) {
+    await run(shadcn, [...monorepoSteps.sidebarArgs, "--yes"], uiPackage);
+  }
   await run(shadcn, ["add", ...items, "--yes"], app);
+  for (const args of monorepoSteps?.installArgs ?? []) {
+    await run("pnpm", args, app);
+  }
   await applyDocsBlockNotes();
   await addFixturePage(app);
 
   // Lint docscn's files only: shadcn/ui's own hooks/use-mobile.ts fails
-  // eslint-config-next's react-hooks rules in a fresh app.
-  await run(
-    "pnpm",
-    [
-      "exec",
-      "eslint",
-      "--max-warnings",
-      "0",
-      "components/docs",
-      "components/mdx.tsx",
-      "lib/source.ts",
-      "lib/layout.shared.tsx",
-      "app/docs",
-      "app/api",
-    ],
-    app,
-  );
+  // eslint-config-next's react-hooks rules in a fresh app. The monorepo
+  // template's ESLint config matches no .ts or .tsx files, so the single-app
+  // run does the linting.
+  if (!monorepo) {
+    await run(
+      "pnpm",
+      [
+        "exec",
+        "eslint",
+        "--max-warnings",
+        "0",
+        "components/docs",
+        "components/mdx.tsx",
+        "lib/source.ts",
+        "lib/layout.shared.tsx",
+        "app/docs",
+        "app/api",
+      ],
+      app,
+    );
+  }
   await run("pnpm", ["run", "build"], app);
   await smokeTest(app);
   console.log(
-    `\nInstalled, built and smoke-tested ${items.length} registry item(s).`,
+    `\nInstalled, built and smoke-tested ${items.length} registry item(s)${monorepo ? " in a monorepo" : ""}.`,
   );
 } finally {
   local?.server.close();
-  if (keep) console.log(`\nKept the generated app at ${app}`);
+  if (keep) console.log(`\nKept the generated app at ${workspace}`);
   else await rm(tempDir, { recursive: true, force: true });
 }

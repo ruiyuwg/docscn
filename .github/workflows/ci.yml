@@ -46,6 +46,9 @@ jobs:
       - name: Test registry install
         run: pnpm test:registry
 
+      - name: Test registry install in a monorepo
+        run: pnpm test:registry -- --monorepo
+
   # Migrates a stock create-fumadocs-app project to docscn and builds it.
   # Needs network access for create-fumadocs-app and its install.
   migration:

@@ -86,7 +86,7 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 
 Run `pnpm build`, `pnpm lint` and `pnpm check-types` from the root, and `pnpm exec shadcn registry validate` in `apps/www`. Run `pnpm format` (or `pnpm format:check`) before committing.
 
-After changing registry items, run `pnpm test:registry`. It scaffolds a fresh shadcn/ui (Base UI) Next.js app in a temp directory, installs every item from the locally built registry, follows the `docs` block's notes, adds the kitchen-sink fixture, then lints docscn's files, builds the app and smoke-tests it with `next start`. Pass `-- --keep` to keep the app for inspection, or `-- --registry <url>` to install from a deployed registry.
+After changing registry items, run `pnpm test:registry`. It scaffolds a fresh shadcn/ui (Base UI) Next.js app in a temp directory, installs every item from the locally built registry, follows the `docs` block's notes, adds the kitchen-sink fixture, then lints docscn's files, builds the app and smoke-tests it with `next start`. Pass `-- --keep` to keep the app for inspection, or `-- --registry <url>` to install from a deployed registry. Pass `-- --monorepo` to install into the app of a shadcn/ui monorepo instead, following the workarounds in Getting started's "Monorepos" section; the test fails if that section's install commands miss a dependency from `registry.json`. CI runs both.
 
 `pnpm test:migration` checks the drop-in claim: it scaffolds the stock `create-fumadocs-app` project (pinned in the script; bump it together with `fumadocs-core`), migrates it as the migration guide describes, removes `fumadocs-ui`, then type-checks, builds and smoke-tests it. It needs network access, and CI runs it as a separate job.
 

@@ -99,3 +99,27 @@ npx shadcn@latest add @docscn/docs-layout @docscn/docs-page @docscn/mdx
 ```
 
 Each component lists the shadcn/ui primitives and other docscn components it needs, and the CLI installs them too. See the component pages for what each one does.
+
+## Monorepos
+
+In a [shadcn/ui monorepo](https://ui.shadcn.com/docs/monorepo), run the commands on this page in your app's directory (for example `apps/web`). docscn's components install into the app, and the shadcn/ui primitives they use into the shared `packages/ui`.
+
+Two extra steps work around bugs in the shadcn CLI.
+
+Before you install docscn, add the sidebar from `packages/ui`. Installed from the app, the CLI puts the sidebar's `use-mobile` hook in the app, where the sidebar can't import it:
+
+```npm
+npx shadcn@latest add sidebar
+```
+
+After you install docscn, add its dependencies to your app. The CLI adds them to `packages/ui/package.json` only, so the app can't import them. Run these in your app's directory:
+
+```npm
+npm install @base-ui/react class-variance-authority cn fumadocs-core@^16.16.2 fumadocs-mdx@^15.4.6 lucide-react next-themes react-medium-image-zoom rehype-raw scroll-into-view-if-needed shiki@^4.5.0 unified unist-util-visit
+```
+
+```npm
+npm install -D @types/hast @types/mdx
+```
+
+These are the packages the `docs` block needs. If you install components one by one, add the packages the CLI added to `packages/ui/package.json` instead. You can also delete the unused `hooks/use-mobile.ts` the CLI adds to your app.
