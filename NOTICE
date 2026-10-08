@@ -4,8 +4,9 @@ docscn includes code adapted from the following projects.
 Fumadocs
 https://github.com/fuma-nama/fumadocs
 
-Registry components are adapted from Fumadocs UI. Adapted files start with a
-comment crediting Fumadocs UI.
+Registry components are adapted from Fumadocs UI, and the docs block's routes
+and lib files from the create-fumadocs-app template. Adapted files start with a
+comment crediting their source.
 --------------------------------------------------------------------------------
 
 MIT License

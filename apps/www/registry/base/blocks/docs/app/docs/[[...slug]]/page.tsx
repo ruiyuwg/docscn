@@ -1,3 +1,5 @@
+// Adapted from the create-fumadocs-app template (https://github.com/fuma-nama/fumadocs)
+// Copyright (c) 2023 Fuma, MIT License
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/components/mdx";

@@ -68,7 +68,7 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - Reference other docscn items in `registryDependencies` as `@docscn/<name>`.
 - Give every item a clear `description`.
 - Ship CSS (typography, Shiki styles, ...) through the registry item's `css` field, so it merges into the user's global stylesheet. Write it as a plain stylesheet in `apps/www/registry/base/docs/styles/`, list it in `scripts/sync-registry-css.ts`, and run `pnpm registry:css` to copy it into `registry.json` (`registry:build` fails while they differ). docscn.dev imports the same stylesheets from `app/globals.css`. The CLI mangles nested (`&`) selectors and moves `@keyframes` into `@theme`, so use flat rules inside `@layer components`, and pseudo-elements outside `:where()`.
-- Files adapted from Fumadocs UI start with this comment, which is installed into users' projects with the code. The full licence texts are in `NOTICE`.
+- Files adapted from Fumadocs UI start with this comment, which is installed into users' projects with the code. Files adapted from the `create-fumadocs-app` template (the `docs` block's routes and `lib/` files) use the same comment with `Adapted from the create-fumadocs-app template` as the first line. The full licence texts are in `NOTICE`.
 
   ```ts
   // Adapted from Fumadocs UI (https://github.com/fuma-nama/fumadocs)
