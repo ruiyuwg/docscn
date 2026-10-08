@@ -1,0 +1,45 @@
+name: Bug report
+description: Something in a docscn component or docscn.dev doesn't work as expected.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. For security vulnerabilities, please don't open an issue: see [SECURITY.md](https://github.com/ruiyuwg/docscn/blob/main/SECURITY.md).
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: The registry item or page affected, e.g. `@docscn/docs-layout` or a docscn.dev URL.
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened
+      description: What you expected, and what happened instead. Include error messages and screenshots if useful.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: A minimal set of steps, or a link to a repository that reproduces it.
+      placeholder: |
+        1. Create a project with `npx shadcn@latest init --template=next --base=base`
+        2. `npx shadcn@latest add @docscn/docs`
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Versions of next, fumadocs-core, fumadocs-mdx and the shadcn CLI, your package manager, and your browser if relevant.
+      render: text
+  - type: checkboxes
+    id: fumadocs
+    attributes:
+      label: Fumadocs UI
+      options:
+        - label: This works differently in Fumadocs UI (a compatibility gap).

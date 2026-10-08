@@ -1,0 +1,61 @@
+# Version updates, grouped and weekly. Security updates are separate and
+# arrive as soon as an advisory is published.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    # pnpm refuses versions published in the last day (minimum release age).
+    cooldown:
+      default-days: 2
+    commit-message:
+      prefix: chore
+      prefix-development: chore
+      include: scope
+    groups:
+      # fumadocs-core and fumadocs-mdx upgrades need a check of upstream
+      # changes to the adapted components (see AGENTS.md), so they come alone.
+      fumadocs:
+        patterns:
+          - "fumadocs-*"
+      next:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      production:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      development:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # ESLint stays on 9 until eslint-config-next's plugins support 10, and
+      # TypeScript majors change the tsc/typescript-eslint split (AGENTS.md).
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@typescript/native"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns:
+          - "*"

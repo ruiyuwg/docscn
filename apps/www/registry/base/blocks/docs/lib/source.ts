@@ -1,3 +1,5 @@
+// Adapted from the create-fumadocs-app template (https://github.com/fuma-nama/fumadocs)
+// Copyright (c) 2023 Fuma, MIT License
 import { loader } from "fumadocs-core/source";
 import { lucideIconsPlugin } from "fumadocs-core/source/lucide-icons";
 import { defineDocs } from "fumadocs-mdx/macro";
