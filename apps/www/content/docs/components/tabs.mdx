@@ -1,0 +1,70 @@
+---
+title: Tabs
+description: Tabbed content, with selections shared between tab groups.
+---
+
+import { Tab, Tabs } from "@/components/docs/components/tabs";
+
+<Tabs items={["pnpm", "npm", "yarn"]}>
+  <Tab>Install with `pnpm add next-themes`.</Tab>
+  <Tab>Install with `npm install next-themes`.</Tab>
+  <Tab>Install with `yarn add next-themes`.</Tab>
+</Tabs>
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/docs-tabs
+```
+
+## Usage
+
+The `docs` block adds `Tabs` and `Tab` to your MDX components. Otherwise, add them to `components/mdx.tsx` or import them in a page:
+
+```mdx
+import { Tab, Tabs } from "@/components/docs/components/tabs";
+
+<Tabs items={["pnpm", "npm", "yarn"]}>
+  <Tab>Install with `pnpm add next-themes`.</Tab>
+  <Tab>Install with `npm install next-themes`.</Tab>
+  <Tab>Install with `yarn add next-themes`.</Tab>
+</Tabs>
+```
+
+With `items`, each `Tab` matches an item by its order. Pass `value` to match a tab explicitly instead, or leave out `items` and compose the list yourself with `TabsList` and `TabsTrigger`:
+
+```mdx
+<Tabs defaultValue="react">
+  <TabsList>
+    <TabsTrigger value="react">React</TabsTrigger>
+    <TabsTrigger value="vue">Vue</TabsTrigger>
+  </TabsList>
+  <TabsContent value="react">...</TabsContent>
+  <TabsContent value="vue">...</TabsContent>
+</Tabs>
+```
+
+## Shared and persisted selections
+
+Tabs with the same `groupId` stay in sync: picking "npm" in one switches every tab group on the site with that `groupId`. The selection is kept for the session, and `persist` keeps it across visits.
+
+```mdx
+<Tabs groupId="package-manager" persist items={["pnpm", "npm", "yarn"]}>
+```
+
+## Linking to a tab
+
+Give a `Tab` an `id`, and a link to `#id` opens that tab. A link to an element inside a tab opens the tab too. With `updateAnchor`, selecting a tab updates the URL hash to its `id`.
+
+## Props
+
+| Prop           | Type        | Description                                                       |
+| -------------- | ----------- | ----------------------------------------------------------------- |
+| `items`        | `string[]`  | The tabs' labels, rendered as the tabs list.                      |
+| `defaultIndex` | `number`    | The tab selected at first, with `items`. Defaults to `0`.         |
+| `label`        | `ReactNode` | Extra content at the start of the tabs list, with `items`.        |
+| `groupId`      | `string`    | Share the selection with other tabs that have the same `groupId`. |
+| `persist`      | `boolean`   | Keep the selection in `localStorage` (with `groupId`).            |
+| `updateAnchor` | `boolean`   | Update the URL hash to the selected tab's `id`.                   |
+
+`Tabs` is built on shadcn/ui `tabs`, and also accepts its props, such as `defaultValue`, `value` and `onValueChange`.

@@ -38,6 +38,8 @@ It covers everything Fumadocs MDX's default preset emits:
 | `Card`, `Cards`                                                              | [Cards](/docs/components/card)                               |
 | `Callout`, `CalloutContainer`, `CalloutTitle`, `CalloutDescription`          | [Callouts](/docs/components/callout)                         |
 
+The `docs` block's `components/mdx.tsx` also adds [Tabs](/docs/components/tabs), [Steps](/docs/components/steps), [Accordion](/docs/components/accordion) and [Files](/docs/components/files), which Fumadocs UI's default components leave out. If you migrated from Fumadocs UI, import them in `components/mdx.tsx` the same way.
+
 ## Relative links
 
 `createRelativeLink` resolves links to other MDX files (`[Next](./next.mdx)`) to their page URLs. It works in server components only:

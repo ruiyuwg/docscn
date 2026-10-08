@@ -1,9 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-/* Shipped to users through the `css` field of the typography and codeblock items. */
+/* Shipped to users through the `css` field of the typography, codeblock and steps items. */
 @import "../registry/base/docs/styles/typography.css";
 @import "../registry/base/docs/styles/codeblock.css";
+@import "../registry/base/docs/styles/steps.css";
 
 @custom-variant dark (&:is(.dark *));
 

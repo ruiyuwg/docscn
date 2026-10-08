@@ -19,6 +19,10 @@
     "callout",
     "card",
     "heading",
+    "tabs",
+    "steps",
+    "accordion",
+    "files",
     "---Other---",
     "og",
     "utilities"

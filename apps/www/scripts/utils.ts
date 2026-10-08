@@ -181,6 +181,24 @@ export async function smokeTest(
       "code blocks render highlighted Shiki output",
     );
     check(pageHtml.includes('role="tablist"'), "code tabs render as tabs");
+    check(
+      pageHtml.includes('class="fd-steps"') &&
+        pageHtml.includes('class="fd-step"'),
+      "steps render with the fd-steps and fd-step classes",
+    );
+    check(
+      pageHtml.includes('data-slot="accordion"') &&
+        pageHtml.includes('id="what-is-docscn"'),
+      "accordions render, with anchor ids",
+    );
+    check(
+      pageHtml.includes(">layout.tsx<") && pageHtml.includes(">package.json<"),
+      "the file tree renders",
+    );
+    check(
+      pageHtml.includes("Install with <code"),
+      "tabs from a list of items render their content",
+    );
 
     const search = await fetch(`${base}/api/search?query=callouts`);
     const results = (await search.json()) as unknown[];

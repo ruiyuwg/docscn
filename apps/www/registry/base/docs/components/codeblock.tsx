@@ -15,11 +15,11 @@ import {
   useMemo,
   useRef,
   useState,
-  useSyncExternalStore,
 } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mergeRefs } from "../utils/merge-refs";
+import { useTabsGroup } from "../utils/tabs-group";
 import { useCopyButton } from "../utils/use-copy-button";
 
 export interface CodeBlockProps extends Omit<
@@ -202,26 +202,6 @@ function CopyButton({
 
 type WithStringClassName<T> = Omit<T, "className"> & { className?: string };
 
-const groupListeners = new Map<string, Set<() => void>>();
-
-function subscribeGroup(groupId: string | undefined) {
-  return (onChange: () => void) => {
-    if (!groupId) return () => {};
-    const listeners = groupListeners.get(groupId) ?? new Set();
-    listeners.add(onChange);
-    groupListeners.set(groupId, listeners);
-    return () => {
-      listeners.delete(onChange);
-    };
-  };
-}
-
-function setGroupValue(groupId: string, value: string, persist: boolean) {
-  sessionStorage.setItem(groupId, value);
-  if (persist) localStorage.setItem(groupId, value);
-  for (const listener of groupListeners.get(groupId) ?? []) listener();
-}
-
 export interface CodeBlockTabsProps extends WithStringClassName<
   ComponentProps<typeof Tabs>
 > {
@@ -250,15 +230,7 @@ export function CodeBlockTabs({
   const nested = use(TabsContext) !== null;
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   // the value selected in another tab group with the same `groupId`
-  const groupValue = useSyncExternalStore(
-    useMemo(() => subscribeGroup(groupId), [groupId]),
-    () => {
-      if (!groupId) return null;
-      const value = sessionStorage.getItem(groupId);
-      return persist ? (value ?? localStorage.getItem(groupId)) : value;
-    },
-    () => null,
-  );
+  const [groupValue, setGroupValue] = useTabsGroup(groupId, persist);
   const value = _value ?? groupValue ?? uncontrolledValue;
 
   return (
@@ -266,9 +238,7 @@ export function CodeBlockTabs({
       ref={mergeRefs(containerRef, ref)}
       value={value}
       onValueChange={(v, details) => {
-        if (groupId && typeof v === "string") {
-          setGroupValue(groupId, v, persist);
-        }
+        if (typeof v === "string") setGroupValue(v);
         setUncontrolledValue(v);
         _onValueChange?.(v, details);
       }}
