@@ -1,16 +1,29 @@
+<p align="center">
+  <a href="https://docscn.dev">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/header/dots.svg?title=docscn&subtitle=Fumadocs+UI%2C+built+the+shadcn%2Fui+way&font=geist&mode=dark" />
+      <img src="https://shieldcn.dev/header/dots.svg?title=docscn&subtitle=Fumadocs+UI%2C+built+the+shadcn%2Fui+way&font=geist&mode=light" alt="docscn" />
+    </picture>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/ruiyuwg/docscn/actions/workflows/ci.yml"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/ci.svg?variant=outline&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/ci.svg?variant=outline&font=geist&mode=light" alt="CI" /></picture></a>
+  <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/license.svg?variant=outline&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/license.svg?variant=outline&font=geist&mode=light" alt="License" /></picture></a>
+  <a href="https://github.com/ruiyuwg/docscn"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/stars.svg?variant=outline&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/stars.svg?variant=outline&font=geist&mode=light" alt="GitHub stars" /></picture></a>
+</p>
+
 # docscn
 
-A [shadcn/ui](https://ui.shadcn.com) registry of documentation components built on [Fumadocs Core](https://fumadocs.dev/docs/headless).
+A drop-in replacement for [Fumadocs UI](https://fumadocs.dev), built the [shadcn/ui](https://ui.shadcn.com) way: a registry of documentation components on [Fumadocs Core](https://fumadocs.dev/docs/headless).
 
 Install docs layouts, sidebars, tables of contents, search, and other documentation components into your own Next.js app with the shadcn CLI. They are built on your existing shadcn/ui primitives and theme, so your docs look like the rest of your project.
 
-## What's included
+## Why docscn?
 
-- **Layouts:** `DocsLayout` on the shadcn/ui sidebar, and `HomeLayout` with a navbar
-- **Pages:** `DocsPage` with a table of contents, breadcrumb, previous/next links and page actions
-- **Search:** a ⌘K search dialog for Fumadocs' search server
-- **MDX components:** code blocks and code tabs for Shiki output, headings, callouts and cards
-- **Styles:** `docs-typeset` typography and Shiki styles built from your shadcn/ui theme
+- **Your primitives, your theme.** Components use your shadcn/ui `sidebar`, `dialog`, `tabs` and theme tokens, not a separate design system with its own `--color-fd-*` variables.
+- **The source is yours.** The shadcn CLI copies the code into your app, so you customise it by editing it, with no `slots` API to learn.
+- **Drop-in for Fumadocs UI.** Component names, props and module paths match, so migrating means changing `fumadocs-ui/` to `@/components/docs/` in your imports.
 
 docscn targets Next.js projects using shadcn/ui with [Base UI](https://base-ui.com).
 
@@ -36,30 +49,13 @@ pnpm dlx shadcn@latest add @docscn/fumadocs-ui
 
 See [Getting started](https://docscn.dev/docs/getting-started) and [Migrating from Fumadocs UI](https://docscn.dev/docs/migrating-from-fumadocs-ui) for the full steps.
 
-## Development
+## Contributing
 
-This is a [Turborepo](https://turborepo.dev) monorepo using pnpm.
-
-| Path                                  | Description                                                              |
-| ------------------------------------- | ------------------------------------------------------------------------ |
-| `apps/www`                            | The [docscn.dev](https://docscn.dev) site, which also hosts the registry |
-| `apps/www/registry.json`              | The registry definition                                                  |
-| `apps/www/registry/base/docs/`        | Source for registry items                                                |
-| `apps/www/registry/base/blocks/docs/` | Source for the `docs` block's routes, `lib/` files and content           |
-| `apps/www/scripts/`                   | The registry CSS sync, install test and migration test                   |
-| `apps/www/content/docs/`              | docscn's documentation (MDX)                                             |
-| `packages/typescript-config`          | Shared TypeScript configuration                                          |
+See [CONTRIBUTING.md](CONTRIBUTING.md) to set up the repository, and [SECURITY.md](SECURITY.md) to report a vulnerability.
 
 ```sh
 pnpm install
-pnpm dev              # start the site at http://localhost:3000
-pnpm build            # build the registry into apps/www/public/r, then the site
-pnpm registry:build   # build the registry only
-pnpm test:registry    # install every registry item into a fresh app, build and smoke-test it
-pnpm test:migration   # migrate a stock create-fumadocs-app project to docscn and build it
-pnpm lint
-pnpm check-types
-pnpm format          # format with Prettier (pnpm format:check to check only)
+pnpm dev   # docscn.dev at http://localhost:3000
 ```
 
 ## License

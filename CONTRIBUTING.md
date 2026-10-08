@@ -15,7 +15,32 @@ pnpm install
 pnpm dev   # docscn.dev at http://localhost:3000
 ```
 
-The [README](README.md#development) describes the repository layout, and [AGENTS.md](AGENTS.md) records the project's decisions and conventions in detail: Fumadocs UI compatibility, architecture, registry conventions and checks. Please read the parts relevant to your change.
+[Repository layout](#repository-layout) describes where things live, and [AGENTS.md](AGENTS.md) records the project's decisions and conventions in detail: Fumadocs UI compatibility, architecture, registry conventions and checks. Please read the parts relevant to your change.
+
+## Repository layout
+
+This is a [Turborepo](https://turborepo.dev) monorepo using pnpm.
+
+| Path                                  | Description                                                              |
+| ------------------------------------- | ------------------------------------------------------------------------ |
+| `apps/www`                            | The [docscn.dev](https://docscn.dev) site, which also hosts the registry |
+| `apps/www/registry.json`              | The registry definition                                                  |
+| `apps/www/registry/base/docs/`        | Source for registry items                                                |
+| `apps/www/registry/base/blocks/docs/` | Source for the `docs` block's routes, `lib/` files and content           |
+| `apps/www/scripts/`                   | The registry CSS sync, install test and migration test                   |
+| `apps/www/content/docs/`              | docscn's documentation (MDX)                                             |
+| `packages/typescript-config`          | Shared TypeScript configuration                                          |
+
+```sh
+pnpm dev              # start the site at http://localhost:3000
+pnpm build            # build the registry into apps/www/public/r, then the site
+pnpm registry:build   # build the registry only
+pnpm test:registry    # install every registry item into a fresh app, build and smoke-test it
+pnpm test:migration   # migrate a stock create-fumadocs-app project to docscn and build it
+pnpm lint
+pnpm check-types
+pnpm format          # format with Prettier (pnpm format:check to check only)
+```
 
 ## Making a change
 
