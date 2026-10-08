@@ -61,27 +61,28 @@ Then build the project. Pages, search, the OG image and Markdown routes keep wor
 
 These are deliberate differences from Fumadocs UI:
 
-| Fumadocs UI                                                      | docscn                                                                                                                      |
-| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| The `slots` prop on layouts and pages                            | Not supported. Edit your copy of the component instead.                                                                     |
-| `--color-fd-*` variables and `fd-*` utility classes              | Your shadcn/ui theme tokens (`--background`, `--primary`, `--sidebar-*`, ...). See [Theming and typography](/docs/theming). |
-| Colour themes and CSS presets (`neutral.css`, `preset.css`, ...) | Not shipped. Change your shadcn/ui theme instead.                                                                           |
-| The `prose` class (`not-prose` to opt out)                       | `docs-typeset` (`not-docs-typeset` to opt out).                                                                             |
-| `fumadocs-ui/components/ui/*` (button, tabs, popover, ...)       | Your own shadcn/ui primitives in `components/ui/`.                                                                          |
-| `fumadocs-ui/components/sidebar/base`                            | The shadcn/ui `sidebar`. `DocsLayout` uses `SidebarProvider` and `SidebarInset`, so `useSidebar()` works inside docs pages. |
-| `createPageTreeRenderer` and `createLinkItemRenderer`            | `SidebarPageTree` and `SidebarLinkItem`, rendered with the shadcn/ui sidebar menu.                                          |
-| Providers for React Router, TanStack Start, Waku and Astro       | Next.js only (`provider/next`).                                                                                             |
-| Fumadocs UI's Radix UI variant                                   | Base UI only.                                                                                                               |
-| Deprecated props (`nav.component`, `sidebar.tabs`, ...)          | Not supported. Use the current props.                                                                                       |
-| The sidebar's desktop collapse state                             | Kept in shadcn/ui's `sidebar_state` cookie. Pass it to `sidebar.defaultOpen` to restore it on load.                         |
-| ⌘B                                                               | Toggles the sidebar, as in every shadcn/ui sidebar.                                                                         |
-| `Banner`'s layout offset                                         | Set as `--docs-banner-height` instead of `--fd-banner-height`.                                                              |
+| Fumadocs UI                                                      | docscn                                                                                                                                      |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| The `slots` prop on layouts and pages                            | Not supported. Edit your copy of the component instead.                                                                                     |
+| `--color-fd-*` variables and `fd-*` utility classes              | Your shadcn/ui theme tokens (`--background`, `--primary`, `--sidebar-*`, ...). See [Theming and typography](/docs/theming).                 |
+| Colour themes and CSS presets (`neutral.css`, `preset.css`, ...) | Not shipped. Change your shadcn/ui theme instead.                                                                                           |
+| The `prose` class (`not-prose` to opt out)                       | `docs-typeset` (`not-docs-typeset` to opt out).                                                                                             |
+| `fumadocs-ui/components/ui/*` (button, tabs, popover, ...)       | Your own shadcn/ui primitives in `components/ui/`.                                                                                          |
+| `fumadocs-ui/components/sidebar/base`                            | The shadcn/ui `sidebar`. The docs and notebook layouts use `SidebarProvider` and `SidebarInset`, so `useSidebar()` works inside docs pages. |
+| `createPageTreeRenderer` and `createLinkItemRenderer`            | `SidebarPageTree` and `SidebarLinkItem`, rendered with the shadcn/ui sidebar menu.                                                          |
+| Providers for React Router, TanStack Start, Waku and Astro       | Next.js only (`provider/next`).                                                                                                             |
+| Fumadocs UI's Radix UI variant                                   | Base UI only.                                                                                                                               |
+| Deprecated props (`nav.component`, `sidebar.tabs`, ...)          | Not supported. Use the current props.                                                                                                       |
+| The sidebar's desktop collapse state                             | Kept in shadcn/ui's `sidebar_state` cookie. Pass it to `sidebar.defaultOpen` to restore it on load.                                         |
+| ⌘B                                                               | Toggles the sidebar, as in every shadcn/ui sidebar.                                                                                         |
+| `Banner`'s layout offset                                         | Set as `--docs-banner-height` instead of `--fd-banner-height`.                                                                              |
+| The notebook layout's width (centred, up to 97rem)               | The full width of the window, with the sidebar against its edge.                                                                            |
 
 ## Not supported yet
 
 - **Translations.** UI strings are in English. The `i18n` prop of `RootProvider`, `LanguageSelect` and `defineI18nUI` aren't available; edit the strings in your copy for now.
-- **AI chat.** The `aiChat` option of `DocsLayout`.
-- **More layouts:** the notebook layout, and the flux, glass and spacious layouts.
+- **AI chat.** The `aiChat` option of the docs and notebook layouts.
+- **More layouts:** the flux, glass and spacious layouts.
 - **Search dialogs** for Algolia and Orama Cloud. Build one from the [search dialog parts](/docs/components/search-dialog).
 
 [Compatibility](/docs/compatibility) lists every Fumadocs UI module and its status.

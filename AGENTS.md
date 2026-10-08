@@ -37,7 +37,7 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - **Typography:** `DocsBody` applies the `docs-typeset` class, typeset-style CSS (in the style of shadcn/typeset) that docscn ships, built from the user's theme tokens. It replaces Fumadocs UI's `prose` styles. Components opt out with `not-docs-typeset` (Fumadocs UI's `not-prose`). The name is docscn-specific so it can't clash with a user's own `prose` or `typeset` styles.
 - **Code highlighting:** keep Fumadocs MDX's default `rehype-code` (Shiki) output. The code block component ships the Shiki CSS it needs.
 - **Theme:** use `next-themes`, as shadcn/ui's dark mode guide does.
-- **Layouts:** docs and home are done; notebook is next ([#9](https://github.com/ruiyuwg/docscn/issues/9)). Add flux, glass or spacious only if users ask.
+- **Layouts:** docs, notebook and home. The notebook layout spans the full width rather than centring like Fumadocs UI's, because the shadcn/ui sidebar is fixed to the window's edge. Add flux, glass or spacious only if users ask.
 - **Primitives used directly:** the search dialog uses Base UI's `Dialog`, and the home navbar Base UI's `NavigationMenu` (anchored to the whole navbar row), where shadcn/ui's wrappers can't express Fumadocs UI's behaviour. Style them with shadcn/ui tokens.
 
 ## Packaging
