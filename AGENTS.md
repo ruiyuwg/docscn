@@ -92,3 +92,14 @@ After changing registry items, run `pnpm test:registry`. It scaffolds a fresh sh
 pnpm enforces a minimum release age, so a package version published in the last day fails to install. Pin the previous version instead of adding entries to `minimumReleaseAgeExclude`.
 
 pnpm also blocks dependency install scripts by default. Record each decision under `allowBuilds` in `pnpm-workspace.yaml`, and use `false` unless the package breaks without its script.
+
+## Commits
+
+Write commit messages with [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/): `<type>(<optional scope>): <description>`.
+
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore` and `revert`. Mark a breaking change with `!` after the type or scope, plus a `BREAKING CHANGE:` footer.
+- Scopes are optional. Use `registry` for changes to registry items and `deps` for dependency updates, e.g. `feat(registry): add the search dialog` or `chore(deps): upgrade shadcn CLI to 4.21.3`.
+- Write the description in the imperative mood, starting in lowercase (unless it starts with a name such as `DocsLayout`), without a trailing full stop.
+- Use the body to explain what changed and why, wrapped at 72 characters. Reference issues in a footer (`Refs #12`, `Closes #12`).
+- Don't add `Co-Authored-By` or other AI attribution trailers.
+- Give pull requests a Conventional Commits title too, and merge them with a merge commit whose subject is the PR title and number, e.g. `feat: first release (#11)`.
