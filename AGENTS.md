@@ -28,7 +28,7 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - **Mirror Fumadocs UI's module paths.** Install everything under `components/docs/` (target `@components/docs/...`), laid out like `fumadocs-ui`'s import paths, so migration is one find-and-replace of `fumadocs-ui/` with `@/components/docs/`. For example, `fumadocs-ui/layouts/docs/page` becomes `@/components/docs/layouts/docs/page`, and `fumadocs-ui/provider/next` becomes `@/components/docs/provider/next`.
 - **Inputs are Fumadocs Core types** (`PageTree.Root`, `TOCItemType`, ...), so any content source Fumadocs supports works.
 - **Deliberately not compatible:** the `slots` API (users edit their own copy instead), `--color-fd-*` variables and `fd-*` utility classes, Fumadocs UI's colour themes and CSS presets, non-Next.js providers, Radix, and deprecated props. Document each in the migration guide.
-- **UI strings are English** for now, written inline in the components, with no `i18n` prop ([#12](https://github.com/ruiyuwg/docscn/issues/12)). Fumadocs UI reads them through `@fuma-translate/react`; replace each `t('...')` call with its English text when porting.
+- **UI strings are translated as in Fumadocs UI**, through `useTranslations()` from `@fuma-translate/react`, so translations and language packs written for Fumadocs UI work unchanged. Keep upstream's `t()` calls and notes when porting: a key is the English text followed by each note in parentheses (`On this page(table of contents)`).
 
 ## Architecture
 
@@ -68,6 +68,7 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - Files outside `components/docs/` (the `docs` block's routes and `lib/` files) use plain targets such as `app/docs/layout.tsx` or `lib/source.ts`, which the CLI places under `src/` when the project has one. Content uses `~/content/docs/...`, because Fumadocs MDX resolves `content/docs` from the project root.
 - Reference other docscn items in `registryDependencies` as `@docscn/<name>`.
 - Give every item a clear `description`.
+- Give every UI string a key in `apps/www/registry/base/docs/.translations/index.ts`, which holds all of Fumadocs UI's keys plus docscn's own. `registry:build` runs `scripts/check-translation-keys.ts`, which fails on a `t()` call whose key is missing. List `@fuma-translate/react` in the `dependencies` of every item that calls `useTranslations()`.
 - Ship CSS (typography, Shiki styles, ...) through the registry item's `css` field, so it merges into the user's global stylesheet. Write it as a plain stylesheet in `apps/www/registry/base/docs/styles/`, list it in `scripts/sync-registry-css.ts`, and run `pnpm registry:css` to copy it into `registry.json` (`registry:build` fails while they differ). docscn.dev imports the same stylesheets from `app/globals.css`. The CLI mangles nested (`&`) selectors and moves `@keyframes` into `@theme`, so use flat rules inside `@layer components`, and pseudo-elements outside `:where()`.
 - Files adapted from Fumadocs UI start with this comment, which is installed into users' projects with the code. Files adapted from the `create-fumadocs-app` template (the `docs` block's routes and `lib/` files) use the same comment with `Adapted from the create-fumadocs-app template` as the first line. The full licence texts are in `NOTICE`.
 
