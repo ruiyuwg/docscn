@@ -1,7 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/components/mdx";
-import { source } from "@/lib/source";
+import { getPageMarkdownUrl, gitConfig, source } from "@/lib/source";
+import {
+  DocsBody,
+  DocsDescription,
+  DocsPage,
+  DocsTitle,
+  MarkdownCopyButton,
+  ViewOptionsPopover,
+} from "@/registry/base/docs/layouts/docs/page";
+import { createRelativeLink } from "@/registry/base/docs/mdx";
 
 export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   const params = await props.params;
@@ -9,21 +18,30 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const markdownUrl = getPageMarkdownUrl(page).url;
 
   return (
-    <article>
-      <h1 className="text-3xl font-semibold tracking-tight">
-        {page.data.title}
-      </h1>
-      {page.data.description && (
-        <p className="mt-2 text-lg text-muted-foreground">
-          {page.data.description}
-        </p>
-      )}
-      <div className="mt-8">
-        <MDX components={getMDXComponents()} />
+    <DocsPage toc={page.data.toc} full={page.data.full}>
+      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsDescription className="mb-0">
+        {page.data.description}
+      </DocsDescription>
+      <div className="flex flex-row items-center gap-2 border-b pb-6">
+        <MarkdownCopyButton markdownUrl={markdownUrl} />
+        <ViewOptionsPopover
+          markdownUrl={markdownUrl}
+          githubUrl={`https://github.com/${gitConfig.user}/${gitConfig.repo}/blob/${gitConfig.branch}/apps/www/content/docs/${page.path}`}
+        />
       </div>
-    </article>
+      <DocsBody>
+        <MDX
+          components={getMDXComponents({
+            // this allows you to link to other pages with relative file paths
+            a: createRelativeLink(source, page),
+          })}
+        />
+      </DocsBody>
+    </DocsPage>
   );
 }
 

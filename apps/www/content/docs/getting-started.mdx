@@ -1,0 +1,99 @@
+---
+title: Getting started
+description: Add docs to a Next.js project that uses shadcn/ui.
+---
+
+docscn supports Next.js projects that use shadcn/ui with [Base UI](https://base-ui.com) (the `base-*` styles).
+
+## Create a project
+
+If you don't have a project yet, create one with shadcn/ui and Base UI:
+
+```npm
+npx shadcn@latest init --template=next --base=base
+```
+
+## Add the registry
+
+Add the `@docscn` registry to your `components.json`:
+
+```npm
+npx shadcn@latest registry add @docscn=https://docscn.dev/r/{name}.json
+```
+
+## Install the docs block
+
+The `docs` block installs every docscn component, plus everything a docs site needs:
+
+- `lib/source.ts`: loads `content/docs` with [Fumadocs MDX](https://fumadocs.dev/docs/mdx)
+- `lib/layout.shared.tsx`: shared layout options (title, links, GitHub URL)
+- `components/mdx.tsx`: the MDX components
+- `app/docs/layout.tsx` and `app/docs/[[...slug]]/page.tsx`: the docs routes
+- `app/api/search/route.ts`: the search API
+- `content/docs/index.mdx` and `meta.json`: a first page
+
+```npm
+npx shadcn@latest add @docscn/docs
+```
+
+<Callout type="warn" title="pnpm 11">
+  Fumadocs MDX depends on esbuild, and pnpm 11 won't install a package with an
+  install script until you decide whether it may run. If the install stops with
+  `ERR_PNPM_IGNORED_BUILDS`, add `esbuild: false` (it works without its script)
+  under `allowBuilds` in `pnpm-workspace.yaml` and run the command again.
+</Callout>
+
+## Finish the setup
+
+Two files need small edits the CLI can't make for you.
+
+Wrap your app in `RootProvider`. It includes [next-themes](https://github.com/pacocoursey/next-themes), so it replaces the `ThemeProvider` from shadcn/ui's template or dark mode guide:
+
+```tsx title="app/layout.tsx"
+import { RootProvider } from "@/components/docs/provider/next"; // [!code ++]
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <RootProvider>{children}</RootProvider> {/* [!code ++] */}
+      </body>
+    </html>
+  );
+}
+```
+
+Compile MDX with Fumadocs MDX:
+
+```ts title="next.config.ts"
+import { createMDX } from "fumadocs-mdx/next"; // [!code ++]
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {};
+
+export default createMDX()(nextConfig); // [!code ++]
+```
+
+## Run it
+
+Start the dev server and open [localhost:3000/docs](http://localhost:3000/docs):
+
+```npm
+npm run dev
+```
+
+Write pages as `.mdx` files in `content/docs`, and order them with `meta.json`. See the [Fumadocs docs](https://fumadocs.dev/docs) for the page and `meta.json` conventions.
+
+## Install components one by one
+
+You can also install components individually, for example:
+
+```npm
+npx shadcn@latest add @docscn/docs-layout @docscn/docs-page @docscn/mdx
+```
+
+Each component lists the shadcn/ui primitives and other docscn components it needs, and the CLI installs them too. See the component pages for what each one does.

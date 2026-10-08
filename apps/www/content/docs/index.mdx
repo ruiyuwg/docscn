@@ -3,8 +3,39 @@ title: Introduction
 description: Documentation components for shadcn/ui, built on Fumadocs Core.
 ---
 
-docscn is a [shadcn/ui](https://ui.shadcn.com) registry of documentation components. Install docs layouts, sidebars, tables of contents, search, and more into your own app with the shadcn CLI.
+docscn is a [shadcn/ui](https://ui.shadcn.com) registry of documentation components: a docs layout with a sidebar, docs pages with a table of contents, search, and the MDX components for code blocks, callouts and cards. You install them into your own Next.js app with the shadcn CLI, and they're built on your shadcn/ui primitives and theme, so your docs look like the rest of your project.
 
-The components are built on [Fumadocs Core](https://fumadocs.dev/docs/headless) and your existing shadcn/ui primitives, so your docs share the same components and theme as the rest of your project.
+## How it relates to Fumadocs
 
-docscn is in early development. No components have been published yet.
+docscn is a drop-in replacement for [Fumadocs UI](https://fumadocs.dev/docs/ui), built the shadcn/ui way.
+
+- Content comes from [Fumadocs Core](https://fumadocs.dev/docs/headless) and [Fumadocs MDX](https://fumadocs.dev/docs/mdx), exactly as it does with Fumadocs UI. docscn components take Fumadocs Core's types (page trees, TOC items, search results), so any content source Fumadocs supports works.
+- Components keep Fumadocs UI's names, props and module paths. `fumadocs-ui/layouts/docs` becomes `@/components/docs/layouts/docs`, so [migrating](/docs/migrating-from-fumadocs-ui) is a find-and-replace.
+- Instead of a package with its own styles and colour themes, you get the source in `components/docs/`, built on your shadcn/ui `sidebar`, `button`, `tabs`, `alert` and other primitives, and styled with your theme tokens. Edit it like any other component in your app.
+
+## What's included
+
+| Area       | Components                                                                                                                                           |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Layouts    | [DocsLayout](/docs/components/docs-layout), [HomeLayout](/docs/components/home-layout)                                                               |
+| Pages      | [DocsPage](/docs/components/docs-page), [TOC](/docs/components/toc), [page actions](/docs/components/page-actions)                                   |
+| Search     | [Search dialog](/docs/components/search-dialog)                                                                                                      |
+| MDX        | [MDX components](/docs/components/mdx), [code block](/docs/components/codeblock), [callout](/docs/components/callout), [card](/docs/components/card) |
+| Everything | [RootProvider](/docs/components/root-provider), [OG images](/docs/components/og)                                                                     |
+
+See [Compatibility](/docs/compatibility) for the status of every Fumadocs UI module.
+
+## Next steps
+
+<Cards>
+  <Card
+    title="Getting started"
+    href="/docs/getting-started"
+    description="Add docs to a new or existing shadcn/ui project."
+  />
+  <Card
+    title="Migrating from Fumadocs UI"
+    href="/docs/migrating-from-fumadocs-ui"
+    description="Replace fumadocs-ui in an existing Fumadocs app."
+  />
+</Cards>

@@ -1,0 +1,26 @@
+{
+  "title": "Components",
+  "pages": [
+    "root-provider",
+    "docs-layout",
+    "docs-page",
+    "home-layout",
+    "---Navigation---",
+    "docs-sidebar",
+    "sidebar-tabs",
+    "toc",
+    "page-actions",
+    "search-dialog",
+    "search-trigger",
+    "theme-switch",
+    "---Content---",
+    "mdx",
+    "codeblock",
+    "callout",
+    "card",
+    "heading",
+    "---Other---",
+    "og",
+    "utilities"
+  ]
+}

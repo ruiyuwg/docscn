@@ -1,0 +1,52 @@
+---
+title: Card
+description: Link cards with an icon, title and description.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/card
+```
+
+## Usage
+
+```mdx
+<Cards>
+  <Card
+    title="Getting started"
+    href="/docs/getting-started"
+    description="Add docs to your project."
+  />
+  <Card
+    title="Fumadocs"
+    href="https://fumadocs.dev"
+    description="The framework docscn builds on."
+  />
+</Cards>
+```
+
+<Cards>
+  <Card
+    title="Getting started"
+    href="/docs/getting-started"
+    description="Add docs to your project."
+  />
+  <Card
+    title="Fumadocs"
+    href="https://fumadocs.dev"
+    description="The framework docscn builds on."
+  />
+</Cards>
+
+## Props
+
+| Prop          | Type        | Description                        |
+| ------------- | ----------- | ---------------------------------- |
+| `title`       | `ReactNode` | The card's title.                  |
+| `description` | `ReactNode` | Text below the title.              |
+| `icon`        | `ReactNode` | An icon above the title.           |
+| `href`        | `string`    | Makes the card a link.             |
+| `external`    | `boolean`   | Open the link as an external link. |
+
+Children render below the description. `Cards` lays cards out in two columns, and one on narrow containers. `Card` is built on shadcn/ui `card`.

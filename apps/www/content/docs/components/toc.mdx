@@ -1,0 +1,33 @@
+---
+title: Table of contents
+description: The table of contents that follows the headings in view.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/toc
+```
+
+## Usage
+
+[`DocsPage`](/docs/components/docs-page) shows the TOC beside the page on wide screens and as a popover on smaller ones. To use it elsewhere:
+
+```tsx
+import { TOCProvider, TOCScrollArea } from "@/components/docs/components/toc";
+import { TOCItem, TOCItems } from "@/components/docs/components/toc/default";
+
+<TOCProvider toc={toc}>
+  <TOCScrollArea>
+    <TOCItems>
+      {toc.map((item) => (
+        <TOCItem key={item.url} item={item} />
+      ))}
+    </TOCItems>
+  </TOCScrollArea>
+</TOCProvider>;
+```
+
+The active headings are highlighted with a thumb on a line that follows the heading levels. `useActiveAnchor`, `useActiveAnchors`, `useItems` and `useTOCItems` are re-exported from `components/toc`.
+
+Fumadocs UI's `clerk` and `block` TOC styles aren't available yet ([#8](https://github.com/ruiyuwg/docscn/issues/8)).

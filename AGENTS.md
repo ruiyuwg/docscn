@@ -28,20 +28,22 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - **Mirror Fumadocs UI's module paths.** Install everything under `components/docs/` (target `@components/docs/...`), laid out like `fumadocs-ui`'s import paths, so migration is one find-and-replace of `fumadocs-ui/` with `@/components/docs/`. For example, `fumadocs-ui/layouts/docs/page` becomes `@/components/docs/layouts/docs/page`, and `fumadocs-ui/provider/next` becomes `@/components/docs/provider/next`.
 - **Inputs are Fumadocs Core types** (`PageTree.Root`, `TOCItemType`, ...), so any content source Fumadocs supports works.
 - **Deliberately not compatible:** the `slots` API (users edit their own copy instead), `--color-fd-*` variables and `fd-*` utility classes, Fumadocs UI's colour themes and CSS presets, non-Next.js providers, Radix, and deprecated props. Document each in the migration guide.
+- **UI strings are English** for now, written inline in the components, with no `i18n` prop ([#12](https://github.com/ruiyuwg/docscn/issues/12)). Fumadocs UI reads them through `@fuma-translate/react`; replace each `t('...')` call with its English text when porting.
 
 ## Architecture
 
 - **Layout:** build `DocsLayout` on the shadcn/ui `sidebar` (`SidebarProvider` / `SidebarInset`), not Fumadocs UI's CSS grid, so docs match the sidebars in the rest of the user's app.
-- **Building blocks:** search on `command` + `kbd` + `useDocsSearch` (`fumadocs-core/search/client`). Breadcrumb on `breadcrumb` + `getBreadcrumbItems` (`fumadocs-core/breadcrumb`). TOC on `fumadocs-core/toc` + `scroll-area`. Prev/next footer on `findNeighbour` (`fumadocs-core/page-tree`). Callout on `alert` extended with Fumadocs' types. Cards on `card`, tabs on `tabs`, accordions on `accordion`, files on `collapsible`.
-- **Typography:** `DocsBody` uses a typeset-style CSS file (in the style of shadcn/typeset) that docscn ships, built from the user's theme tokens. It replaces Fumadocs UI's `prose` styles.
+- **Building blocks:** search on Base UI's `Dialog` (the primitive under shadcn/ui's `dialog`) + `kbd` + `useDocsSearch` (`fumadocs-core/search/client`), keeping Fumadocs UI's search dialog parts and keyboard handling. cmdk (`command`) was left out because its built-in filtering and selection conflict with server-side results and the parts API. Breadcrumb on `breadcrumb` + `getBreadcrumbItems` (`fumadocs-core/breadcrumb`). TOC on `fumadocs-core/toc` + `scroll-area`. Prev/next footer on `findNeighbour` (`fumadocs-core/page-tree`). Callout on `alert` extended with Fumadocs' types. Cards on `card`, tabs on `tabs`, accordions on `accordion`, files on `collapsible`.
+- **Typography:** `DocsBody` applies the `docs-typeset` class, typeset-style CSS (in the style of shadcn/typeset) that docscn ships, built from the user's theme tokens. It replaces Fumadocs UI's `prose` styles. Components opt out with `not-docs-typeset` (Fumadocs UI's `not-prose`). The name is docscn-specific so it can't clash with a user's own `prose` or `typeset` styles.
 - **Code highlighting:** keep Fumadocs MDX's default `rehype-code` (Shiki) output. The code block component ships the Shiki CSS it needs.
 - **Theme:** use `next-themes`, as shadcn/ui's dark mode guide does.
-- **Layouts:** the docs layout first, then home and notebook. Add flux, glass or spacious only if users ask.
+- **Layouts:** docs and home are done; notebook is next ([#9](https://github.com/ruiyuwg/docscn/issues/9)). Add flux, glass or spacious only if users ask.
+- **Primitives used directly:** the search dialog uses Base UI's `Dialog`, and the home navbar Base UI's `NavigationMenu` (anchored to the whole navbar row), where shadcn/ui's wrappers can't express Fumadocs UI's behaviour. Style them with shadcn/ui tokens.
 
 ## Packaging
 
 - **Components:** one registry item per Fumadocs UI component or module, depending on shadcn/ui primitives and other docscn items through `registryDependencies`.
-- **`@docscn/docs`:** a block for new projects. It installs the components plus `lib/source.ts`, `lib/layout.shared.tsx`, the `app/docs` routes and `app/api/search/route.ts`. Use the item's `docs` field to explain wrapping the root layout in `RootProvider`.
+- **`@docscn/docs`:** a block for new projects. It installs the components plus `lib/source.ts`, `lib/layout.shared.tsx`, `components/mdx.tsx`, the `app/docs` routes, `app/api/search/route.ts` and starter content. Its source is in `apps/www/registry/base/blocks/docs/`. The item's `docs` field explains the two manual edits (`RootProvider` in the root layout, `createMDX()` in `next.config.ts`), and the install test applies them as written.
 - **`@docscn/fumadocs-ui`:** a bundle for migrating from Fumadocs UI. It installs every component but no routes.
 
 ## Layout
@@ -49,7 +51,8 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - `apps/www`: the docscn.dev site and the registry host. Its `turbo.json` makes `build` depend on `registry:build`, which writes `public/r/` (gitignored).
 - `apps/www/registry/base/docs/`: source for all registry items, declared in `apps/www/registry.json`. It mirrors the install layout (see Registry conventions). The docscn.dev site imports this source directly.
 - `apps/www/components/ui/` and `apps/www/hooks/use-mobile.ts`: shadcn/ui primitives installed with the shadcn CLI. The site and registry items both use them. Don't edit them, so they stay comparable with upstream. They're excluded from Prettier, and any lint exceptions go in `apps/www/eslint.config.js`.
-- `apps/www/content/docs/`: docscn's documentation, loaded by Fumadocs MDX (`lib/source.ts`) and served at `/docs`. The docs layout and MDX components are temporary until docscn's own components replace them.
+- `apps/www/content/docs/`: docscn's documentation, loaded by Fumadocs MDX (`lib/source.ts`) and served at `/docs` with docscn's own components. Add a page under `components/` for each new item, and update `compatibility.mdx` and the migration guide when support changes.
+- `apps/www/scripts/fixtures/kitchen-sink.mdx`: a page using everything the MDX components render, copied into the test apps. Copy it into `content/docs/` locally (gitignored) to preview components.
 
 ## Registry conventions
 
@@ -57,11 +60,14 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - Style with shadcn/ui theme tokens (`bg-background`, `text-muted-foreground`, `--sidebar-*`, ...), not Fumadocs UI's `--color-fd-*` variables.
 - Use `fumadocs-core` headless APIs (`page-tree`, `toc`, `breadcrumb`, `search`, `link`, ...). Never depend on `fumadocs-ui` or `@fumadocs/base-ui`. Use their source only as a reference.
 - Import `cn` from the `cn` package and list it in `dependencies`.
-- Put source at `apps/www/registry/base/docs/<path>` and give each file `"target": "@components/docs/<path>"`, where `<path>` mirrors Fumadocs UI's module path (e.g. `layouts/docs/page/index.tsx`). `base` is a shadcn style folder: when rewriting imports between items, the CLI drops the first folder after `registry/`, so source must not sit directly in `registry/docs/`.
-- Import other docscn modules with `@/registry/base/docs/...` and shadcn/ui primitives with `@/components/ui/...`. The CLI rewrites both to the user's aliases. Relative imports also work, but stick to the alias form.
+- Put source at `apps/www/registry/base/docs/<path>` and give each file `"target": "@components/docs/<path>"`, where `<path>` mirrors Fumadocs UI's module path (e.g. `layouts/docs/page/index.tsx`). Keep upstream's file names inside each module, including `slots/` folders, so every file stays comparable with its upstream counterpart.
+- Name items in kebab-case after the Fumadocs UI component or module, with a `docs-` prefix where the plain name would read as a shadcn/ui primitive (`docs-layout`, `docs-page`, `docs-sidebar`).
+- Import other docscn modules with relative paths (`../utils/urls`), which the CLI leaves unchanged and which resolve because files install with the same layout. Don't use `@/registry/base/docs/...`: the CLI rewrites any such path containing a `/components`, `/lib`, `/hooks` or `/ui` segment to the matching alias and drops `docs/`, so `@/registry/base/docs/components/card` would become `@/components/card`.
+- Import shadcn/ui primitives with `@/components/ui/...`. The CLI rewrites them to the user's `ui` alias.
+- Files outside `components/docs/` (the `docs` block's routes and `lib/` files) use plain targets such as `app/docs/layout.tsx` or `lib/source.ts`, which the CLI places under `src/` when the project has one. Content uses `~/content/docs/...`, because Fumadocs MDX resolves `content/docs` from the project root.
 - Reference other docscn items in `registryDependencies` as `@docscn/<name>`.
 - Give every item a clear `description`.
-- Ship CSS (typography, Shiki styles, ...) through the registry item's `css` field, so it merges into the user's global stylesheet. Fall back to a CSS file with a `target` plus a `docs` note only when `css` can't express it.
+- Ship CSS (typography, Shiki styles, ...) through the registry item's `css` field, so it merges into the user's global stylesheet. Write it as a plain stylesheet in `apps/www/registry/base/docs/styles/`, list it in `scripts/sync-registry-css.ts`, and run `pnpm registry:css` to copy it into `registry.json` (`registry:build` fails while they differ). docscn.dev imports the same stylesheets from `app/globals.css`. The CLI mangles nested (`&`) selectors and moves `@keyframes` into `@theme`, so use flat rules inside `@layer components`, and pseudo-elements outside `:where()`.
 - Files adapted from Fumadocs UI start with this comment, which is installed into users' projects with the code. The full licence texts are in `NOTICE`.
 
   ```ts
@@ -79,7 +85,9 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 
 Run `pnpm build`, `pnpm lint` and `pnpm check-types` from the root, and `pnpm exec shadcn registry validate` in `apps/www`. Run `pnpm format` (or `pnpm format:check`) before committing.
 
-After changing registry items, run `pnpm test:registry`. It scaffolds a fresh shadcn/ui (Base UI) Next.js app in a temp directory, installs every item from the locally built registry, then lints and builds the app. Pass `-- --keep` to keep the app for inspection.
+After changing registry items, run `pnpm test:registry`. It scaffolds a fresh shadcn/ui (Base UI) Next.js app in a temp directory, installs every item from the locally built registry, follows the `docs` block's notes, adds the kitchen-sink fixture, then lints docscn's files, builds the app and smoke-tests it with `next start`. Pass `-- --keep` to keep the app for inspection, or `-- --registry <url>` to install from a deployed registry.
+
+`pnpm test:migration` checks the drop-in claim: it scaffolds the stock `create-fumadocs-app` project (pinned in the script; bump it together with `fumadocs-core`), migrates it as the migration guide describes, removes `fumadocs-ui`, then type-checks, builds and smoke-tests it. It needs network access, and CI runs it as a separate job.
 
 pnpm enforces a minimum release age, so a package version published in the last day fails to install. Pin the previous version instead of adding entries to `minimumReleaseAgeExclude`.
 

@@ -1,0 +1,47 @@
+---
+title: MDX components
+description: The components for Fumadocs MDX content.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/mdx
+```
+
+## Usage
+
+Spread `defaultMdxComponents` into your MDX components:
+
+```tsx title="components/mdx.tsx"
+import type { MDXComponents } from "mdx/types";
+import defaultMdxComponents from "@/components/docs/mdx";
+
+export function getMDXComponents(components?: MDXComponents) {
+  return {
+    ...defaultMdxComponents,
+    ...components,
+  } satisfies MDXComponents;
+}
+```
+
+It covers everything Fumadocs MDX's default preset emits:
+
+| Key                                                                          | Renders                                                      |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `pre`                                                                        | [`CodeBlock`](/docs/components/codeblock) for Shiki output   |
+| `CodeBlockTabs`, `CodeBlockTabsList`, `CodeBlockTabsTrigger`, `CodeBlockTab` | Code tabs from `tab="..."` code blocks and ` ```npm ` blocks |
+| `h1`–`h6`                                                                    | [`Heading`](/docs/components/heading) with anchor links      |
+| `a`                                                                          | Fumadocs Core's `Link` (Next.js `Link` for internal links)   |
+| `img`                                                                        | Next.js `Image`                                              |
+| `table`                                                                      | A horizontally scrollable table                              |
+| `Card`, `Cards`                                                              | [Cards](/docs/components/card)                               |
+| `Callout`, `CalloutContainer`, `CalloutTitle`, `CalloutDescription`          | [Callouts](/docs/components/callout)                         |
+
+## Relative links
+
+`createRelativeLink` resolves links to other MDX files (`[Next](./next.mdx)`) to their page URLs. It works in server components only:
+
+```tsx
+<MDX components={getMDXComponents({ a: createRelativeLink(source, page) })} />
+```

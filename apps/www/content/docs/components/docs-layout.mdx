@@ -1,0 +1,60 @@
+---
+title: DocsLayout
+description: The docs layout with a sidebar, built on the shadcn/ui sidebar.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/docs-layout
+```
+
+## Usage
+
+```tsx title="app/docs/layout.tsx"
+import { DocsLayout } from "@/components/docs/layouts/docs";
+import { baseOptions } from "@/lib/layout.shared";
+import { source } from "@/lib/source";
+
+export default function Layout({ children }: LayoutProps<"/docs">) {
+  return (
+    <DocsLayout tree={source.getPageTree()} {...baseOptions()}>
+      {children}
+    </DocsLayout>
+  );
+}
+```
+
+`DocsLayout` renders the shadcn/ui `SidebarProvider`, a `Sidebar` with the page tree, and a `SidebarInset` for the page. On mobile, the sidebar opens as a sheet from a navbar with the title, search and a sidebar trigger. On desktop, the sidebar can be collapsed (<kbd>⌘</kbd> <kbd>B</kbd>), leaving a small panel to reopen it.
+
+Because it uses the shadcn/ui sidebar, `useSidebar()` from `@/components/ui/sidebar` works anywhere inside it.
+
+## Props
+
+| Prop             | Type                                           | Description                                                                                                                     |
+| ---------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `tree`           | `PageTree.Root`                                | The page tree, usually `source.getPageTree()`.                                                                                  |
+| `nav`            | `NavOptions`                                   | `title`, `url` (defaults to `/`), `enabled`, `children` (extra navbar content) and `transparentMode`.                           |
+| `links`          | `LinkItemType[]`                               | Links shown in the sidebar. Icon links show in the sidebar footer. `on: "nav" \| "menu" \| "all"` restricts where a link shows. |
+| `githubUrl`      | `string`                                       | Adds a GitHub icon link.                                                                                                        |
+| `sidebar`        | `SidebarOptions`                               | See below.                                                                                                                      |
+| `tabs`           | `LayoutTab[] \| GetLayoutTabsOptions \| false` | Layout tabs, by default one per root folder (`"root": true` in `meta.json`).                                                    |
+| `tabMode`        | `"auto" \| "top"`                              | Show tabs as a dropdown in the sidebar (`auto`), or above the page on desktop (`top`).                                          |
+| `themeSwitch`    | `{ enabled?, mode? }`                          | The theme switch in the sidebar footer. `mode: "light-dark-system"` adds a system option.                                       |
+| `searchToggle`   | `{ enabled?, sm?, full? }`                     | The search triggers, with props for the small and full variants.                                                                |
+| `containerProps` | `ComponentProps<"main">`                       | Props for the `SidebarInset` that wraps the page.                                                                               |
+
+### `sidebar`
+
+| Option                 | Type                             | Description                                                                                                                       |
+| ---------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`              | `boolean`                        | Show the sidebar. Defaults to `true`.                                                                                             |
+| `banner`, `footer`     | `ReactNode`                      | Content above the page tree, and in the sidebar footer.                                                                           |
+| `collapsible`          | `boolean`                        | Allow collapsing the sidebar on desktop. Defaults to `true`.                                                                      |
+| `defaultOpenLevel`     | `number`                         | Open folders up to this depth by default. Defaults to `0`.                                                                        |
+| `prefetch`             | `boolean`                        | Prefetch pages linked from the sidebar.                                                                                           |
+| `defaultOpen`          | `boolean`                        | Whether the desktop sidebar starts open. Read shadcn/ui's `sidebar_state` cookie and pass it to keep the state across page loads. |
+| `open`, `onOpenChange` | `boolean`, `(open) => void`      | Control the desktop open state.                                                                                                   |
+| `components`           | `{ Item?, Folder?, Separator? }` | Replace how page tree nodes render.                                                                                               |
+
+The rest are passed to the shadcn/ui `Sidebar` (e.g. `variant`, `side`, `className`).

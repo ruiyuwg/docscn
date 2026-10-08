@@ -1,0 +1,22 @@
+---
+title: Heading
+description: Headings with anchor links.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/heading
+```
+
+## Usage
+
+`defaultMdxComponents` renders `h1`–`h6` with `Heading`. A heading with an `id` (Fumadocs MDX adds one to every heading) links to itself, and shows a button on hover that copies the link to the section.
+
+```tsx
+import { Heading } from "@/components/docs/components/heading";
+
+<Heading as="h2" id="installation">
+  Installation
+</Heading>;
+```
