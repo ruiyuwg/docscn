@@ -14,6 +14,7 @@ import {
 import { cn } from "cn";
 import { useTOCItems } from ".";
 import { mergeRefs } from "../../utils/merge-refs";
+import { findLastIndex } from "../../utils/array";
 
 interface ComputedSVG {
   width: number;
@@ -199,7 +200,7 @@ function ThumbTrack({
     const startIdx = items.findIndex((item) => item.active);
     if (startIdx === -1) return { style, info: prev };
 
-    const endIdx = items.findLastIndex((item) => item.active);
+    const endIdx = findLastIndex(items, (item) => item.active);
     style["--track-top"] = `${computed.positions[startIdx]![0]}px`;
     style["--track-bottom"] = `${computed.positions[endIdx]![1]}px`;
     if (!thumbBox) return { style, info: prev };

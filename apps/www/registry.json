@@ -38,6 +38,11 @@
           "path": "registry/base/docs/utils/tabs-group.ts",
           "type": "registry:lib",
           "target": "@components/docs/utils/tabs-group.ts"
+        },
+        {
+          "path": "registry/base/docs/utils/array.ts",
+          "type": "registry:lib",
+          "target": "@components/docs/utils/array.ts"
         }
       ]
     },
@@ -497,7 +502,7 @@
       "title": "Page tree context",
       "description": "TreeContextProvider and hooks for the current page tree, the path to the current page, layout tab groups and the linear page list used for previous/next links.",
       "dependencies": ["fumadocs-core@^16.16.2"],
-      "registryDependencies": ["@docscn/layout-shared"],
+      "registryDependencies": ["@docscn/layout-shared", "@docscn/docs-utils"],
       "files": [
         {
           "path": "registry/base/docs/contexts/tree.tsx",
@@ -552,7 +557,8 @@
         "dropdown-menu",
         "sidebar",
         "@docscn/tree-context",
-        "@docscn/layout-shared"
+        "@docscn/layout-shared",
+        "@docscn/docs-utils"
       ],
       "files": [
         {

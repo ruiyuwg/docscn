@@ -16,6 +16,7 @@ import {
 import { useSidebar } from "@/components/ui/sidebar";
 import { useTabsGroups, useTreePath } from "../../../contexts/tree";
 import { isLayoutTabActive, type LayoutTab } from "../../../layouts/shared";
+import { findLast } from "../../../utils/array";
 
 export type SidebarTabWithProps = LayoutTab;
 
@@ -57,7 +58,7 @@ function Dropdown({
   const path = useTreePath();
 
   const selected = useMemo(() => {
-    return options.findLast((item) => isLayoutTabActive(item, path, pathname));
+    return findLast(options, (item) => isLayoutTabActive(item, path, pathname));
   }, [options, path, pathname]);
 
   const item = selected ? (
