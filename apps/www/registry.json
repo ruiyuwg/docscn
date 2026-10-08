@@ -898,6 +898,147 @@
       ]
     },
     {
+      "name": "type-table",
+      "type": "registry:component",
+      "title": "Type table",
+      "description": "TypeTable: a table of props or fields, each expanding to its description, full type, default, parameters and return value, and linkable from the URL hash.",
+      "dependencies": [
+        "class-variance-authority",
+        "cn",
+        "fumadocs-core@^16.16.2",
+        "lucide-react"
+      ],
+      "registryDependencies": ["collapsible"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/type-table.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/type-table.tsx"
+        }
+      ]
+    },
+    {
+      "name": "image-zoom",
+      "type": "registry:component",
+      "title": "Image zoom",
+      "description": "ImageZoom: an image that zooms in to fill the screen when clicked, built on react-medium-image-zoom.",
+      "dependencies": ["fumadocs-core@^16.16.2", "react-medium-image-zoom"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/image-zoom.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/image-zoom.tsx"
+        }
+      ],
+      "css": {
+        "@layer components": {
+          "[data-rmiz]": {
+            "display": "block",
+            "position": "relative"
+          },
+          "[data-rmiz-ghost]": {
+            "position": "absolute",
+            "pointer-events": "none"
+          },
+          "[data-rmiz-btn-zoom], [data-rmiz-btn-unzoom]": {
+            "display": "none"
+          },
+          "[data-rmiz-content=\"found\"] img": {
+            "cursor": "zoom-in"
+          },
+          "[data-rmiz-modal][open]": {
+            "position": "fixed",
+            "width": "100dvw",
+            "max-width": "none",
+            "height": "100dvh",
+            "max-height": "none",
+            "margin": "0",
+            "padding": "0",
+            "overflow": "hidden",
+            "background-color": "transparent"
+          },
+          "[data-rmiz-modal]:focus-visible": {
+            "outline": "none"
+          },
+          "[data-rmiz-modal-overlay]": {
+            "position": "absolute",
+            "inset": "0",
+            "transition": "background-color 0.3s"
+          },
+          "[data-rmiz-modal-overlay=\"visible\"]": {
+            "background-color": "var(--background)"
+          },
+          "[data-rmiz-modal-overlay=\"hidden\"]": {
+            "background-color": "transparent"
+          },
+          "[data-rmiz-modal-content]": {
+            "position": "relative",
+            "width": "100%",
+            "height": "100%"
+          },
+          "[data-rmiz-modal]::backdrop": {
+            "display": "none"
+          },
+          "[data-rmiz-modal-img]": {
+            "position": "absolute",
+            "transform-origin": "0 0",
+            "cursor": "zoom-out",
+            "image-rendering": "high-quality",
+            "transition": "transform 0.3s"
+          },
+          "@media (prefers-reduced-motion: reduce)": {
+            "[data-rmiz-modal-overlay], [data-rmiz-modal-img]": {
+              "transition-duration": "0.01ms !important"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "inline-toc",
+      "type": "registry:component",
+      "title": "Inline TOC",
+      "description": "InlineTOC: a collapsible table of contents to place inside a page.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "registryDependencies": ["collapsible"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/inline-toc.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/inline-toc.tsx"
+        }
+      ]
+    },
+    {
+      "name": "banner",
+      "type": "registry:component",
+      "title": "Banner",
+      "description": "Banner: an announcement bar above the layout, optionally dismissible and with a rainbow variant, that offsets docscn's layouts by its height.",
+      "dependencies": ["cn", "lucide-react"],
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/banner.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/banner.tsx"
+        }
+      ]
+    },
+    {
+      "name": "github-info",
+      "type": "registry:component",
+      "title": "GitHub info",
+      "description": "GithubInfo: a link to a GitHub repository with its star and fork counts, fetched on the server.",
+      "dependencies": ["cn", "lucide-react"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/github-info.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/github-info.tsx"
+        }
+      ]
+    },
+    {
       "name": "docs",
       "type": "registry:block",
       "title": "Docs",
@@ -917,7 +1058,8 @@
         "@docscn/docs-tabs",
         "@docscn/steps",
         "@docscn/docs-accordion",
-        "@docscn/files"
+        "@docscn/files",
+        "@docscn/type-table"
       ],
       "files": [
         {
@@ -995,7 +1137,12 @@
         "@docscn/docs-tabs",
         "@docscn/steps",
         "@docscn/docs-accordion",
-        "@docscn/files"
+        "@docscn/files",
+        "@docscn/type-table",
+        "@docscn/image-zoom",
+        "@docscn/inline-toc",
+        "@docscn/banner",
+        "@docscn/github-info"
       ]
     }
   ]

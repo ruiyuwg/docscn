@@ -5,6 +5,7 @@ import { Accordion, Accordions } from "@/components/docs/components/accordion";
 import { File, Files, Folder } from "@/components/docs/components/files";
 import { Step, Steps } from "@/components/docs/components/steps";
 import { Tab, Tabs } from "@/components/docs/components/tabs";
+import { TypeTable } from "@/components/docs/components/type-table";
 import defaultMdxComponents from "@/registry/base/docs/mdx";
 
 export function getMDXComponents(components?: MDXComponents) {
@@ -19,6 +20,7 @@ export function getMDXComponents(components?: MDXComponents) {
     Files,
     Folder,
     File,
+    TypeTable,
     ...components,
   } satisfies MDXComponents;
 }

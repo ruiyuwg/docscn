@@ -26,7 +26,7 @@ export function Header(props: ComponentProps<"header">) {
       data-transparent={isNavTransparent}
       {...props}
       className={cn(
-        "sticky top-0 z-30 flex h-(--docs-header-height) items-center gap-2 border-b ps-4 pe-2.5 backdrop-blur-sm transition-colors data-[transparent=false]:bg-background/80 md:hidden",
+        "sticky top-(--docs-banner-height,0px) z-30 flex h-(--docs-header-height) items-center gap-2 border-b ps-4 pe-2.5 backdrop-blur-sm transition-colors data-[transparent=false]:bg-background/80 md:hidden",
         props.className,
       )}
     >
@@ -60,7 +60,7 @@ export function CollapsedSidebarPanel({
       inert={!collapsed}
       {...props}
       className={cn(
-        "fixed start-4 top-4 z-20 flex rounded-xl border bg-muted p-0.5 text-muted-foreground shadow-lg transition-opacity max-md:hidden",
+        "fixed start-4 top-[calc(var(--docs-banner-height,0px)+--spacing(4))] z-20 flex rounded-xl border bg-muted p-0.5 text-muted-foreground shadow-lg transition-opacity max-md:hidden",
         !collapsed && "pointer-events-none opacity-0",
         className,
       )}

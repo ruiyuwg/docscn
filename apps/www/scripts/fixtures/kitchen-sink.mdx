@@ -12,6 +12,10 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/docs/components/tabs";
+import { ImageZoom } from "@/components/docs/components/image-zoom";
+import { InlineTOC } from "@/components/docs/components/inline-toc";
+import { TypeTable } from "@/components/docs/components/type-table";
+import gradient from "./kitchen-sink.png";
 
 This page is copied into test apps by `scripts/test-registry-install.ts`. It uses **bold**, _italic_, `inline code`, <kbd>Ctrl</kbd> and a [relative link](./index.mdx).
 
@@ -174,3 +178,29 @@ npm install next-themes
   </Folder>
   <File name="package.json" />
 </Files>
+
+## Type table
+
+<TypeTable
+  id="props"
+  type={{
+    title: {
+      type: "ReactNode",
+      description: "The card's title.",
+      required: true,
+    },
+    href: {
+      type: "string",
+      description: "Makes the card a link.",
+      default: "undefined",
+    },
+  }}
+/>
+
+## Inline TOC
+
+<InlineTOC items={toc} />
+
+## Image zoom
+
+<ImageZoom src={gradient} alt="A gradient you can zoom into" />

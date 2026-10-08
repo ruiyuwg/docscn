@@ -67,7 +67,7 @@ export function TOC({ container, header, footer, list }: TOCProps) {
       id="nd-toc"
       {...container}
       className={cn(
-        "sticky top-0 flex h-svh w-[268px] shrink-0 flex-col pe-4 pt-12 pb-2 max-xl:hidden",
+        "sticky top-(--docs-banner-height,0px) flex h-[calc(100svh-var(--docs-banner-height,0px))] w-[268px] shrink-0 flex-col pe-4 pt-12 pb-2 max-xl:hidden",
         container?.className,
       )}
     >
@@ -167,7 +167,7 @@ export function TOCPopover({
         data-toc-popover=""
         {...container}
         className={cn(
-          "sticky top-(--docs-header-height) z-10 h-10 xl:hidden",
+          "sticky top-[calc(var(--docs-header-height)+var(--docs-banner-height,0px))] z-10 h-10 xl:hidden",
           container?.className,
         )}
       >
