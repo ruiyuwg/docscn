@@ -19,6 +19,7 @@ const stylesheets: Record<string, string> = {
   typography: "registry/base/docs/styles/typography.css",
   codeblock: "registry/base/docs/styles/codeblock.css",
   steps: "registry/base/docs/styles/steps.css",
+  "image-zoom": "registry/base/docs/styles/image-zoom.css",
 };
 
 type CssTree = { [key: string]: string | CssTree };

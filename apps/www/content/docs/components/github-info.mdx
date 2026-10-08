@@ -1,0 +1,70 @@
+---
+title: GitHub info
+description: A link to a GitHub repository with its star and fork counts.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/github-info
+```
+
+## Usage
+
+`GithubInfo` is a React Server Component that fetches the counts from GitHub's API, cached for 60 seconds. It fits in the sidebar's footer or the layout's links:
+
+```tsx title="lib/layout.shared.tsx"
+import { GithubInfo } from "@/components/docs/components/github-info";
+
+export function baseOptions(): BaseLayoutProps {
+  return {
+    links: [
+      {
+        type: "custom",
+        children: <GithubInfo owner="ruiyuwg" repo="docscn" />,
+      },
+    ],
+  };
+}
+```
+
+Unauthenticated requests to GitHub's API are rate limited. Pass a `token` (for example `process.env.GITHUB_TOKEN`) on busy sites.
+
+`fetchRepositoryInfo()` returns the counts without the link.
+
+## Props
+
+<TypeTable
+  type={{
+    owner: {
+      type: "string",
+      required: true,
+    },
+    repo: {
+      type: "string",
+      required: true,
+    },
+    token: {
+      description: <>A GitHub token for the API request.</>,
+      type: "string",
+    },
+    baseUrl: {
+      description: <>The API's URL, for GitHub Enterprise.</>,
+      type: "string",
+      default: '"https://api.github.com"',
+    },
+    fetchOptions: {
+      description: (
+        <>
+          Options for <code>{"fetch"}</code>.
+        </>
+      ),
+      type: "RequestInit",
+      default: "{ next: { revalidate: 60 } }",
+    },
+    locale: {
+      description: <>The locale for the compact counts, such as 1.2K.</>,
+      type: "Intl.LocalesArgument",
+    },
+  }}
+/>

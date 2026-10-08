@@ -166,7 +166,10 @@ export function Header({ ref, className, ...props }: ComponentProps<"header">) {
           id="nd-nav"
           {...props}
           ref={mergeRefs(headerRef, ref)}
-          className={cn("sticky top-0 z-40 h-14", className)}
+          className={cn(
+            "sticky top-(--docs-banner-height,0px) z-40 h-14",
+            className,
+          )}
         >
           <Primitive.Root
             className={(s) =>

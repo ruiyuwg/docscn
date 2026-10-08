@@ -199,6 +199,16 @@ export async function smokeTest(
       pageHtml.includes("Install with <code"),
       "tabs from a list of items render their content",
     );
+    check(
+      pageHtml.includes('id="props-title"') && pageHtml.includes(">Prop<"),
+      "the type table renders its fields",
+    );
+    check(pageHtml.includes("Table of Contents"), "the inline TOC renders");
+    check(
+      pageHtml.includes("data-rmiz") &&
+        pageHtml.includes('alt="A gradient you can zoom into"'),
+      "the zoomable image renders",
+    );
 
     const search = await fetch(`${base}/api/search?query=callouts`);
     const results = (await search.json()) as unknown[];

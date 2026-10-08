@@ -41,11 +41,43 @@ It provides:
 
 ## Props
 
-| Prop         | Type                                                     | Description                                                                                                                   |
-| ------------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `theme`      | `ThemeProviderProps & { enabled?, hotKey? }`             | Options for next-themes. `enabled: false` removes it; `hotKey` changes or (`false`) disables the <kbd>D</kbd> hotkey.         |
-| `search`     | `{ enabled?, SearchDialog?, options?, links?, hotKey? }` | Search options. `SearchDialog` replaces the default dialog, and `options` passes props to it (e.g. `{ api: "/api/search" }`). |
-| `dir`        | `"ltr" \| "rtl"`                                         | Text direction for Base UI components. Defaults to `"ltr"`.                                                                   |
-| `components` | `{ Link?, Image? }`                                      | Replace the Next.js `Link` and `Image` used by docscn components.                                                             |
+<TypeTable
+  type={{
+    theme: {
+      description: (
+        <>
+          Options for next-themes. <code>{"enabled: false"}</code> removes it;{" "}
+          <code>{"hotKey"}</code> changes or (<code>{"false"}</code>) disables
+          the <kbd>D</kbd> hotkey.
+        </>
+      ),
+      type: "ThemeProviderProps & { enabled?, hotKey? }",
+    },
+    search: {
+      description: (
+        <>
+          Search options. <code>{"SearchDialog"}</code> replaces the default
+          dialog, and <code>{"options"}</code> passes props to it (e.g.{" "}
+          <code>{'{ api: "/api/search" }'}</code>).
+        </>
+      ),
+      type: "{ enabled?, SearchDialog?, options?, links?, hotKey? }",
+    },
+    dir: {
+      description: <>Text direction for Base UI components.</>,
+      type: '"ltr" | "rtl"',
+      default: '"ltr"',
+    },
+    components: {
+      description: (
+        <>
+          Replace the Next.js <code>{"Link"}</code> and <code>{"Image"}</code>{" "}
+          used by docscn components.
+        </>
+      ),
+      type: "{ Link?, Image? }",
+    },
+  }}
+/>
 
 `useTheme` is re-exported from `@/components/docs/provider/base`.

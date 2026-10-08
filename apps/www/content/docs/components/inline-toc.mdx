@@ -1,0 +1,48 @@
+---
+title: Inline TOC
+description: A collapsible table of contents to place inside a page.
+---
+
+import { InlineTOC } from "@/components/docs/components/inline-toc";
+
+<InlineTOC items={toc} />
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/inline-toc
+```
+
+## Usage
+
+In MDX, Fumadocs MDX passes the page's headings as `toc`:
+
+```mdx
+import { InlineTOC } from "@/components/docs/components/inline-toc";
+
+<InlineTOC items={toc} />
+```
+
+Elsewhere, pass `page.data.toc`, or any `TOCItemType[]`. Children replace the "Table of Contents" label.
+
+## Props
+
+<TypeTable
+  type={{
+    items: {
+      description: <>The headings to list.</>,
+      type: "TOCItemType[]",
+      required: true,
+    },
+    defaultOpen: {
+      description: (
+        <>
+          Start open. The other props of shadcn/ui <code>{"collapsible"}</code>{" "}
+          work too.
+        </>
+      ),
+      type: "boolean",
+      default: "false",
+    },
+  }}
+/>

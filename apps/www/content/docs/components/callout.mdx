@@ -39,11 +39,28 @@ npx shadcn@latest add @docscn/callout
 
 ## Props
 
-| Prop    | Type                                                              | Description              |
-| ------- | ----------------------------------------------------------------- | ------------------------ |
-| `type`  | `"info" \| "warn" \| "warning" \| "error" \| "success" \| "idea"` | Defaults to `"info"`.    |
-| `title` | `ReactNode`                                                       | An optional title.       |
-| `icon`  | `ReactNode`                                                       | Replace the type's icon. |
+<TypeTable
+  type={{
+    type: {
+      description: (
+        <>
+          Sets the colour and icon. <code>{"warn"}</code> and{" "}
+          <code>{"warning"}</code> are the same.
+        </>
+      ),
+      type: '"info" | "warn" | "warning" | "error" | "success" | "idea"',
+      default: '"info"',
+    },
+    title: {
+      description: <>An optional title.</>,
+      type: "ReactNode",
+    },
+    icon: {
+      description: <>Replace the type's icon.</>,
+      type: "ReactNode",
+    },
+  }}
+/>
 
 `Callout` is built on shadcn/ui `alert`. `CalloutContainer`, `CalloutTitle` and `CalloutDescription` are exported to compose your own.
 

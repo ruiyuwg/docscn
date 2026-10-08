@@ -1,0 +1,77 @@
+/* Styles for ImageZoom (react-medium-image-zoom), with the zoomed image shown
+   over the page background. */
+@layer components {
+  [data-rmiz] {
+    display: block;
+    position: relative;
+  }
+
+  [data-rmiz-ghost] {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  [data-rmiz-btn-zoom],
+  [data-rmiz-btn-unzoom] {
+    display: none;
+  }
+
+  [data-rmiz-content="found"] img {
+    cursor: zoom-in;
+  }
+
+  [data-rmiz-modal][open] {
+    position: fixed;
+    width: 100dvw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: transparent;
+  }
+
+  [data-rmiz-modal]:focus-visible {
+    outline: none;
+  }
+
+  [data-rmiz-modal-overlay] {
+    position: absolute;
+    inset: 0;
+    transition: background-color 0.3s;
+  }
+
+  [data-rmiz-modal-overlay="visible"] {
+    background-color: var(--background);
+  }
+
+  [data-rmiz-modal-overlay="hidden"] {
+    background-color: transparent;
+  }
+
+  [data-rmiz-modal-content] {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  [data-rmiz-modal]::backdrop {
+    display: none;
+  }
+
+  [data-rmiz-modal-img] {
+    position: absolute;
+    transform-origin: 0 0;
+    cursor: zoom-out;
+    image-rendering: high-quality;
+    transition: transform 0.3s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-rmiz-modal-overlay],
+    [data-rmiz-modal-img] {
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

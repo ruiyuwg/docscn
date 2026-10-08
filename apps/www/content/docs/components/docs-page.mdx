@@ -48,14 +48,55 @@ Use it inside [`DocsLayout`](/docs/components/docs-layout). `DocsBody` adds the 
 
 ## Props
 
-| Prop                    | Type                                                          | Description                                                                               |
-| ----------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `toc`                   | `TOCItemType[]`                                               | The page's headings, usually `page.data.toc`.                                             |
-| `full`                  | `boolean`                                                     | Use the full width and hide the desktop TOC.                                              |
-| `tableOfContent`        | `{ enabled?, single?, header?, footer?, container?, list? }`  | The TOC beside the page on wide screens. `single: true` highlights one heading at a time. |
-| `tableOfContentPopover` | `{ enabled?, header?, footer?, ... }`                         | The TOC popover at the top of the page on smaller screens.                                |
-| `breadcrumb`            | `{ enabled?, includeRoot?, includePage?, includeSeparator? }` | The breadcrumb above the page, on shadcn/ui `breadcrumb`.                                 |
-| `footer`                | `{ enabled?, items? }`                                        | Previous and next page links, taken from the page tree unless you pass `items`.           |
+<TypeTable
+  type={{
+    toc: {
+      description: (
+        <>
+          The page's headings, usually <code>{"page.data.toc"}</code>.
+        </>
+      ),
+      type: "TOCItemType[]",
+    },
+    full: {
+      description: <>Use the full width and hide the desktop TOC.</>,
+      type: "boolean",
+    },
+    tableOfContent: {
+      description: (
+        <>
+          The TOC beside the page on wide screens. <code>{"single: true"}</code>{" "}
+          highlights one heading at a time.
+        </>
+      ),
+      type: "{ enabled?, single?, header?, footer?, container?, list? }",
+    },
+    tableOfContentPopover: {
+      description: (
+        <>The TOC popover at the top of the page on smaller screens.</>
+      ),
+      type: "{ enabled?, header?, footer?, ... }",
+    },
+    breadcrumb: {
+      description: (
+        <>
+          The breadcrumb above the page, on shadcn/ui{" "}
+          <code>{"breadcrumb"}</code>.
+        </>
+      ),
+      type: "{ enabled?, includeRoot?, includePage?, includeSeparator? }",
+    },
+    footer: {
+      description: (
+        <>
+          Previous and next page links, taken from the page tree unless you pass{" "}
+          <code>{"items"}</code>.
+        </>
+      ),
+      type: "{ enabled?, items? }",
+    },
+  }}
+/>
 
 The rest are passed to the page's `<article>`.
 

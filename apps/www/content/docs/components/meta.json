@@ -23,7 +23,12 @@
     "steps",
     "accordion",
     "files",
+    "type-table",
+    "inline-toc",
+    "image-zoom",
     "---Other---",
+    "banner",
+    "github-info",
     "og",
     "utilities"
   ]

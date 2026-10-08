@@ -65,7 +65,11 @@ export function Sidebar({
   return (
     <SidebarRoot
       collapsible="offcanvas"
-      className={cn("text-sm", className)}
+      className={cn(
+        // below a Banner, if there is one
+        "top-(--docs-banner-height,0px) h-[calc(100svh-var(--docs-banner-height,0px))] text-sm",
+        className,
+      )}
       {...rest}
     >
       <SidebarHeader className="gap-3 p-4 pb-2">
