@@ -1,7 +1,9 @@
 /**
- * Theme presets for the landing page's live preview. Each one is a set of
- * shadcn/ui theme variables, mapped from a Tailwind gray and an optional accent
- * the way shadcn/ui maps its neutral theme.
+ * Theme presets for the landing page's live preview, following shadcn/ui's
+ * theming (https://ui.shadcn.com/docs/theming). A base color sets every token
+ * the way shadcn/ui's registry does (`/r/colors/{name}.json`), and a primary
+ * color changes only `primary`, `primary-foreground` and `ring` (and their
+ * sidebar equivalents), like shadcn/ui's color themes.
  */
 
 type Scale = Record<
@@ -9,7 +11,8 @@ type Scale = Record<
   string
 >;
 
-const grays = {
+/** shadcn/ui's base colors, from Tailwind's palette. */
+const baseColors = {
   neutral: {
     50: "oklch(0.985 0 0)",
     100: "oklch(0.97 0 0)",
@@ -49,18 +52,18 @@ const grays = {
     900: "oklch(0.21 0.006 285.885)",
     950: "oklch(0.141 0.005 285.823)",
   },
-  slate: {
-    50: "oklch(0.984 0.003 247.858)",
-    100: "oklch(0.968 0.007 247.896)",
-    200: "oklch(0.929 0.013 255.508)",
-    300: "oklch(0.869 0.022 252.894)",
-    400: "oklch(0.704 0.04 256.788)",
-    500: "oklch(0.554 0.046 257.417)",
-    600: "oklch(0.446 0.043 257.281)",
-    700: "oklch(0.372 0.044 257.287)",
-    800: "oklch(0.279 0.041 260.031)",
-    900: "oklch(0.208 0.042 265.755)",
-    950: "oklch(0.129 0.042 264.695)",
+  mauve: {
+    50: "oklch(0.985 0 0)",
+    100: "oklch(0.96 0.003 325.6)",
+    200: "oklch(0.922 0.005 325.62)",
+    300: "oklch(0.865 0.012 325.68)",
+    400: "oklch(0.711 0.019 323.02)",
+    500: "oklch(0.542 0.034 322.5)",
+    600: "oklch(0.435 0.029 321.78)",
+    700: "oklch(0.364 0.029 323.89)",
+    800: "oklch(0.263 0.024 320.12)",
+    900: "oklch(0.212 0.019 322.12)",
+    950: "oklch(0.145 0.008 326)",
   },
   olive: {
     50: "oklch(0.988 0.003 106.5)",
@@ -75,73 +78,100 @@ const grays = {
     900: "oklch(0.228 0.013 107.4)",
     950: "oklch(0.153 0.006 107.1)",
   },
+  mist: {
+    50: "oklch(0.987 0.002 197.1)",
+    100: "oklch(0.963 0.002 197.1)",
+    200: "oklch(0.925 0.005 214.3)",
+    300: "oklch(0.872 0.007 219.6)",
+    400: "oklch(0.723 0.014 214.4)",
+    500: "oklch(0.56 0.021 213.5)",
+    600: "oklch(0.45 0.017 213.2)",
+    700: "oklch(0.378 0.015 216)",
+    800: "oklch(0.275 0.011 216.9)",
+    900: "oklch(0.218 0.008 223.9)",
+    950: "oklch(0.148 0.004 228.8)",
+  },
+  taupe: {
+    50: "oklch(0.986 0.002 67.8)",
+    100: "oklch(0.96 0.002 17.2)",
+    200: "oklch(0.922 0.005 34.3)",
+    300: "oklch(0.868 0.007 39.5)",
+    400: "oklch(0.714 0.014 41.2)",
+    500: "oklch(0.547 0.021 43.1)",
+    600: "oklch(0.438 0.017 39.3)",
+    700: "oklch(0.367 0.016 35.7)",
+    800: "oklch(0.268 0.011 36.5)",
+    900: "oklch(0.214 0.009 43.1)",
+    950: "oklch(0.147 0.004 49.3)",
+  },
 } satisfies Record<string, Scale>;
 
-type AccentScale = Pick<Scale, 50 | 100 | 300 | 400 | 500 | 600 | 700 | 950>;
+interface PrimaryColor {
+  /** `primary` and `primary-foreground` in light mode */
+  light: { primary: string; foreground: string };
+  /** `primary` in dark mode, with the base color's darkest shade as foreground */
+  dark: string;
+}
 
-const accents = {
+/**
+ * Primary colors from Tailwind's palette. The shades are picked so that
+ * `primary-foreground` on `primary` meets WCAG AA (4.5:1) in both modes.
+ */
+const primaryColors = {
   blue: {
-    50: "oklch(0.97 0.014 254.604)",
-    100: "oklch(0.932 0.032 255.585)",
-    300: "oklch(0.809 0.105 251.813)",
-    400: "oklch(0.707 0.165 254.624)",
-    500: "oklch(0.623 0.214 259.815)",
-    600: "oklch(0.546 0.245 262.881)",
-    700: "oklch(0.488 0.243 264.376)",
-    950: "oklch(0.282 0.091 267.935)",
+    light: {
+      primary: "oklch(0.546 0.245 262.881)", // blue-600
+      foreground: "oklch(0.97 0.014 254.604)", // blue-50
+    },
+    dark: "oklch(0.623 0.214 259.815)", // blue-500
   },
   emerald: {
-    50: "oklch(0.979 0.021 166.113)",
-    100: "oklch(0.95 0.052 163.051)",
-    300: "oklch(0.845 0.143 164.978)",
-    400: "oklch(0.765 0.177 163.223)",
-    500: "oklch(0.696 0.17 162.48)",
-    600: "oklch(0.596 0.145 163.225)",
-    700: "oklch(0.508 0.118 165.612)",
-    950: "oklch(0.262 0.051 172.552)",
+    light: {
+      primary: "oklch(0.508 0.118 165.612)", // emerald-700
+      foreground: "oklch(0.979 0.021 166.113)", // emerald-50
+    },
+    dark: "oklch(0.696 0.17 162.48)", // emerald-500
   },
   orange: {
-    50: "oklch(0.98 0.016 73.684)",
-    100: "oklch(0.954 0.038 75.164)",
-    300: "oklch(0.837 0.128 66.29)",
-    400: "oklch(0.75 0.183 55.934)",
-    500: "oklch(0.705 0.213 47.604)",
-    600: "oklch(0.646 0.222 41.116)",
-    700: "oklch(0.553 0.195 38.402)",
-    950: "oklch(0.266 0.079 36.259)",
+    light: {
+      primary: "oklch(0.553 0.195 38.402)", // orange-700
+      foreground: "oklch(0.98 0.016 73.684)", // orange-50
+    },
+    dark: "oklch(0.705 0.213 47.604)", // orange-500
   },
   rose: {
-    50: "oklch(0.969 0.015 12.422)",
-    100: "oklch(0.941 0.03 12.58)",
-    300: "oklch(0.81 0.117 11.638)",
-    400: "oklch(0.712 0.194 13.428)",
-    500: "oklch(0.645 0.246 16.439)",
-    600: "oklch(0.586 0.253 17.585)",
-    700: "oklch(0.514 0.222 16.935)",
-    950: "oklch(0.271 0.105 12.094)",
+    light: {
+      primary: "oklch(0.514 0.222 16.935)", // rose-700
+      foreground: "oklch(0.969 0.015 12.422)", // rose-50
+    },
+    dark: "oklch(0.645 0.246 16.439)", // rose-500
   },
   violet: {
-    50: "oklch(0.969 0.016 293.756)",
-    100: "oklch(0.943 0.029 294.588)",
-    300: "oklch(0.811 0.111 293.571)",
-    400: "oklch(0.702 0.183 293.541)",
-    500: "oklch(0.606 0.25 292.717)",
-    600: "oklch(0.541 0.281 293.009)",
-    700: "oklch(0.491 0.27 292.581)",
-    950: "oklch(0.283 0.141 291.089)",
+    light: {
+      primary: "oklch(0.541 0.281 293.009)", // violet-600
+      foreground: "oklch(0.969 0.016 293.756)", // violet-50
+    },
+    dark: "oklch(0.702 0.183 293.541)", // violet-400
   },
-} satisfies Record<string, AccentScale>;
+} satisfies Record<string, PrimaryColor>;
 
-export type GrayName = keyof typeof grays;
-export type AccentName = keyof typeof accents | "none";
+/** shadcn/ui's dark `sidebar-primary`, the same for every base color. */
+const darkSidebarPrimary = "oklch(0.488 0.243 264.376)";
 
-export const grayOptions = Object.keys(grays) as GrayName[];
-export const accentOptions = ["none", ...Object.keys(accents)] as AccentName[];
+export type BaseColorName = keyof typeof baseColors;
+export type PrimaryColorName = keyof typeof primaryColors;
+export type PrimaryName = PrimaryColorName | "default";
+
+export const baseColorOptions = Object.keys(baseColors) as BaseColorName[];
+export const primaryOptions = [
+  "default",
+  ...Object.keys(primaryColors),
+] as PrimaryName[];
 
 /** A colour to show on an option's swatch. */
-export function swatch(option: GrayName | keyof typeof accents) {
-  if (option in grays) return grays[option as GrayName][500];
-  return accents[option as keyof typeof accents][500];
+export function swatch(option: BaseColorName | PrimaryColorName) {
+  if (option in baseColors) return baseColors[option as BaseColorName][500];
+  return primaryColors[option as PrimaryColorName].light.primary;
 }
 
 export const radiusOptions = [
@@ -151,6 +181,10 @@ export const radiusOptions = [
   { label: "1", value: "1rem" },
 ];
 
+/**
+ * Not a shadcn/ui theme token: this overrides the `--font-sans` variable that
+ * docscn.dev's `next/font` setup defines.
+ */
 export const fontOptions = [
   { label: "Sans", value: undefined },
   {
@@ -164,15 +198,19 @@ export const fontOptions = [
 ];
 
 export interface PreviewTheme {
-  gray: GrayName;
-  accent: AccentName;
+  baseColor: BaseColorName;
+  primary: PrimaryName;
   radius: string;
   font?: string;
 }
 
 type Variables = Record<string, string>;
 
-function lightVariables(g: Scale, a?: AccentScale): Variables {
+function lightVariables(g: Scale, p?: PrimaryColor): Variables {
+  const primary = p?.light.primary ?? g[900];
+  const primaryForeground = p?.light.foreground ?? g[50];
+  const ring = p?.light.primary ?? g[400];
+
   return {
     "--background": "oklch(1 0 0)",
     "--foreground": g[950],
@@ -180,8 +218,8 @@ function lightVariables(g: Scale, a?: AccentScale): Variables {
     "--card-foreground": g[950],
     "--popover": "oklch(1 0 0)",
     "--popover-foreground": g[950],
-    "--primary": a ? a[600] : g[900],
-    "--primary-foreground": a ? a[50] : g[50],
+    "--primary": primary,
+    "--primary-foreground": primaryForeground,
     "--secondary": g[100],
     "--secondary-foreground": g[900],
     "--muted": g[100],
@@ -190,19 +228,21 @@ function lightVariables(g: Scale, a?: AccentScale): Variables {
     "--accent-foreground": g[900],
     "--border": g[200],
     "--input": g[200],
-    "--ring": a ? a[400] : g[400],
+    "--ring": ring,
     "--sidebar": g[50],
     "--sidebar-foreground": g[950],
-    "--sidebar-primary": a ? a[600] : g[900],
-    "--sidebar-primary-foreground": a ? a[50] : g[50],
-    "--sidebar-accent": a ? a[100] : g[100],
-    "--sidebar-accent-foreground": a ? a[700] : g[900],
+    "--sidebar-primary": primary,
+    "--sidebar-primary-foreground": primaryForeground,
+    "--sidebar-accent": g[100],
+    "--sidebar-accent-foreground": g[900],
     "--sidebar-border": g[200],
-    "--sidebar-ring": a ? a[400] : g[400],
+    "--sidebar-ring": ring,
   };
 }
 
-function darkVariables(g: Scale, a?: AccentScale): Variables {
+function darkVariables(g: Scale, p?: PrimaryColor): Variables {
+  const ring = p?.dark ?? g[500];
+
   return {
     "--background": g[950],
     "--foreground": g[50],
@@ -210,8 +250,8 @@ function darkVariables(g: Scale, a?: AccentScale): Variables {
     "--card-foreground": g[50],
     "--popover": g[900],
     "--popover-foreground": g[50],
-    "--primary": a ? a[500] : g[200],
-    "--primary-foreground": a ? a[50] : g[900],
+    "--primary": p?.dark ?? g[200],
+    "--primary-foreground": p ? g[950] : g[900],
     "--secondary": g[800],
     "--secondary-foreground": g[50],
     "--muted": g[800],
@@ -220,15 +260,15 @@ function darkVariables(g: Scale, a?: AccentScale): Variables {
     "--accent-foreground": g[50],
     "--border": "oklch(1 0 0 / 10%)",
     "--input": "oklch(1 0 0 / 15%)",
-    "--ring": a ? a[500] : g[500],
+    "--ring": ring,
     "--sidebar": g[900],
     "--sidebar-foreground": g[50],
-    "--sidebar-primary": a ? a[500] : g[200],
-    "--sidebar-primary-foreground": a ? a[50] : g[900],
-    "--sidebar-accent": a ? a[950] : g[800],
-    "--sidebar-accent-foreground": a ? a[300] : g[50],
+    "--sidebar-primary": p?.dark ?? darkSidebarPrimary,
+    "--sidebar-primary-foreground": p ? g[950] : g[50],
+    "--sidebar-accent": g[800],
+    "--sidebar-accent-foreground": g[50],
     "--sidebar-border": "oklch(1 0 0 / 10%)",
-    "--sidebar-ring": a ? a[500] : g[500],
+    "--sidebar-ring": ring,
   };
 }
 
@@ -244,15 +284,16 @@ function block(selector: string, variables: Variables) {
  * `.dark` rules, so the order of stylesheets in the document doesn't matter.
  */
 export function previewThemeCss(theme: PreviewTheme) {
-  const g = grays[theme.gray];
-  const a = theme.accent === "none" ? undefined : accents[theme.accent];
+  const g = baseColors[theme.baseColor];
+  const p =
+    theme.primary === "default" ? undefined : primaryColors[theme.primary];
 
   return [
     block("html:root", {
-      ...lightVariables(g, a),
+      ...lightVariables(g, p),
       "--radius": theme.radius,
       ...(theme.font ? { "--font-sans": theme.font } : {}),
     }),
-    block("html.dark", darkVariables(g, a)),
+    block("html.dark", darkVariables(g, p)),
   ].join("\n");
 }

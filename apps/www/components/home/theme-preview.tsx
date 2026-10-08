@@ -12,12 +12,13 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
-  type AccentName,
-  accentOptions,
+  baseColorOptions,
+  type BaseColorName,
   fontOptions,
-  type GrayName,
-  grayOptions,
   type PreviewTheme,
+  type PrimaryColorName,
+  type PrimaryName,
+  primaryOptions,
   previewThemeCss,
   radiusOptions,
   swatch,
@@ -56,8 +57,8 @@ function capitalize(value: string) {
  */
 export function ThemePreview() {
   const [theme, setTheme] = useState<PreviewTheme>({
-    gray: "neutral",
-    accent: "none",
+    baseColor: "neutral",
+    primary: "default",
     radius: "0.625rem",
   });
   const [size, setSize] = useState<{ width: number; height: number }>();
@@ -99,35 +100,47 @@ export function ThemePreview() {
   return (
     <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b px-4 py-3">
-        <Control label="Gray">
+        <Control label="Base color">
           <ToggleGroup
             size="sm"
             spacing={0}
-            value={[theme.gray]}
-            onValueChange={([gray]) => {
-              if (gray) setTheme((t) => ({ ...t, gray: gray as GrayName }));
+            value={[theme.baseColor]}
+            onValueChange={([baseColor]) => {
+              if (baseColor)
+                setTheme((t) => ({
+                  ...t,
+                  baseColor: baseColor as BaseColorName,
+                }));
             }}
           >
-            {grayOptions.map((gray) => (
-              <SwatchItem key={gray} value={gray} label={capitalize(gray)} />
+            {baseColorOptions.map((baseColor) => (
+              <SwatchItem
+                key={baseColor}
+                value={baseColor}
+                label={capitalize(baseColor)}
+              />
             ))}
           </ToggleGroup>
         </Control>
-        <Control label="Accent">
+        <Control label="Primary">
           <ToggleGroup
             size="sm"
             spacing={0}
-            value={[theme.accent]}
-            onValueChange={([accent]) => {
-              if (accent)
-                setTheme((t) => ({ ...t, accent: accent as AccentName }));
+            value={[theme.primary]}
+            onValueChange={([primary]) => {
+              if (primary)
+                setTheme((t) => ({ ...t, primary: primary as PrimaryName }));
             }}
           >
-            {accentOptions.map((accent) => (
+            {primaryOptions.map((primary) => (
               <SwatchItem
-                key={accent}
-                value={accent}
-                label={accent === "none" ? "None" : capitalize(accent)}
+                key={primary}
+                value={primary}
+                label={
+                  primary === "default"
+                    ? "Default (from the base color)"
+                    : capitalize(primary)
+                }
               />
             ))}
           </ToggleGroup>
@@ -245,14 +258,14 @@ function SwatchItem({ value, label }: { value: string; label: string }) {
       <span
         className={cn(
           "size-4 rounded-full border border-black/10 dark:border-white/15",
-          value === "none" && "bg-foreground",
+          value === "default" && "bg-foreground",
         )}
         style={
-          value === "none"
+          value === "default"
             ? undefined
             : {
                 backgroundColor: swatch(
-                  value as Exclude<GrayName | AccentName, "none">,
+                  value as BaseColorName | PrimaryColorName,
                 ),
               }
         }
