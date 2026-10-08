@@ -1,6 +1,7 @@
 // Checks the drop-in claim: scaffolds the stock create-fumadocs-app project
-// (Next.js + Fumadocs MDX), migrates it to docscn the way the migration guide
-// describes, removes fumadocs-ui, then type-checks, builds and smoke-tests it.
+// (Next.js + Fumadocs MDX), adds a copy of its docs route in the notebook
+// layout, migrates it to docscn the way the migration guide describes, removes
+// fumadocs-ui, then type-checks, builds and smoke-tests it.
 //
 // Run `shadcn build` first. Pass `--keep` to keep the generated app for
 // inspection, and `--registry <url>` to install from a deployed registry.
@@ -10,6 +11,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import {
   addFixturePage,
+  addNotebookRoute,
   allowBuild,
   getOption,
   run,
@@ -126,6 +128,8 @@ try {
   await run(shadcn, ["init", "--base=base", "--preset=nova", "--yes"], app);
   await setRegistry(app, registryUrl);
   await run(shadcn, ["add", "@docscn/fumadocs-ui", "--yes"], app);
+  // a route in Fumadocs UI's notebook layout, for the migration to carry over
+  await addNotebookRoute(app);
 
   await migrate();
   await assertNoFumadocsUi();

@@ -1,7 +1,8 @@
 // Installs every docscn registry item into a fresh shadcn/ui (Base UI) Next.js
 // app, follows the `docs` block's setup notes, adds the kitchen-sink fixture
-// page, then lints, builds and smoke-tests the app, to check that items install
-// and work the way they will for users.
+// page and a copy of the docs route in the notebook layout, then lints, builds
+// and smoke-tests the app, to check that items install and work the way they
+// will for users.
 //
 // Run `shadcn build` first. Pass `--keep` to keep the generated app for
 // inspection, and `--registry <url>` to install from a deployed registry
@@ -15,6 +16,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import {
   addFixturePage,
+  addNotebookRoute,
   allowBuild,
   getOption,
   outputDir,
@@ -155,6 +157,10 @@ try {
   }
   await applyDocsBlockNotes();
   await addFixturePage(app);
+  await addNotebookRoute(
+    app,
+    'nav={{ ...baseOptions().nav, mode: "top" }} tabMode="navbar"',
+  );
 
   // Lint docscn's files only: shadcn/ui's own hooks/use-mobile.ts fails
   // eslint-config-next's react-hooks rules in a fresh app. The monorepo
@@ -173,6 +179,7 @@ try {
         "lib/source.ts",
         "lib/layout.shared.tsx",
         "app/docs",
+        "app/notebook",
         "app/api",
       ],
       app,
