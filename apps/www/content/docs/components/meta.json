@@ -16,6 +16,8 @@
     "---Content---",
     "mdx",
     "codeblock",
+    "dynamic-codeblock",
+    "server-codeblock",
     "callout",
     "card",
     "heading",

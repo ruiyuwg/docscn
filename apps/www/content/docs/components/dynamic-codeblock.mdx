@@ -1,0 +1,67 @@
+---
+title: Dynamic code block
+description: A code block highlighted in the browser, for code that's only known at runtime.
+---
+
+import { DynamicCodeBlock } from "@/components/docs/components/dynamic-codeblock";
+
+<DynamicCodeBlock lang="ts" code={'const greeting = "Hello, world!";'} />
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/dynamic-codeblock
+```
+
+## Usage
+
+```tsx
+import { DynamicCodeBlock } from "@/components/docs/components/dynamic-codeblock";
+
+<DynamicCodeBlock lang="ts" code={code} />;
+```
+
+It loads Shiki in the browser and highlights the code with the GitHub light and dark themes, using the same [code block](/docs/components/codeblock) as your content. Until Shiki has loaded, it shows the code without colours.
+
+Shiki's full bundle is large. To load less, use `DynamicCodeBlock` from `components/dynamic-codeblock.core` with your own highlighter, built with only the languages and themes you need.
+
+For code that's known on the server, [`ServerCodeBlock`](/docs/components/server-codeblock) sends no JavaScript to the browser.
+
+## Props
+
+<TypeTable
+  type={{
+    lang: {
+      description: <>The code's language.</>,
+      type: "string",
+      required: true,
+    },
+    code: {
+      type: "string",
+      required: true,
+    },
+    options: {
+      description: (
+        <>
+          Shiki's options, such as <code>{"themes"}</code> and{" "}
+          <code>{"components"}</code>.
+        </>
+      ),
+      type: "UseShikiOptions",
+    },
+    codeblock: {
+      description: (
+        <>
+          Props for the underlying <code>{"CodeBlock"}</code>, such as{" "}
+          <code>{"title"}</code>.
+        </>
+      ),
+      type: "CodeBlockProps",
+    },
+    wrapInSuspense: {
+      description: <>Show the code without colours while Shiki loads.</>,
+      type: "boolean",
+      default: "true",
+    },
+  }}
+/>
