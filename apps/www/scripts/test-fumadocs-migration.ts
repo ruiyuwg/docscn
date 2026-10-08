@@ -11,6 +11,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import {
   addFixturePage,
+  addI18n,
   addNotebookRoute,
   allowBuild,
   getOption,
@@ -130,6 +131,8 @@ try {
   await run(shadcn, ["add", "@docscn/fumadocs-ui", "--yes"], app);
   // a route in Fumadocs UI's notebook layout, for the migration to carry over
   await addNotebookRoute(app);
+  // Fumadocs UI's translations, for the migration to carry over
+  await addI18n(app, "fumadocs-ui");
 
   await migrate();
   await assertNoFumadocsUi();
@@ -138,6 +141,7 @@ try {
   await run("pnpm", ["run", "types:check"], app);
   await run("pnpm", ["run", "build"], app);
   await smokeTest(app, {
+    i18n: true,
     extraPaths: ["/", "/og/docs/image.png", "/llms.mdx/docs/content.md"],
   });
   console.log("\nMigrated, built and smoke-tested the stock Fumadocs app.");

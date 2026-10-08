@@ -146,6 +146,67 @@ export async function addNotebookRoute(app: string, layoutProps = "") {
   }
 }
 
+/**
+ * Sets up translations for two languages, as Fumadocs' i18n guide does:
+ * `lib/i18n.ts` defines them, RootProvider shows English, and the /notebook
+ * route (from `addNotebookRoute()`) shows the second language through a nested
+ * I18nProvider. `modules` is where the UI components are imported from:
+ * `fumadocs-ui` before migrating, `@/components/docs` for docscn.
+ */
+export async function addI18n(app: string, modules: string) {
+  const src = await access(path.join(app, "src/app")).then(
+    () => path.join(app, "src"),
+    () => app,
+  );
+
+  await mkdir(path.join(src, "lib"), { recursive: true });
+  await writeFile(
+    path.join(src, "lib/i18n.ts"),
+    `import { defineI18n } from "fumadocs-core/i18n";
+import { uiTranslations } from "${modules}/i18n";
+
+export const i18n = defineI18n({
+  defaultLanguage: "en",
+  languages: ["en", "cn"],
+});
+
+export const translations = i18n
+  .translations()
+  .extend(uiTranslations())
+  .add({
+    en: { displayName: "English" },
+    cn: {
+      displayName: "中文",
+      "On this page(table of contents)": "本页目录",
+      "Choose a language(language switcher)(aria-label)": "选择语言",
+    },
+  });
+`,
+  );
+
+  const rootPath = path.join(src, "app/layout.tsx");
+  let root = await readFile(rootPath, "utf8");
+  if (!root.includes("<RootProvider>")) {
+    throw new Error("app/layout.tsx doesn't render <RootProvider>");
+  }
+  root = `import { i18nProvider } from "${modules}/i18n";
+import { translations } from "@/lib/i18n";
+${root.replace("<RootProvider>", '<RootProvider i18n={i18nProvider(translations, "en")}>')}`;
+  await writeFile(rootPath, root);
+
+  const notebookPath = path.join(src, "app/notebook/layout.tsx");
+  let notebook = await readFile(notebookPath, "utf8");
+  const layout = /<DocsLayout[\s\S]*<\/DocsLayout>/;
+  if (!layout.test(notebook)) {
+    throw new Error("app/notebook/layout.tsx doesn't render <DocsLayout>");
+  }
+  notebook = `import { I18nProvider } from "${modules}/contexts/i18n";
+import { i18nProvider } from "${modules}/i18n";
+import { translations } from "@/lib/i18n";
+${notebook.replace(layout, (match) => `<I18nProvider {...i18nProvider(translations, "cn")}>${match}</I18nProvider>`)}`;
+  await writeFile(notebookPath, notebook);
+}
+
 async function getFreePort() {
   const server = createServer();
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
@@ -166,7 +227,14 @@ function check(condition: unknown, message: string) {
  */
 export async function smokeTest(
   app: string,
-  { extraPaths = [] }: { extraPaths?: string[] } = {},
+  {
+    extraPaths = [],
+    i18n = false,
+  }: {
+    extraPaths?: string[];
+    /** Check the translations `addI18n()` sets up. */
+    i18n?: boolean;
+  } = {},
 ) {
   const port = await getFreePort();
   const base = `http://127.0.0.1:${port}`;
@@ -271,6 +339,20 @@ export async function smokeTest(
         notebookHtml.includes('href="#code-blocks"'),
       "the notebook page renders a TOC",
     );
+
+    if (i18n) {
+      check(
+        pageHtml.includes('aria-label="Choose a language"') &&
+          pageHtml.includes(">English<") &&
+          pageHtml.includes("On this page"),
+        "/docs renders the language switcher, in English",
+      );
+      check(
+        notebookHtml.includes('aria-label="选择语言"') &&
+          notebookHtml.includes("本页目录"),
+        "/notebook renders the second language's translations",
+      );
+    }
 
     const search = await fetch(`${base}/api/search?query=callouts`);
     const results = (await search.json()) as unknown[];
