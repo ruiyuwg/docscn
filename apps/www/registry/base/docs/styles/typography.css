@@ -1,0 +1,236 @@
+/* docs-typeset: content styles for DocsBody, built from shadcn/ui theme tokens.
+   Add `not-docs-typeset` to an element to opt it and its children out. */
+@layer components {
+  .docs-typeset {
+    color: var(--foreground);
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .docs-typeset > :first-child {
+    margin-top: 0;
+  }
+
+  .docs-typeset > :last-child {
+    margin-bottom: 0;
+  }
+
+  .docs-typeset :where(p):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  .docs-typeset :where(h1):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset :where(h2):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset :where(h3):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset :where(h4):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset :where(h5):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset :where(h6):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    color: var(--foreground);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .docs-typeset :where(h1):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    font-size: 2.25em;
+    line-height: 1.15;
+    margin-top: 0;
+    margin-bottom: 0.8em;
+  }
+
+  .docs-typeset :where(h2):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    font-size: 1.5em;
+    line-height: 1.35;
+    margin-top: 2em;
+    margin-bottom: 0.8em;
+  }
+
+  .docs-typeset :where(h3):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    font-size: 1.25em;
+    line-height: 1.5;
+    margin-top: 1.6em;
+    margin-bottom: 0.6em;
+  }
+
+  .docs-typeset :where(h4):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset :where(h5):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset :where(h6):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    font-size: 1em;
+    line-height: 1.5;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+
+  .docs-typeset
+    :where(a:not([data-card])):not(
+      :where(.not-docs-typeset, .not-docs-typeset *)
+    ) {
+    color: var(--foreground);
+    font-weight: 500;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklab, var(--primary) 40%, transparent);
+    text-underline-offset: 4px;
+    transition: text-decoration-color 150ms;
+  }
+
+  .docs-typeset
+    :where(a:not([data-card]):hover):not(
+      :where(.not-docs-typeset, .not-docs-typeset *)
+    ) {
+    text-decoration-color: var(--primary);
+  }
+
+  .docs-typeset
+    :where(strong):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    color: var(--foreground);
+    font-weight: 600;
+  }
+
+  .docs-typeset :where(ul):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset :where(ol):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-inline-start: 1.625em;
+  }
+
+  .docs-typeset :where(ul):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    list-style-type: disc;
+  }
+
+  .docs-typeset :where(ol):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    list-style-type: decimal;
+  }
+
+  .docs-typeset :where(li):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-inline-start: 0.375em;
+  }
+
+  .docs-typeset
+    :where(li):not(:where(.not-docs-typeset, .not-docs-typeset *))::marker {
+    color: var(--muted-foreground);
+  }
+
+  .docs-typeset
+    :where(li > ul):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset
+    :where(li > ol):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  .docs-typeset
+    :where(li > p):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  .docs-typeset
+    :where(blockquote):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding-inline-start: 1em;
+    border-inline-start: 2px solid var(--border);
+    color: var(--muted-foreground);
+    font-style: italic;
+  }
+
+  .docs-typeset :where(hr):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 3em;
+    margin-bottom: 3em;
+    border-color: var(--border);
+  }
+
+  .docs-typeset
+    :where(code:not(pre code)):not(
+      :where(.not-docs-typeset, .not-docs-typeset *)
+    ) {
+    padding: 0.2em 0.35em;
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 0.6);
+    background-color: var(--muted);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.875em;
+    font-weight: 500;
+  }
+
+  .docs-typeset
+    :where(pre):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    padding: 0.875em 1em;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background-color: var(--muted);
+    font-size: 0.875em;
+    line-height: 1.7;
+  }
+
+  .docs-typeset
+    :where(kbd):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    padding: 0.1em 0.375em;
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 0.6);
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.875em;
+  }
+
+  .docs-typeset
+    :where(table):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    width: 100%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-collapse: collapse;
+    font-size: 0.875em;
+    line-height: 1.7;
+    text-align: start;
+  }
+
+  .docs-typeset
+    :where(thead):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .docs-typeset
+    :where(tbody tr):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .docs-typeset
+    :where(tbody tr:last-child):not(
+      :where(.not-docs-typeset, .not-docs-typeset *)
+    ) {
+    border-bottom-width: 0;
+  }
+
+  .docs-typeset :where(th):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    padding: 0.5em 0.75em;
+    color: var(--foreground);
+    font-weight: 600;
+    text-align: start;
+    vertical-align: bottom;
+  }
+
+  .docs-typeset :where(td):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    padding: 0.5em 0.75em;
+    vertical-align: top;
+  }
+
+  .docs-typeset :where(img):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset
+    :where(video):not(:where(.not-docs-typeset, .not-docs-typeset *)),
+  .docs-typeset
+    :where(figure):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
+
+  .docs-typeset
+    :where(figcaption):not(:where(.not-docs-typeset, .not-docs-typeset *)) {
+    margin-top: 0.75em;
+    color: var(--muted-foreground);
+    font-size: 0.875em;
+  }
+}

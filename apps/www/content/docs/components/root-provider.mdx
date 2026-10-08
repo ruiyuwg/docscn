@@ -1,0 +1,51 @@
+---
+title: RootProvider
+description: Theme, search and framework providers for the root layout.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/root-provider
+```
+
+## Usage
+
+Wrap your app in `RootProvider` in the root layout, and add `suppressHydrationWarning` to `<html>` for next-themes:
+
+```tsx title="app/layout.tsx"
+import { RootProvider } from "@/components/docs/provider/next";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <RootProvider>{children}</RootProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+It provides:
+
+- [next-themes](https://github.com/pacocoursey/next-themes), with a <kbd>D</kbd> hotkey to switch between light and dark mode
+- search, with the [default search dialog](/docs/components/search-dialog) opened by <kbd>⌘</kbd> <kbd>K</kbd> or <kbd>Ctrl</kbd> <kbd>K</kbd>
+- shadcn/ui's `TooltipProvider`, which the sidebar uses
+- Base UI's `DirectionProvider`
+- Fumadocs Core's Next.js adapter, for links, images and routing
+
+## Props
+
+| Prop         | Type                                                     | Description                                                                                                                   |
+| ------------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `theme`      | `ThemeProviderProps & { enabled?, hotKey? }`             | Options for next-themes. `enabled: false` removes it; `hotKey` changes or (`false`) disables the <kbd>D</kbd> hotkey.         |
+| `search`     | `{ enabled?, SearchDialog?, options?, links?, hotKey? }` | Search options. `SearchDialog` replaces the default dialog, and `options` passes props to it (e.g. `{ api: "/api/search" }`). |
+| `dir`        | `"ltr" \| "rtl"`                                         | Text direction for Base UI components. Defaults to `"ltr"`.                                                                   |
+| `components` | `{ Link?, Image? }`                                      | Replace the Next.js `Link` and `Image` used by docscn components.                                                             |
+
+`useTheme` is re-exported from `@/components/docs/provider/base`.

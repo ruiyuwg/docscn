@@ -1,0 +1,40 @@
+---
+title: Sidebar
+description: Render a Fumadocs page tree with the shadcn/ui sidebar.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/docs-sidebar
+```
+
+## Usage
+
+[`DocsLayout`](/docs/components/docs-layout) renders the sidebar for you. Use `SidebarPageTree` directly to build your own layout on the shadcn/ui sidebar. It reads the page tree from `TreeContextProvider` ([tree context](/docs/components/utilities)):
+
+```tsx
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarProvider,
+} from "@/components/ui/sidebar";
+import { SidebarPageTree } from "@/components/docs/components/sidebar/page-tree";
+import { TreeContextProvider } from "@/components/docs/contexts/tree";
+
+<TreeContextProvider tree={tree}>
+  <SidebarProvider>
+    <Sidebar>
+      <SidebarContent>
+        <SidebarPageTree />
+      </SidebarContent>
+    </Sidebar>
+  </SidebarProvider>
+</TreeContextProvider>;
+```
+
+Top-level separators become `SidebarGroup` labels. Pages render as `SidebarMenuButton` links, and folders as collapsible `SidebarMenuSub` lists that open when the current page is inside them. A folder with an index page links to it and has a separate button to expand it. The active page is scrolled into view, and the mobile sheet closes after navigating.
+
+`SidebarPageTree` accepts `Item`, `Folder` and `Separator` components to replace how each kind of node renders. Wrap it in `SidebarTreeOptionsProvider` to set `defaultOpenLevel` and `prefetch`.
+
+`SidebarLinkItem` (in `components/sidebar/link-item`) renders a layout link (`LinkItemType`) the same way.

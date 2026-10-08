@@ -11,6 +11,11 @@
     },
     "test:registry": {
       "dependsOn": ["registry:build"],
+      "cache": false,
+      "passThroughEnv": ["VERCEL_AUTOMATION_BYPASS_SECRET"]
+    },
+    "test:migration": {
+      "dependsOn": ["registry:build"],
       "cache": false
     }
   }

@@ -1,50 +1,67 @@
 // Installs every docscn registry item into a fresh shadcn/ui (Base UI) Next.js
-// app, then lints and builds it, to check that items install and compile the
-// way they will for users. Run `shadcn build` first. Pass `--keep` to keep the
-// generated app for inspection.
-import { spawn } from "node:child_process";
+// app, follows the `docs` block's setup notes, adds the kitchen-sink fixture
+// page, then lints, builds and smoke-tests the app, to check that items install
+// and work the way they will for users.
+//
+// Run `shadcn build` first. Pass `--keep` to keep the generated app for
+// inspection, and `--registry <url>` to install from a deployed registry
+// (e.g. https://docscn.dev/r/{name}.json) instead of the local build. For a
+// protected Vercel preview, also set VERCEL_AUTOMATION_BYPASS_SECRET.
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { createServer } from "node:http";
-import type { AddressInfo } from "node:net";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import {
+  addFixturePage,
+  allowBuild,
+  getOption,
+  outputDir,
+  root,
+  run,
+  serveRegistry,
+  setRegistry,
+  shadcn,
+  smokeTest,
+} from "./utils.ts";
 
-const root = path.resolve(import.meta.dirname, "..");
-const outputDir = path.join(root, "public/r");
-const shadcn = path.join(root, "node_modules/.bin/shadcn");
 const keep = process.argv.includes("--keep");
-
-function run(command: string, args: string[], cwd: string) {
-  console.log(`\n$ ${command} ${args.join(" ")}`);
-  return new Promise<void>((resolve, reject) => {
-    spawn(command, args, { cwd, stdio: "inherit" })
-      .on("error", reject)
-      .on("exit", (code) => {
-        if (code === 0) resolve();
-        else reject(new Error(`${command} exited with code ${code}`));
-      });
-  });
-}
+const registryOption = getOption("--registry");
 
 const registry = JSON.parse(
   await readFile(path.join(outputDir, "registry.json"), "utf8"),
 ) as { items: { name: string }[] };
 const items = registry.items.map((item) => `@docscn/${item.name}`);
 
-const server = createServer(async (req, res) => {
-  const { pathname } = new URL(req.url ?? "/", "http://localhost");
-  try {
-    const body = await readFile(path.join(outputDir, path.basename(pathname)));
-    res.writeHead(200, { "content-type": "application/json" }).end(body);
-  } catch {
-    res.writeHead(404).end();
-  }
-});
-await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
-const { port } = server.address() as AddressInfo;
+const local = registryOption ? undefined : await serveRegistry();
+const registryUrl = registryOption ?? local!.url;
 
 const tempDir = await mkdtemp(path.join(tmpdir(), "docscn-install-"));
 const app = path.join(tempDir, "app");
+
+/** The two edits the `docs` block's notes ask users to make. */
+async function applyDocsBlockNotes() {
+  const layoutPath = path.join(app, "app/layout.tsx");
+  let layout = await readFile(layoutPath, "utf8");
+  // RootProvider includes next-themes, so it replaces the template's ThemeProvider.
+  layout = layout
+    .replace(/^import \{ ThemeProvider \} from .*\n/m, "")
+    .replace(
+      /<ThemeProvider>\{children\}<\/ThemeProvider>|\{children\}/,
+      "<RootProvider>{children}</RootProvider>",
+    );
+  if (!layout.includes("suppressHydrationWarning")) {
+    layout = layout.replace("<html", "<html suppressHydrationWarning");
+  }
+  layout = `import { RootProvider } from "@/components/docs/provider/next";\n${layout}`;
+  await writeFile(layoutPath, layout);
+
+  const configPath = path.join(app, "next.config.ts");
+  let config = await readFile(configPath, "utf8");
+  config = `import { createMDX } from "fumadocs-mdx/next";\n${config.replace(
+    /export default nextConfig;?/,
+    "export default createMDX()(nextConfig);",
+  )}`;
+  await writeFile(configPath, config);
+}
 
 try {
   await run(
@@ -62,25 +79,37 @@ try {
     root,
   );
 
-  const componentsJsonPath = path.join(app, "components.json");
-  const componentsJson = JSON.parse(await readFile(componentsJsonPath, "utf8"));
-  componentsJson.registries = {
-    ...componentsJson.registries,
-    "@docscn": `http://127.0.0.1:${port}/r/{name}.json`,
-  };
-  await writeFile(componentsJsonPath, JSON.stringify(componentsJson, null, 2));
+  await setRegistry(app, registryUrl);
+  await allowBuild(app, "esbuild", false);
+  await run(shadcn, ["add", ...items, "--yes"], app);
+  await applyDocsBlockNotes();
+  await addFixturePage(app);
 
-  if (items.length > 0) {
-    await run(shadcn, ["add", ...items, "--yes"], app);
-  } else {
-    console.log("\nThe registry has no items. Checking the base app only.");
-  }
-
-  await run("pnpm", ["run", "lint"], app);
+  // Lint docscn's files only: shadcn/ui's own hooks/use-mobile.ts fails
+  // eslint-config-next's react-hooks rules in a fresh app.
+  await run(
+    "pnpm",
+    [
+      "exec",
+      "eslint",
+      "--max-warnings",
+      "0",
+      "components/docs",
+      "components/mdx.tsx",
+      "lib/source.ts",
+      "lib/layout.shared.tsx",
+      "app/docs",
+      "app/api",
+    ],
+    app,
+  );
   await run("pnpm", ["run", "build"], app);
-  console.log(`\nInstalled and built ${items.length} registry item(s).`);
+  await smokeTest(app);
+  console.log(
+    `\nInstalled, built and smoke-tested ${items.length} registry item(s).`,
+  );
 } finally {
-  server.close();
+  local?.server.close();
   if (keep) console.log(`\nKept the generated app at ${app}`);
   else await rm(tempDir, { recursive: true, force: true });
 }

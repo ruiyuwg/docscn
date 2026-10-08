@@ -1,0 +1,113 @@
+// Adapted from Fumadocs UI (https://github.com/fuma-nama/fumadocs)
+// Copyright (c) 2023 Fuma, MIT License
+"use client";
+
+import type { SortedResult } from "fumadocs-core/search";
+import { useDocsSearch } from "fumadocs-core/search/client";
+import { fetchClient } from "fumadocs-core/search/client/fetch";
+import { useOnChange } from "fumadocs-core/utils/use-on-change";
+import { type ReactNode, useMemo, useState } from "react";
+import type { SearchLink, TagItem } from "../../contexts/search";
+import {
+  SearchDialog,
+  SearchDialogClose,
+  SearchDialogContent,
+  SearchDialogFooter,
+  SearchDialogHeader,
+  SearchDialogIcon,
+  SearchDialogInput,
+  SearchDialogList,
+  SearchDialogOverlay,
+  type SharedProps,
+  TagsList,
+  TagsListItem,
+} from "./search";
+
+export interface DefaultSearchDialogProps extends SharedProps {
+  links?: SearchLink[];
+
+  defaultTag?: string;
+  tags?: TagItem[];
+
+  /**
+   * Search API URL
+   */
+  api?: string;
+
+  /**
+   * The debounced delay for performing a search.
+   */
+  delayMs?: number;
+
+  footer?: ReactNode;
+
+  /**
+   * Allow to clear tag filters
+   *
+   * @defaultValue false
+   */
+  allowClear?: boolean;
+}
+
+export default function DefaultSearchDialog({
+  defaultTag,
+  tags = [],
+  api,
+  delayMs,
+  allowClear = false,
+  links = [],
+  footer,
+  ...props
+}: DefaultSearchDialogProps) {
+  const [tag, setTag] = useState(defaultTag);
+  const client = useMemo(() => fetchClient({ api, tag }), [api, tag]);
+  const { search, setSearch, query } = useDocsSearch({ client, delayMs });
+  const defaultItems = useMemo<SortedResult[] | null>(() => {
+    if (links.length === 0) return null;
+    return links.map(([name, link]) => ({
+      type: "page",
+      id: name,
+      content: name,
+      url: link,
+    }));
+  }, [links]);
+
+  useOnChange(defaultTag, (v) => {
+    setTag(v);
+  });
+
+  return (
+    <SearchDialog
+      search={search}
+      onSearchChange={setSearch}
+      isLoading={query.isLoading}
+      {...props}
+    >
+      <SearchDialogOverlay />
+      <SearchDialogContent>
+        <SearchDialogHeader>
+          <SearchDialogIcon />
+          <SearchDialogInput />
+          <SearchDialogClose />
+        </SearchDialogHeader>
+        <SearchDialogList
+          items={query.data !== "empty" ? query.data : defaultItems}
+        />
+        <SearchDialogFooter>
+          {tags.length > 0 && (
+            <TagsList tag={tag} onTagChange={setTag} allowClear={allowClear}>
+              {tags.map((tag) => (
+                <TagsListItem key={tag.value} value={tag.value}>
+                  {tag.name}
+                </TagsListItem>
+              ))}
+            </TagsList>
+          )}
+          {footer}
+        </SearchDialogFooter>
+      </SearchDialogContent>
+    </SearchDialog>
+  );
+}
+
+export { DefaultSearchDialog };

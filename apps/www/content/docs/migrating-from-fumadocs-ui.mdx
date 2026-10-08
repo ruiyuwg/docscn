@@ -1,0 +1,88 @@
+---
+title: Migrating from Fumadocs UI
+description: Replace fumadocs-ui in an existing Fumadocs app with docscn.
+---
+
+docscn keeps Fumadocs UI's component names, props and module paths, so a project made with `create-fumadocs-app` (Next.js and Fumadocs MDX) migrates in a few steps. docscn's CI runs exactly these steps on the stock template on every change.
+
+## Steps
+
+### 1. Set up shadcn/ui
+
+If the project doesn't use shadcn/ui yet, initialise it with Base UI. It detects `app/global.css`, adds the theme tokens and creates `components.json`:
+
+```npm
+npx shadcn@latest init --base=base
+```
+
+<Callout type="warn" title="pnpm 11">
+  `create-fumadocs-app` leaves a placeholder for esbuild under `allowBuilds` in
+  `pnpm-workspace.yaml`, and pnpm 11 refuses to install anything until you
+  replace it. Set it to `esbuild: false` first.
+</Callout>
+
+### 2. Install the components
+
+Add the registry, then install `@docscn/fumadocs-ui`, which installs every docscn component into `components/docs/` (but no routes):
+
+```npm
+npx shadcn@latest registry add @docscn=https://docscn.dev/r/{name}.json
+npx shadcn@latest add @docscn/fumadocs-ui
+```
+
+### 3. Change the imports
+
+Replace `fumadocs-ui/` with `@/components/docs/` in your imports, in `app/`, `components/` and `lib/`:
+
+```tsx title="app/docs/layout.tsx"
+import { DocsLayout } from "fumadocs-ui/layouts/docs"; // [!code --]
+import { DocsLayout } from "@/components/docs/layouts/docs"; // [!code ++]
+```
+
+### 4. Remove Fumadocs UI's styles
+
+Delete the `fumadocs-ui/css/*` imports from your global stylesheet. The docscn components installed their styles into the same file, built from your shadcn/ui theme:
+
+```css title="app/global.css"
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css"; /* [!code --] */
+@import "fumadocs-ui/css/preset.css"; /* [!code --] */
+```
+
+### 5. Uninstall Fumadocs UI
+
+```npm
+npm uninstall fumadocs-ui
+```
+
+Then build the project. Pages, search, the OG image and Markdown routes keep working as before.
+
+## What's different
+
+These are deliberate differences from Fumadocs UI:
+
+| Fumadocs UI                                                      | docscn                                                                                                                      |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| The `slots` prop on layouts and pages                            | Not supported. Edit your copy of the component instead.                                                                     |
+| `--color-fd-*` variables and `fd-*` utility classes              | Your shadcn/ui theme tokens (`--background`, `--primary`, `--sidebar-*`, ...). See [Theming and typography](/docs/theming). |
+| Colour themes and CSS presets (`neutral.css`, `preset.css`, ...) | Not shipped. Change your shadcn/ui theme instead.                                                                           |
+| The `prose` class (`not-prose` to opt out)                       | `docs-typeset` (`not-docs-typeset` to opt out).                                                                             |
+| `fumadocs-ui/components/ui/*` (button, tabs, popover, ...)       | Your own shadcn/ui primitives in `components/ui/`.                                                                          |
+| `fumadocs-ui/components/sidebar/base`                            | The shadcn/ui `sidebar`. `DocsLayout` uses `SidebarProvider` and `SidebarInset`, so `useSidebar()` works inside docs pages. |
+| `createPageTreeRenderer` and `createLinkItemRenderer`            | `SidebarPageTree` and `SidebarLinkItem`, rendered with the shadcn/ui sidebar menu.                                          |
+| Providers for React Router, TanStack Start, Waku and Astro       | Next.js only (`provider/next`).                                                                                             |
+| Fumadocs UI's Radix UI variant                                   | Base UI only.                                                                                                               |
+| Deprecated props (`nav.component`, `sidebar.tabs`, ...)          | Not supported. Use the current props.                                                                                       |
+| The sidebar's desktop collapse state                             | Kept in shadcn/ui's `sidebar_state` cookie. Pass it to `sidebar.defaultOpen` to restore it on load.                         |
+| ⌘B                                                               | Toggles the sidebar, as in every shadcn/ui sidebar.                                                                         |
+
+## Not supported yet
+
+- **Translations.** UI strings are in English. The `i18n` prop of `RootProvider`, `LanguageSelect` and `defineI18nUI` aren't available; edit the strings in your copy for now.
+- **AI chat.** The `aiChat` option of `DocsLayout`.
+- **More components:** `Tabs`, `Steps`, `Accordion`, `Files`, `TypeTable`, `ImageZoom`, `InlineTOC`, `Banner`, `GithubInfo`, `DynamicCodeBlock` and `ServerCodeBlock`, so the output of the opt-in `remark-admonition`, `remark-steps` and `remark-mdx-files` plugins too.
+- **More layouts:** the notebook layout, and the flux, glass and spacious layouts.
+- **TOC styles:** `clerk` and `block`.
+- **Search dialogs** for Algolia and Orama Cloud. Build one from the [search dialog parts](/docs/components/search-dialog).
+
+[Compatibility](/docs/compatibility) lists every Fumadocs UI module and its status.
