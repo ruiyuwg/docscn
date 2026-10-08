@@ -14,7 +14,7 @@ const root = path.resolve(import.meta.dirname, "..");
 /** The icon's grid, in SVG units. */
 const canvas = 32;
 /** Space between the tile's edge and the mark. */
-const padding = 10;
+const padding = 7;
 /** Corner radius of the tile. */
 const radius = 5;
 const tileColor = "#0a0a0a";
@@ -65,9 +65,9 @@ function insideTile(x: number, y: number) {
   return (x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2;
 }
 
-function insideMark(rects: Rect[], x: number, y: number) {
-  const mx = (x - padding) / markScale;
-  const my = (y - padding) / markScale;
+function insideMark(rects: Rect[], x: number, y: number, offset: number) {
+  const mx = (x - offset) / markScale;
+  const my = (y - offset) / markScale;
   return rects.some((r) => mx >= r.x0 && mx < r.x1 && my >= r.y0 && my < r.y1);
 }
 
@@ -81,6 +81,9 @@ function rasterize(rects: Rect[], size: number) {
   const mark = hex(markColor);
   const pixels = Buffer.alloc(size * size * 4);
   const unit = canvas / size;
+  // Snap the mark to whole pixels, so its squares stay sharp when the padding
+  // isn't a whole number of pixels at this size.
+  const offset = Math.round(padding / unit - 0.01) * unit;
 
   for (let py = 0; py < size; py++) {
     for (let px = 0; px < size; px++) {
@@ -92,7 +95,7 @@ function rasterize(rects: Rect[], size: number) {
           const y = (py + (sy + 0.5) / samples) * unit;
           if (!insideTile(x, y)) continue;
           inTile++;
-          if (insideMark(rects, x, y)) inMark++;
+          if (insideMark(rects, x, y, offset)) inMark++;
         }
       }
 
