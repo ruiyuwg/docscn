@@ -56,13 +56,26 @@ export async function serveRegistry(): Promise<{
   return { url: `http://127.0.0.1:${port}/r/{name}.json`, server };
 }
 
-/** Points the `@docscn` registry in the app's components.json at `url`. */
+/**
+ * Points the `@docscn` registry in the app's components.json at `url`. When
+ * VERCEL_AUTOMATION_BYPASS_SECRET is set, requests carry Vercel's protection
+ * bypass header, so a protected preview deployment can serve the registry. The
+ * CLI expands the `${...}` placeholder from the environment, so the secret
+ * isn't written to the file.
+ */
 export async function setRegistry(app: string, url: string) {
   const componentsJsonPath = path.join(app, "components.json");
   const componentsJson = JSON.parse(await readFile(componentsJsonPath, "utf8"));
   componentsJson.registries = {
     ...componentsJson.registries,
-    "@docscn": url,
+    "@docscn": process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+      ? {
+          url,
+          headers: {
+            "x-vercel-protection-bypass": "${VERCEL_AUTOMATION_BYPASS_SECRET}",
+          },
+        }
+      : url,
   };
   await writeFile(componentsJsonPath, JSON.stringify(componentsJson, null, 2));
 }
