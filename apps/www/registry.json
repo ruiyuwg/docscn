@@ -129,7 +129,7 @@
       "name": "layout-shared",
       "type": "registry:component",
       "title": "Shared layout options",
-      "description": "BaseLayoutProps, link items, layout tabs and helpers shared by the docs and home layouts.",
+      "description": "BaseLayoutProps, link items, layout tabs and helpers shared by the docs, notebook and home layouts.",
       "dependencies": ["fumadocs-core@^16.16.2"],
       "registryDependencies": [
         "@docscn/docs-utils",
@@ -709,6 +709,97 @@
       ]
     },
     {
+      "name": "notebook-layout",
+      "type": "registry:component",
+      "title": "Notebook layout",
+      "description": "DocsLayout from layouts/notebook: a more compact docs layout on the shadcn/ui sidebar, with a navbar beside or above the sidebar, and layout tabs in the sidebar or the navbar.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "registryDependencies": [
+        "sidebar",
+        "button",
+        "popover",
+        "@docscn/docs-sidebar",
+        "@docscn/sidebar-tabs",
+        "@docscn/theme-switch",
+        "@docscn/search-trigger",
+        "@docscn/tree-context",
+        "@docscn/layout-shared",
+        "@docscn/docs-utils"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/layouts/notebook/index.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/index.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/notebook/client.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/client.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/notebook/slots/header.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/slots/header.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/notebook/slots/sidebar.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/slots/sidebar.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/notebook/slots/container.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/slots/container.tsx"
+        }
+      ]
+    },
+    {
+      "name": "notebook-page",
+      "type": "registry:component",
+      "title": "Notebook page",
+      "description": "DocsPage and the other page components from layouts/notebook/page, for pages in the notebook layout: the breadcrumb, previous/next links, the table of contents, EditOnGitHub and PageLastUpdate.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "registryDependencies": [
+        "breadcrumb",
+        "button",
+        "collapsible",
+        "@docscn/toc",
+        "@docscn/typography",
+        "@docscn/page-actions",
+        "@docscn/notebook-layout",
+        "@docscn/tree-context",
+        "@docscn/docs-utils"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/layouts/notebook/page/index.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/page/index.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/notebook/page/slots/breadcrumb.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/page/slots/breadcrumb.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/notebook/page/slots/container.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/page/slots/container.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/notebook/page/slots/footer.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/page/slots/footer.tsx"
+        },
+        {
+          "path": "registry/base/docs/layouts/notebook/page/slots/toc.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/notebook/page/slots/toc.tsx"
+        }
+      ]
+    },
+    {
       "name": "search-dialog",
       "type": "registry:component",
       "title": "Search dialog",
@@ -1181,6 +1272,8 @@
         "@docscn/toc",
         "@docscn/page-actions",
         "@docscn/docs-page",
+        "@docscn/notebook-layout",
+        "@docscn/notebook-page",
         "@docscn/search-dialog",
         "@docscn/search-dialog-default",
         "@docscn/home-layout",

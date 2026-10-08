@@ -4,6 +4,7 @@
     "root-provider",
     "docs-layout",
     "docs-page",
+    "notebook-layout",
     "home-layout",
     "---Navigation---",
     "docs-sidebar",

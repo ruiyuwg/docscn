@@ -1,6 +1,6 @@
 // Helpers shared by test-registry-install.ts and test-fumadocs-migration.ts.
 import { spawn } from "node:child_process";
-import { cp, readFile, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { createServer, type Server } from "node:http";
 import type { AddressInfo } from "node:net";
 import path from "node:path";
@@ -109,6 +109,43 @@ export async function addFixturePage(app: string) {
   await writeFile(metaPath, JSON.stringify(meta, null, 2));
 }
 
+/**
+ * Adds a /notebook route that renders the docs pages in the notebook layout: a
+ * copy of the app's docs layout and page, importing from `layouts/notebook`
+ * instead of `layouts/docs`. `layoutProps` (JSX attributes) are added to the
+ * layout's DocsLayout, after the `baseOptions()` spread.
+ */
+export async function addNotebookRoute(app: string, layoutProps = "") {
+  const appDir = await access(path.join(app, "src/app")).then(
+    () => path.join(app, "src/app"),
+    () => path.join(app, "app"),
+  );
+  for (const file of ["layout.tsx", "[[...slug]]/page.tsx"]) {
+    let content = await readFile(path.join(appDir, "docs", file), "utf8");
+    content = content
+      .replaceAll(
+        /(["'][^"']*\/layouts\/)docs(\/page)?(["'])/g,
+        "$1notebook$2$3",
+      )
+      .replaceAll(/((?:Layout|Page)Props<["'])\/docs/g, "$1/notebook");
+    if (!content.includes("layouts/notebook")) {
+      throw new Error(`app/docs/${file} doesn't import a docs layout module`);
+    }
+    if (file === "layout.tsx" && layoutProps) {
+      if (!content.includes("{...baseOptions()}")) {
+        throw new Error("app/docs/layout.tsx doesn't spread baseOptions()");
+      }
+      content = content.replace(
+        "{...baseOptions()}",
+        `{...baseOptions()} ${layoutProps}`,
+      );
+    }
+    const target = path.join(appDir, "notebook", file);
+    await mkdir(path.dirname(target), { recursive: true });
+    await writeFile(target, content);
+  }
+}
+
 async function getFreePort() {
   const server = createServer();
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
@@ -124,7 +161,8 @@ function check(condition: unknown, message: string) {
 
 /**
  * Starts the built app with `next start`, then checks that the docs, the
- * kitchen-sink page and the search API respond with the expected content.
+ * kitchen-sink page (also in the notebook layout) and the search API respond
+ * with the expected content.
  */
 export async function smokeTest(
   app: string,
@@ -217,6 +255,21 @@ export async function smokeTest(
       pageHtml.includes("data-rmiz") &&
         pageHtml.includes('alt="A gradient you can zoom into"'),
       "the zoomable image renders",
+    );
+
+    const notebook = await fetch(`${base}/notebook/kitchen-sink`);
+    const notebookHtml = await notebook.text();
+    check(notebook.status === 200, "/notebook/kitchen-sink responds with 200");
+    check(
+      notebookHtml.includes('id="nd-notebook-layout"') &&
+        notebookHtml.includes('id="nd-subnav"') &&
+        notebookHtml.includes('data-slot="sidebar"'),
+      "the notebook layout renders its navbar and sidebar",
+    );
+    check(
+      notebookHtml.includes('id="nd-toc"') &&
+        notebookHtml.includes('href="#code-blocks"'),
+      "the notebook page renders a TOC",
     );
 
     const search = await fetch(`${base}/api/search?query=callouts`);
