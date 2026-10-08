@@ -14,7 +14,7 @@ const root = path.resolve(import.meta.dirname, "..");
 /** The icon's grid, in SVG units. */
 const canvas = 32;
 /** Space between the tile's edge and the mark. */
-const padding = 4;
+const padding = 10;
 /** Corner radius of the tile. */
 const radius = 5;
 const tileColor = "#0a0a0a";

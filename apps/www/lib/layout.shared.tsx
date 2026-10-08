@@ -6,8 +6,8 @@ export function baseOptions(): BaseLayoutProps {
     nav: {
       title: (
         <>
-          <Logo className="size-5" />
-          docscn
+          <Logo className="size-3.5" />
+          Docscn
         </>
       ),
     },
