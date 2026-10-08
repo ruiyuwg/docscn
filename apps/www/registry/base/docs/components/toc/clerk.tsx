@@ -1,6 +1,7 @@
 // Adapted from Fumadocs UI (https://github.com/fuma-nama/fumadocs)
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
+import { useTranslations } from "@fuma-translate/react";
 import * as Primitive from "fumadocs-core/toc";
 import {
   type ComponentProps,
@@ -144,9 +145,11 @@ export function TOCItems({
 }
 
 export function TOCEmpty() {
+  const t = useTranslations({ note: "table of contents" });
+
   return (
     <div className="rounded-lg border bg-card p-3 text-xs text-muted-foreground">
-      No Headings
+      {t("No Headings")}
     </div>
   );
 }

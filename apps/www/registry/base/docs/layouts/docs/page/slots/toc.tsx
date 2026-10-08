@@ -1,6 +1,7 @@
 // Adapted from Fumadocs UI (https://github.com/fuma-nama/fumadocs)
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
+import { useTranslations } from "@fuma-translate/react";
 import * as TocDefault from "../../../../components/toc/default";
 import * as TocClerk from "../../../../components/toc/clerk";
 import * as TocBlock from "../../../../components/toc/block";
@@ -68,6 +69,7 @@ export function TOC({
   style = "normal",
   list,
 }: TOCProps) {
+  const t = useTranslations({ note: "table of contents" });
   const items = Base.useTOCItems();
   const { TOCItems, TOCEmpty, TOCItem } = variants[style];
 
@@ -95,7 +97,7 @@ export function TOC({
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground"
       >
         <Text className="size-4" />
-        On this page
+        {t("On this page")}
       </h3>
       <Base.TOCScrollArea className="ms-px">
         <TOCItems {...list}>
@@ -228,6 +230,7 @@ function PageTOCPopoverTrigger({
   className,
   ...props
 }: ComponentProps<"button">) {
+  const t = useTranslations({ note: "table of contents" });
   const { open } = use(TocPopoverContext)!;
   const items = Base.useItems();
   const selectedIdx = items.findIndex((item) => item.active);
@@ -259,7 +262,7 @@ function PageTOCPopoverTrigger({
             showItem && "pointer-events-none -translate-y-full opacity-0",
           )}
         >
-          {path?.name ?? "On this page"}
+          {path?.name ?? t("On this page")}
         </span>
         <span
           className={cn(

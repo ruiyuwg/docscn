@@ -1,6 +1,7 @@
 // Adapted from Fumadocs UI (https://github.com/fuma-nama/fumadocs)
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
+import { useTranslations } from "@fuma-translate/react";
 import { type ComponentProps, useMemo, useState } from "react";
 import {
   Check,
@@ -34,6 +35,7 @@ export function MarkdownCopyButton({
   markdownUrl: string;
 }) {
   const markdownUrl = withBasePath(_markdownUrl);
+  const t = useTranslations({ note: "page actions" });
   const [isLoading, setLoading] = useState(false);
   const [checked, onClick] = useCopyButton(async () => {
     const cached = cache.get(markdownUrl);
@@ -75,7 +77,7 @@ export function MarkdownCopyButton({
       )}
     >
       {checked ? <Check /> : <Copy />}
-      {props.children ?? (checked ? "Copied Markdown" : "Copy Markdown")}
+      {props.children ?? (checked ? t("Copied Markdown") : t("Copy Markdown"))}
     </button>
   );
 }
@@ -110,15 +112,18 @@ export function ViewOptionsPopover({
   pageUrl?: string;
 }) {
   const pathname = usePathname();
+  const t = useTranslations({ note: "page actions" });
   const items = useMemo(() => {
     const pageUrl =
       pageUrlProp ??
       (typeof window === "undefined" ? pathname : window.location.href);
-    const q = `Read ${pageUrl}, I want to ask questions about it.`;
+    const q = t("Read {url}, I want to ask questions about it.", {
+      variables: { url: pageUrl },
+    });
 
     return [
       githubUrl && {
-        title: "Open in GitHub",
+        title: t("Open in GitHub"),
         href: githubUrl,
         icon: (
           <svg fill="currentColor" role="img" viewBox="0 0 24 24">
@@ -128,12 +133,12 @@ export function ViewOptionsPopover({
         ),
       },
       markdownUrl && {
-        title: "View as Markdown",
+        title: t("View as Markdown"),
         href: withBasePath(markdownUrl),
         icon: <TextIcon />,
       },
       {
-        title: "Open in Scira AI",
+        title: t("Open in Scira AI"),
         href: `https://scira.ai/?${new URLSearchParams({
           q,
         })}`,
@@ -197,7 +202,7 @@ export function ViewOptionsPopover({
         ),
       },
       {
-        title: "Open in ChatGPT",
+        title: t("Open in ChatGPT"),
         href: `https://chatgpt.com/?${new URLSearchParams({
           prompt: q,
           hints: "search",
@@ -215,7 +220,7 @@ export function ViewOptionsPopover({
         ),
       },
       {
-        title: "Open in Claude",
+        title: t("Open in Claude"),
         href: `https://claude.ai/new?${new URLSearchParams({
           q,
         })}`,
@@ -232,7 +237,7 @@ export function ViewOptionsPopover({
         ),
       },
       {
-        title: "Open in Cursor",
+        title: t("Open in Cursor"),
         icon: (
           <svg
             fill="currentColor"
@@ -249,7 +254,7 @@ export function ViewOptionsPopover({
         })}`,
       },
     ].filter((v) => !!v);
-  }, [githubUrl, markdownUrl, pathname, pageUrlProp]);
+  }, [githubUrl, markdownUrl, pathname, t, pageUrlProp]);
 
   return (
     <Popover>
@@ -264,7 +269,7 @@ export function ViewOptionsPopover({
           props.className,
         )}
       >
-        {props.children ?? "Open"}
+        {props.children ?? t("Open")}
         <ChevronDown className="size-3.5 text-muted-foreground" />
       </PopoverTrigger>
       <PopoverContent align="start" className="w-56 gap-0 p-1">

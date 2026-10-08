@@ -62,6 +62,43 @@
       ]
     },
     {
+      "name": "i18n-context",
+      "type": "registry:component",
+      "title": "I18n context",
+      "description": "I18nProvider and useI18n: the current locale, the available locales and the UI string translations, which RootProvider's i18n prop sets.",
+      "dependencies": [
+        "@fuma-translate/react@^1.0.2",
+        "fumadocs-core@^16.16.2"
+      ],
+      "files": [
+        {
+          "path": "registry/base/docs/contexts/i18n.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/contexts/i18n.tsx"
+        }
+      ]
+    },
+    {
+      "name": "i18n",
+      "type": "registry:lib",
+      "title": "I18n",
+      "description": "defineI18nUI, i18nProvider and uiTranslations: build RootProvider's i18n prop from a Fumadocs Core i18n config, with translations of the UI strings keyed as in Fumadocs UI.",
+      "dependencies": ["fumadocs-core@^16.16.2"],
+      "registryDependencies": ["@docscn/i18n-context"],
+      "files": [
+        {
+          "path": "registry/base/docs/i18n.tsx",
+          "type": "registry:lib",
+          "target": "@components/docs/i18n.tsx"
+        },
+        {
+          "path": "registry/base/docs/.translations/index.ts",
+          "type": "registry:lib",
+          "target": "@components/docs/.translations/index.ts"
+        }
+      ]
+    },
+    {
       "name": "root-provider",
       "type": "registry:component",
       "title": "Root provider",
@@ -75,7 +112,8 @@
         "tooltip",
         "@docscn/search-context",
         "@docscn/docs-utils",
-        "@docscn/search-dialog-default"
+        "@docscn/search-dialog-default",
+        "@docscn/i18n-context"
       ],
       "files": [
         {
@@ -95,7 +133,11 @@
       "type": "registry:component",
       "title": "Theme switch",
       "description": "ThemeSwitch: a light/dark toggle, or a light/dark/system toggle group.",
-      "dependencies": ["lucide-react", "next-themes"],
+      "dependencies": [
+        "@fuma-translate/react@^1.0.2",
+        "lucide-react",
+        "next-themes"
+      ],
       "registryDependencies": ["button", "toggle-group"],
       "files": [
         {
@@ -114,6 +156,7 @@
         "@base-ui/react",
         "class-variance-authority",
         "cn",
+        "@fuma-translate/react@^1.0.2",
         "lucide-react"
       ],
       "registryDependencies": ["button", "kbd", "@docscn/search-context"],
@@ -122,6 +165,25 @@
           "path": "registry/base/docs/layouts/shared/slots/search-trigger.tsx",
           "type": "registry:component",
           "target": "@components/docs/layouts/shared/slots/search-trigger.tsx"
+        }
+      ]
+    },
+    {
+      "name": "language-select",
+      "type": "registry:component",
+      "title": "Language select",
+      "description": "LanguageSelect and LanguageSelectText: a popover listing the locales from RootProvider's i18n prop, shown by the layouts when there is more than one.",
+      "dependencies": [
+        "class-variance-authority",
+        "cn",
+        "@fuma-translate/react@^1.0.2"
+      ],
+      "registryDependencies": ["button", "popover", "@docscn/i18n-context"],
+      "files": [
+        {
+          "path": "registry/base/docs/layouts/shared/slots/language-select.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/layouts/shared/slots/language-select.tsx"
         }
       ]
     },
@@ -328,7 +390,7 @@
       "type": "registry:component",
       "title": "Heading",
       "description": "Heading with an anchor link and a button that copies the link to the section.",
-      "dependencies": ["cn", "lucide-react"],
+      "dependencies": ["cn", "@fuma-translate/react@^1.0.2", "lucide-react"],
       "registryDependencies": ["button", "@docscn/docs-utils"],
       "files": [
         {
@@ -343,7 +405,7 @@
       "type": "registry:component",
       "title": "Code block",
       "description": "CodeBlock and CodeBlockTabs for Fumadocs MDX's Shiki output: title, icon, copy button, code tabs, and the styles for dual themes, highlights, diffs, focus and line numbers.",
-      "dependencies": ["cn", "lucide-react"],
+      "dependencies": ["cn", "@fuma-translate/react@^1.0.2", "lucide-react"],
       "registryDependencies": ["button", "tabs", "@docscn/docs-utils"],
       "files": [
         {
@@ -523,6 +585,7 @@
       "description": "SidebarPageTree renders a Fumadocs page tree (pages, folders, separators, icons, external links) with the shadcn/ui sidebar menu, and SidebarLinkItem renders layout links.",
       "dependencies": [
         "cn",
+        "@fuma-translate/react@^1.0.2",
         "fumadocs-core@^16.16.2",
         "lucide-react",
         "scroll-into-view-if-needed"
@@ -544,6 +607,11 @@
           "path": "registry/base/docs/components/sidebar/link-item.tsx",
           "type": "registry:component",
           "target": "@components/docs/components/sidebar/link-item.tsx"
+        },
+        {
+          "path": "registry/base/docs/components/sidebar/base.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/sidebar/base.tsx"
         }
       ]
     },
@@ -578,7 +646,7 @@
       "type": "registry:component",
       "title": "Docs layout",
       "description": "DocsLayout: the docs layout on the shadcn/ui sidebar, with the page tree, search, layout tabs, links, a theme switch and a mobile navbar.",
-      "dependencies": ["cn", "fumadocs-core@^16.16.2"],
+      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
       "registryDependencies": [
         "sidebar",
         "button",
@@ -588,7 +656,9 @@
         "@docscn/search-trigger",
         "@docscn/tree-context",
         "@docscn/layout-shared",
-        "@docscn/docs-utils"
+        "@docscn/docs-utils",
+        "@docscn/i18n-context",
+        "@docscn/language-select"
       ],
       "files": [
         {
@@ -623,7 +693,11 @@
       "type": "registry:component",
       "title": "Table of contents",
       "description": "TOCProvider, TOCScrollArea and the TOC items in three styles: the default, with a thumb that follows the headings in view, clerk and block.",
-      "dependencies": ["cn", "fumadocs-core@^16.16.2"],
+      "dependencies": [
+        "cn",
+        "@fuma-translate/react@^1.0.2",
+        "fumadocs-core@^16.16.2"
+      ],
       "registryDependencies": ["@docscn/docs-utils"],
       "files": [
         {
@@ -653,7 +727,12 @@
       "type": "registry:component",
       "title": "Page actions",
       "description": "MarkdownCopyButton copies the page as Markdown, and ViewOptionsPopover links to the source on GitHub, the Markdown, and ChatGPT, Claude, Cursor and Scira.",
-      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "dependencies": [
+        "cn",
+        "@fuma-translate/react@^1.0.2",
+        "fumadocs-core@^16.16.2",
+        "lucide-react"
+      ],
       "registryDependencies": ["button", "popover", "@docscn/docs-utils"],
       "files": [
         {
@@ -668,7 +747,12 @@
       "type": "registry:component",
       "title": "Docs page",
       "description": "DocsPage, DocsTitle, DocsDescription and DocsBody, with the breadcrumb, previous/next links, the table of contents (a popover on small screens), EditOnGitHub and PageLastUpdate.",
-      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "dependencies": [
+        "cn",
+        "@fuma-translate/react@^1.0.2",
+        "fumadocs-core@^16.16.2",
+        "lucide-react"
+      ],
       "registryDependencies": [
         "breadcrumb",
         "button",
@@ -724,7 +808,9 @@
         "@docscn/search-trigger",
         "@docscn/tree-context",
         "@docscn/layout-shared",
-        "@docscn/docs-utils"
+        "@docscn/docs-utils",
+        "@docscn/i18n-context",
+        "@docscn/language-select"
       ],
       "files": [
         {
@@ -759,7 +845,12 @@
       "type": "registry:component",
       "title": "Notebook page",
       "description": "DocsPage and the other page components from layouts/notebook/page, for pages in the notebook layout: the breadcrumb, previous/next links, the table of contents, EditOnGitHub and PageLastUpdate.",
-      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "dependencies": [
+        "cn",
+        "@fuma-translate/react@^1.0.2",
+        "fumadocs-core@^16.16.2",
+        "lucide-react"
+      ],
       "registryDependencies": [
         "breadcrumb",
         "button",
@@ -808,6 +899,7 @@
         "@base-ui/react",
         "class-variance-authority",
         "cn",
+        "@fuma-translate/react@^1.0.2",
         "fumadocs-core@^16.16.2",
         "lucide-react",
         "rehype-raw",
@@ -856,6 +948,7 @@
         "@base-ui/react",
         "class-variance-authority",
         "cn",
+        "@fuma-translate/react@^1.0.2",
         "fumadocs-core@^16.16.2",
         "lucide-react"
       ],
@@ -865,7 +958,9 @@
         "@docscn/layout-shared",
         "@docscn/theme-switch",
         "@docscn/search-trigger",
-        "@docscn/docs-utils"
+        "@docscn/docs-utils",
+        "@docscn/i18n-context",
+        "@docscn/language-select"
       ],
       "files": [
         {
@@ -979,7 +1074,7 @@
       "type": "registry:component",
       "title": "Accordion",
       "description": "Accordions and Accordion: collapsible sections that open from the URL hash and have a copy-link button.",
-      "dependencies": ["cn", "lucide-react"],
+      "dependencies": ["cn", "@fuma-translate/react@^1.0.2", "lucide-react"],
       "registryDependencies": ["accordion", "button", "@docscn/docs-utils"],
       "files": [
         {
@@ -1012,6 +1107,7 @@
       "dependencies": [
         "class-variance-authority",
         "cn",
+        "@fuma-translate/react@^1.0.2",
         "fumadocs-core@^16.16.2",
         "lucide-react"
       ],
@@ -1106,7 +1202,12 @@
       "type": "registry:component",
       "title": "Inline TOC",
       "description": "InlineTOC: a collapsible table of contents to place inside a page.",
-      "dependencies": ["cn", "fumadocs-core@^16.16.2", "lucide-react"],
+      "dependencies": [
+        "cn",
+        "@fuma-translate/react@^1.0.2",
+        "fumadocs-core@^16.16.2",
+        "lucide-react"
+      ],
       "registryDependencies": ["collapsible"],
       "files": [
         {
@@ -1121,7 +1222,7 @@
       "type": "registry:component",
       "title": "Banner",
       "description": "Banner: an announcement bar above the layout, optionally dismissible and with a rainbow variant, that offsets docscn's layouts by its height.",
-      "dependencies": ["cn", "lucide-react"],
+      "dependencies": ["cn", "@fuma-translate/react@^1.0.2", "lucide-react"],
       "registryDependencies": ["button"],
       "files": [
         {
@@ -1255,9 +1356,12 @@
       "registryDependencies": [
         "@docscn/docs-utils",
         "@docscn/search-context",
+        "@docscn/i18n-context",
+        "@docscn/i18n",
         "@docscn/root-provider",
         "@docscn/theme-switch",
         "@docscn/search-trigger",
+        "@docscn/language-select",
         "@docscn/layout-shared",
         "@docscn/typography",
         "@docscn/heading",

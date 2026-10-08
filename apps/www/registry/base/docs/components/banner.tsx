@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
 import { X } from "lucide-react";
 import { type HTMLAttributes, useState, useSyncExternalStore } from "react";
@@ -49,6 +50,7 @@ export function Banner({
 }) {
   const globalKey = id ? `nd-banner-${encodeBase32(id)}` : null;
   const [closed, setClosed] = useState(false);
+  const t = useTranslations({ note: "banner" });
   // a banner closed on an earlier visit, `false` on the server
   const dismissed = useSyncExternalStore(
     noop,
@@ -108,7 +110,7 @@ export function Banner({
           type="button"
           variant="ghost"
           size="icon-sm"
-          aria-label="Close Banner"
+          aria-label={t("Close Banner", { note: "aria-label" })}
           onClick={onClose}
           className="absolute inset-e-2 top-1/2 -translate-y-1/2 text-muted-foreground"
         >

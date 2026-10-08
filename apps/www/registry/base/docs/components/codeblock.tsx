@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
 import { Check, Clipboard } from "lucide-react";
 import {
@@ -171,6 +172,7 @@ function CopyButton({
 }: ComponentProps<typeof Button> & {
   containerRef: RefObject<HTMLElement | null>;
 }) {
+  const t = useTranslations({ note: "code block" });
   const [checked, onClick] = useCopyButton(() => {
     const pre = containerRef.current?.getElementsByTagName("pre").item(0);
     if (!pre) return;
@@ -195,7 +197,11 @@ function CopyButton({
       {...props}
     >
       {checked ? <Check /> : <Clipboard />}
-      <span className="sr-only">{checked ? "Copied Text" : "Copy Text"}</span>
+      <span className="sr-only">
+        {checked
+          ? t("Copied Text", { note: "aria-label" })
+          : t("Copy Text", { note: "aria-label" })}
+      </span>
     </Button>
   );
 }

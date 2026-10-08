@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
 import { CopyCheckIcon, LinkIcon } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
@@ -18,6 +19,7 @@ export function Heading<T extends Types = "h1">({
   ...props
 }: HeadingProps<T>) {
   const As = as ?? "h1";
+  const t = useTranslations({ note: "heading anchor" });
   const [isChecked, onCopy] = useCopyButton(() => {
     if (!props.id) return;
 
@@ -48,7 +50,9 @@ export function Heading<T extends Types = "h1">({
       >
         {isChecked ? <CopyCheckIcon /> : <LinkIcon />}
         <span className="sr-only">
-          {isChecked ? "Copied Anchor Link" : "Copy Anchor Link"}
+          {isChecked
+            ? t("Copied Anchor Link", { note: "aria-label" })
+            : t("Copy Anchor Link", { note: "aria-label" })}
         </span>
       </Button>
     </As>

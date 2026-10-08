@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
 import { usePathname } from "fumadocs-core/framework";
 import Link from "fumadocs-core/link";
@@ -57,6 +58,7 @@ export function Footer({ items, children, className, ...props }: FooterProps) {
 }
 
 function FooterItem({ item, index }: { item: Item; index: 0 | 1 }) {
+  const t = useTranslations({ note: "pagination" });
   const Icon = index === 0 ? ChevronLeft : ChevronRight;
 
   return (
@@ -77,7 +79,8 @@ function FooterItem({ item, index }: { item: Item; index: 0 | 1 }) {
         <p>{item.name}</p>
       </div>
       <p className="text-muted-foreground">
-        {item.description ?? (index === 0 ? "Previous Page" : "Next Page")}
+        {item.description ??
+          (index === 0 ? t("Previous Page") : t("Next Page"))}
       </p>
     </Link>
   );

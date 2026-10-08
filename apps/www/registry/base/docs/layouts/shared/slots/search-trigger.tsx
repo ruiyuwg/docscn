@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { Dialog } from "@base-ui/react/dialog";
 import type { VariantProps } from "class-variance-authority";
 import { cn } from "cn";
@@ -23,6 +24,7 @@ export function SearchTrigger({
   ...props
 }: SearchTriggerProps) {
   const { enabled, dialogHandle } = useSearchContext();
+  const t = useTranslations({ note: "search trigger" });
   if (hideIfDisabled && !enabled) return null;
 
   return (
@@ -30,7 +32,7 @@ export function SearchTrigger({
       handle={dialogHandle}
       render={<Button size={size} variant={variant} />}
       data-search=""
-      aria-label="Open Search"
+      aria-label={t("Open Search", { note: "aria-label" })}
       {...props}
     >
       <Search />
@@ -48,6 +50,7 @@ export function FullSearchTrigger({
   ...props
 }: FullSearchTriggerProps) {
   const { enabled, hotKey, dialogHandle } = useSearchContext();
+  const t = useTranslations({ note: "search trigger" });
   if (hideIfDisabled && !enabled) return null;
 
   return (
@@ -63,7 +66,7 @@ export function FullSearchTrigger({
       )}
     >
       <Search />
-      Search
+      {t("Search")}
       <KbdGroup className="ms-auto">
         {hotKey.map((k, i) => (
           <Kbd key={i}>{k.display}</Kbd>

@@ -5,7 +5,7 @@
 import { cn } from "cn";
 import { usePathname } from "fumadocs-core/framework";
 import Link from "fumadocs-core/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Languages } from "lucide-react";
 import {
   type ComponentProps,
   Fragment,
@@ -18,8 +18,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "../../../components/sidebar/base";
 import { SidebarTabsDropdown } from "../../../components/sidebar/tabs/dropdown";
+import { useI18n } from "../../../contexts/i18n";
 import { useTabsGroups, useTreePath } from "../../../contexts/tree";
 import { findLast, findLastIndex } from "../../../utils/array";
 import {
@@ -30,6 +32,7 @@ import {
   type MenuItemType,
 } from "../../shared";
 import { LinkItem, NavTitle } from "../../shared/client";
+import { LanguageSelect } from "../../shared/slots/language-select";
 import {
   FullSearchTrigger,
   SearchTrigger,
@@ -55,6 +58,7 @@ export function Header(props: ComponentProps<"header">) {
     },
   } = useNotebookLayout();
   const { state, openMobile } = useSidebar();
+  const { locales = [] } = useI18n();
   const navMode = nav?.mode ?? "auto";
   const collapsed = state === "collapsed";
   const groups = useTabsGroups(tabs);
@@ -144,6 +148,11 @@ export function Header(props: ComponentProps<"header">) {
           </div>
 
           <div className="flex items-center gap-2 max-md:hidden">
+            {locales.length > 1 && (
+              <LanguageSelect className="text-muted-foreground">
+                <Languages />
+              </LanguageSelect>
+            )}
             {themeSwitchEnabled && <ThemeSwitch {...themeSwitchProps} />}
             {sidebarCollapsible && navMode === "top" && (
               <SidebarTrigger className="-me-1.5 text-muted-foreground" />

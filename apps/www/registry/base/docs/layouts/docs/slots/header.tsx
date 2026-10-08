@@ -4,7 +4,8 @@
 
 import { cn } from "cn";
 import type { ComponentProps } from "react";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "../../../components/sidebar/base";
 import { NavTitle } from "../../shared/client";
 import { SearchTrigger } from "../../shared/slots/search-trigger";
 import { useDocsLayout } from "../client";

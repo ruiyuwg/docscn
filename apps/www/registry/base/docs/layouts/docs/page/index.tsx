@@ -2,6 +2,7 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
 import type { TOCItemType } from "fumadocs-core/toc";
 import { Edit } from "lucide-react";
@@ -114,6 +115,8 @@ export function DocsPage({
 }
 
 export function EditOnGitHub(props: ComponentProps<"a">) {
+  const t = useTranslations({ note: "edit page" });
+
   return (
     <a
       target="_blank"
@@ -131,7 +134,7 @@ export function EditOnGitHub(props: ComponentProps<"a">) {
       {props.children ?? (
         <>
           <Edit className="size-3.5" />
-          Edit on GitHub
+          {t("Edit on GitHub")}
         </>
       )}
     </a>
@@ -192,6 +195,7 @@ export function PageLastUpdate({
   date: value,
   ...props
 }: Omit<ComponentProps<"p">, "children"> & { date: Date }) {
+  const t = useTranslations({ note: "page footer" });
   // formatted in the reader's locale and timezone, so empty on the server
   const date = useSyncExternalStore(
     noop,
@@ -204,7 +208,7 @@ export function PageLastUpdate({
       {...props}
       className={cn("text-sm text-muted-foreground", props.className)}
     >
-      Last updated on {date}
+      {t("Last updated on")} {date}
     </p>
   );
 }
