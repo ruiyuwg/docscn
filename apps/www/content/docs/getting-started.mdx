@@ -106,13 +106,13 @@ In a [shadcn/ui monorepo](https://ui.shadcn.com/docs/monorepo), run the commands
 
 Two extra steps work around bugs in the shadcn CLI.
 
-Before you install docscn, add the sidebar from `packages/ui`. Installed from the app, the CLI puts the sidebar's `use-mobile` hook in the app, where the sidebar can't import it:
+Before you install docscn, add the sidebar from `packages/ui`. Installed from the app, the CLI puts the sidebar's `use-mobile` hook in the app, where the sidebar can't import it ([shadcn-ui/ui#12212](https://github.com/shadcn-ui/ui/issues/12212)):
 
 ```npm
 npx shadcn@latest add sidebar
 ```
 
-After you install docscn, add its dependencies to your app. The CLI adds them to `packages/ui/package.json` only, so the app can't import them. Run these in your app's directory:
+After you install docscn, add its dependencies to your app. The CLI adds them to `packages/ui/package.json` only, so the app can't import them ([shadcn-ui/ui#12213](https://github.com/shadcn-ui/ui/issues/12213)). Run these in your app's directory:
 
 ```npm
 npm install @base-ui/react class-variance-authority cn fumadocs-core@^16.16.2 fumadocs-mdx@^15.4.6 lucide-react next-themes react-medium-image-zoom rehype-raw scroll-into-view-if-needed shiki@^4.5.0 unified unist-util-visit

@@ -52,7 +52,9 @@ interface SourceItem {
  * The commands in Getting started's "Monorepos" section, after checking that
  * its install commands list every dependency of docscn's items. The section
  * works around shadcn CLI bugs: in a monorepo, it installs the sidebar's
- * use-mobile hook into the app, and dependencies into packages/ui only.
+ * use-mobile hook into the app, and dependencies into packages/ui only
+ * (https://github.com/shadcn-ui/ui/issues/12212 and
+ * https://github.com/shadcn-ui/ui/issues/12213). Remove each step once fixed.
  */
 async function getMonorepoSteps() {
   const page = await readFile(
