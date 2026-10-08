@@ -75,6 +75,7 @@ These are deliberate differences from Fumadocs UI:
 | Deprecated props (`nav.component`, `sidebar.tabs`, ...)          | Not supported. Use the current props.                                                                                                       |
 | The sidebar's desktop collapse state                             | Kept in shadcn/ui's `sidebar_state` cookie. Pass it to `sidebar.defaultOpen` to restore it on load.                                         |
 | ⌘B                                                               | Toggles the sidebar, as in every shadcn/ui sidebar.                                                                                         |
+| Hovering the edge of a collapsed sidebar shows it                | Not supported: the shadcn/ui sidebar slides away completely. Reopen it with the sidebar button or ⌘B.                                       |
 | `Banner`'s layout offset                                         | Set as `--docs-banner-height` instead of `--fd-banner-height`.                                                                              |
 | The notebook layout's width (centred, up to 97rem)               | The full width of the window, with the sidebar against its edge.                                                                            |
 
