@@ -95,7 +95,7 @@ export function Sidebar({
         )}
         {banner}
       </SidebarHeader>
-      <SidebarContent className="[scrollbar-width:thin] gap-0 px-2">
+      <SidebarContent className="gap-0 px-2">
         {links.length > 0 && (
           <SidebarGroup>
             <SidebarGroupContent>

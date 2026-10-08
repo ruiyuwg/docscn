@@ -144,7 +144,7 @@ export function CodeBlock({
         role="region"
         tabIndex={0}
         className={cn(
-          "max-h-[600px] [scrollbar-width:thin] overflow-auto py-3.5 text-[0.8125rem] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset",
+          "max-h-[600px] overflow-auto py-3.5 text-[0.8125rem] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset",
           viewportProps.className,
         )}
         style={
@@ -273,7 +273,7 @@ export function CodeBlockTabsList({
       variant="line"
       {...props}
       className={cn(
-        "w-full justify-start gap-0 overflow-x-auto px-2 group-data-horizontal/tabs:h-auto",
+        "no-scrollbar w-full justify-start gap-0 overflow-x-auto px-2 group-data-horizontal/tabs:h-auto",
         className,
       )}
     >

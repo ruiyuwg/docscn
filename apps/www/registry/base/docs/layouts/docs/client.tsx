@@ -154,7 +154,7 @@ function LayoutTabs({
     <div
       {...props}
       className={cn(
-        "flex flex-row items-end gap-6 overflow-auto",
+        "no-scrollbar flex flex-row items-end gap-6 overflow-auto",
         props.className,
       )}
     >
