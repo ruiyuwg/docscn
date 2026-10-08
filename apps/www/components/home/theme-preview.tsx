@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import { ExternalLink, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import {
   type CSSProperties,
   type ReactNode,
@@ -10,7 +10,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -178,44 +178,23 @@ export function ThemePreview() {
             }))}
           />
         </div>
-        <div className="flex items-center">
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  className="text-muted-foreground"
-                  disabled={isDefault}
-                  onClick={() => setOptions(defaultOptions)}
-                />
-              }
-            >
-              <RotateCcw />
-              <span className="sr-only">Reset theme</span>
-            </TooltipTrigger>
-            <TooltipContent>Reset theme</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <a
-                  href={src}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={cn(
-                    buttonVariants({ variant: "ghost", size: "icon-sm" }),
-                    "text-muted-foreground",
-                  )}
-                />
-              }
-            >
-              <ExternalLink />
-              <span className="sr-only">Open the docs in a new tab</span>
-            </TooltipTrigger>
-            <TooltipContent>Open in a new tab</TooltipContent>
-          </Tooltip>
-        </div>
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="text-muted-foreground"
+                disabled={isDefault}
+                onClick={() => setOptions(defaultOptions)}
+              />
+            }
+          >
+            <RotateCcw />
+            <span className="sr-only">Reset theme</span>
+          </TooltipTrigger>
+          <TooltipContent>Reset theme</TooltipContent>
+        </Tooltip>
       </div>
       <div
         ref={viewportRef}

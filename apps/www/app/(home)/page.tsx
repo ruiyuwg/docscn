@@ -18,34 +18,16 @@ import { Card, Cards } from "@/registry/base/docs/components/card";
 const migrationDiff = `
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import { DocsLayout } from "@/components/docs/layouts/docs";
-import { baseOptions } from "@/lib/layout.shared";
-import { source } from "@/lib/source";
-`;
-
-const blockFiles = `
-app/docs/layout.tsx
-app/docs/[[...slug]]/page.tsx
-app/api/search/route.ts
-lib/source.ts
-lib/layout.shared.tsx
-components/mdx.tsx
-components/docs/…
-content/docs/index.mdx
 `;
 
 const installTree = `
 components/
 ├── docs/
-│   ├── layouts/
-│   │   ├── docs/       DocsLayout, DocsPage
-│   │   └── home/       HomeLayout
-│   ├── components/     CodeBlock, Callout, TOC…
-│   ├── provider/       RootProvider
-│   └── mdx.tsx         defaultMdxComponents
-└── ui/                 your shadcn/ui
-    ├── sidebar.tsx
-    ├── tabs.tsx
-    └── …
+│   ├── layouts/     DocsLayout…
+│   ├── components/  CodeBlock, TOC…
+│   ├── provider/    RootProvider
+│   └── mdx.tsx      MDX components
+└── ui/              your shadcn/ui
 `;
 
 const features = [
@@ -90,15 +72,11 @@ const features = [
 export default function HomePage() {
   return (
     <>
-      <section className="relative isolate overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] mask-[radial-gradient(ellipse_at_top,black,transparent_70%)] bg-size-[32px_32px]"
-        />
-        <div className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-4 pt-20 pb-16 text-center sm:pt-28">
+      <section className="pb-20">
+        <div className="mx-auto flex w-full max-w-3xl flex-col items-center px-4 pt-12 pb-12 text-center sm:pt-18 sm:pb-16">
           <Link
             href="/docs/compatibility"
-            className="inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            className="mb-5 inline-flex items-center gap-1.5 rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
           >
             Early release: see what&apos;s supported
             <ArrowRight className="size-3" />
@@ -106,12 +84,11 @@ export default function HomePage() {
           <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
             Docs that look like the rest of your app
           </h1>
-          <p className="max-w-2xl text-lg text-balance text-muted-foreground">
-            docscn is a shadcn/ui registry of documentation components built on
-            Fumadocs Core. Layouts, search, a table of contents and MDX
-            components, installed as source and styled with your theme.
+          <p className="mt-4 max-w-2xl text-base text-balance text-muted-foreground sm:text-lg">
+            docscn is a shadcn/ui registry of documentation components that work
+            with Fumadocs.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link href="/docs" className={buttonVariants({ size: "lg" })}>
               Get started
             </Link>
@@ -122,43 +99,35 @@ export default function HomePage() {
               Migrate from Fumadocs UI
             </Link>
           </div>
-          <PackageCommand
-            command="shadcn@latest add @docscn/docs"
-            className="my-0 w-full max-w-lg text-start"
-          />
+        </div>
+        <div className="mx-auto w-full max-w-[1400px] px-4">
+          <ThemePreview />
         </div>
       </section>
 
-      <Section
-        title="Your theme, your docs"
-        description="These are docscn.dev's own docs. Change the theme variables and they follow, because every component is built from your shadcn/ui tokens and primitives."
-      >
-        <ThemePreview />
-      </Section>
-
-      <Section
-        title="Start fresh or migrate"
-        description="Add docs to a shadcn/ui project, or move an existing Fumadocs UI site over without touching your content."
-      >
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <Section title="Start fresh or migrate">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-x-8 lg:gap-y-4">
           <Path
             title="New docs site"
-            description="The docs block adds every component, the /docs routes, a search API and a first page. Then make two small edits to your root layout and Next.js config."
+            description="One command adds the components, routes, search and a first page."
             href="/docs/getting-started"
             link="Getting started"
           >
-            <Code code={blockFiles} lang="text" title="Files added" />
+            <PackageCommand
+              command="shadcn@latest add @docscn/docs"
+              className="my-0"
+            />
           </Path>
           <Path
             title="From Fumadocs UI"
-            description="Components keep Fumadocs UI's names, props and module paths, so migrating is a find-and-replace. CI migrates and builds a stock create-fumadocs-app project on every change."
+            description="Same component names, props and module paths. Swap the import prefix."
             href="/docs/migrating-from-fumadocs-ui"
             link="Migration guide"
           >
             <Code
               code={migrationDiff}
               lang="tsx"
-              title="app/docs/layout.tsx"
+              title="Find and replace"
               diff={{ remove: [1], add: [2] }}
             />
           </Path>
@@ -176,31 +145,32 @@ export default function HomePage() {
         </Cards>
       </Section>
 
-      <Section
-        title="You own the code"
-        description="Components install into components/docs and build on the shadcn/ui primitives you already have. Change anything by editing your copy, like any other component in your app."
-      >
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
-          <ul className="grid gap-4 text-sm text-muted-foreground">
-            <Point title="Fumadocs Core underneath">
-              Page trees, search and table of contents data come from Fumadocs
-              Core, so any content source Fumadocs supports works.
-            </Point>
-            <Point title="Your primitives">
-              The sidebar, tabs, alerts, cards and dialogs are your own
-              shadcn/ui components, not a second copy.
-            </Point>
-            <Point title="Your tokens">
-              No extra colour themes or CSS presets. Everything uses background,
-              muted-foreground, sidebar and the rest of your theme.
-            </Point>
-          </ul>
-          <Code code={installTree} lang="text" />
+      <section className="border-t">
+        <div className="mx-auto grid w-full max-w-[1400px] grid-cols-1 items-center gap-10 px-4 py-20 lg:grid-cols-2 lg:gap-8">
+          <div className="flex flex-col gap-3">
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+              You own the code
+            </h2>
+            <p className="text-balance text-muted-foreground">
+              Components install into components/docs as source you edit like
+              the rest of your app.
+            </p>
+            <ul className="mt-5 grid gap-4 text-sm text-muted-foreground">
+              <Point title="Your primitives and tokens">
+                Built on your sidebar, tabs and dialogs, styled with your theme.
+              </Point>
+              <Point title="Any content source">
+                Data comes from Fumadocs Core, so any source Fumadocs supports
+                works.
+              </Point>
+            </ul>
+          </div>
+          <Code code={installTree} lang="text" allowCopy={false} />
         </div>
-      </Section>
+      </section>
 
       <section className="border-t">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-4 py-20 text-center">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center gap-6 px-4 py-20 text-center">
           <Logo className="size-8" />
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             Write docs, not docs components
@@ -222,16 +192,13 @@ export default function HomePage() {
       </section>
 
       <footer className="border-t">
-        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-sm text-muted-foreground">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-wrap items-center justify-between gap-4 px-4 py-6 text-sm text-muted-foreground">
+          <p>© 2026 Ruiyu Wang. MIT licensed.</p>
           <p>
             Built on{" "}
             <FooterLink href="https://fumadocs.dev">Fumadocs</FooterLink> and{" "}
-            <FooterLink href="https://ui.shadcn.com">shadcn/ui</FooterLink>. MIT
-            licensed.
+            <FooterLink href="https://ui.shadcn.com">shadcn/ui</FooterLink>.
           </p>
-          <FooterLink href="https://github.com/ruiyuwg/docscn">
-            GitHub
-          </FooterLink>
         </div>
       </footer>
     </>
@@ -244,17 +211,19 @@ function Section({
   children,
 }: {
   title: string;
-  description: string;
+  description?: string;
   children: ReactNode;
 }) {
   return (
     <section className="border-t">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-20">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-10 px-4 py-20">
         <div className="flex max-w-2xl flex-col gap-3">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             {title}
           </h2>
-          <p className="text-balance text-muted-foreground">{description}</p>
+          {description && (
+            <p className="text-balance text-muted-foreground">{description}</p>
+          )}
         </div>
         {children}
       </div>
@@ -276,7 +245,9 @@ function Path({
   children: ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-4">
+    // on large screens, share the parent grid's rows so the header, code and
+    // link line up across both columns
+    <div className="flex flex-col gap-4 lg:row-span-3 lg:grid lg:grid-rows-subgrid lg:items-start">
       <div className="flex flex-col gap-2">
         <h3 className="font-semibold">{title}</h3>
         <p className="text-sm text-muted-foreground">{description}</p>
@@ -284,7 +255,7 @@ function Path({
       {children}
       <Link
         href={href}
-        className="inline-flex items-center gap-1 text-sm font-medium hover:underline"
+        className="inline-flex w-fit items-center gap-1 text-sm font-medium hover:underline"
       >
         {link}
         <ArrowRight className="size-3.5" />

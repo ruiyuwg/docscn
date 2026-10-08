@@ -32,6 +32,7 @@ export async function Code({
   title,
   icon,
   diff,
+  allowCopy,
   className,
 }: {
   code: string;
@@ -39,6 +40,7 @@ export async function Code({
   title?: string;
   icon?: ReactNode;
   diff?: { add?: number[]; remove?: number[] };
+  allowCopy?: boolean;
   className?: string;
 }) {
   return highlight(code.trim(), {
@@ -50,6 +52,7 @@ export async function Code({
           {...props}
           title={title}
           icon={icon}
+          allowCopy={allowCopy}
           className={className ?? "my-0"}
         >
           <Pre>{props.children}</Pre>
