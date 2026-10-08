@@ -1,0 +1,72 @@
+---
+title: Banner
+description: An announcement bar above the layout.
+---
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/banner
+```
+
+## Usage
+
+Put it above the layout, for example in `app/docs/layout.tsx`:
+
+```tsx title="app/docs/layout.tsx"
+import { Banner } from "@/components/docs/components/banner";
+
+export default function Layout({ children }: LayoutProps<"/docs">) {
+  return (
+    <>
+      <Banner id="v1">docscn v1 is out</Banner>
+      <DocsLayout tree={source.getPageTree()} {...baseOptions()}>
+        {children}
+      </DocsLayout>
+    </>
+  );
+}
+```
+
+The banner sticks to the top of the page, and moves docscn's sidebar, navbars and table of contents down by its height. It does this by setting the `--docs-banner-height` variable, which you can use in your own sticky elements too: `top-(--docs-banner-height,0px)`.
+
+With an `id`, the banner gets a close button and stays closed on later visits. Change the `id` to show a new announcement.
+
+`variant="rainbow"` shows an animated gradient behind the text.
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: (
+        <>
+          Makes the banner dismissible, and remembers that in{" "}
+          <code>{"localStorage"}</code>.
+        </>
+      ),
+      type: "string",
+    },
+    variant: {
+      type: '"normal" | "rainbow"',
+      default: '"normal"',
+    },
+    rainbowColors: {
+      description: (
+        <>
+          The gradient's colours, with <code>{'variant="rainbow"'}</code>.
+        </>
+      ),
+      type: "string[]",
+    },
+    height: {
+      type: "string",
+      default: '"3rem"',
+    },
+    changeLayout: {
+      description: <>Move docscn's layouts down by the banner's height.</>,
+      type: "boolean",
+      default: "true",
+    },
+  }}
+/>

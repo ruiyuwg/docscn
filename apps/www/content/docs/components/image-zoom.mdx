@@ -1,0 +1,56 @@
+---
+title: Image zoom
+description: An image that zooms in to fill the screen when clicked.
+---
+
+import { ImageZoom } from "@/components/docs/components/image-zoom";
+import gradient from "./image-zoom.png";
+
+<ImageZoom src={gradient} alt="A gradient" />
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/image-zoom
+```
+
+## Usage
+
+`ImageZoom` takes the props of Next.js' `Image`. To make every image in your content zoomable, render Markdown images with it in `components/mdx.tsx`:
+
+```tsx title="components/mdx.tsx"
+import {
+  ImageZoom,
+  type ImageZoomProps,
+} from "@/components/docs/components/image-zoom";
+
+export function getMDXComponents(components?: MDXComponents) {
+  return {
+    ...defaultMdxComponents,
+    img: (props) => <ImageZoom {...(props as ImageZoomProps)} />,
+    ...components,
+  } satisfies MDXComponents;
+}
+```
+
+It's built on [react-medium-image-zoom](https://github.com/rpearce/react-medium-image-zoom). Installing it adds the styles the zoomed image needs to your global stylesheet, with the page's `--background` behind the image.
+
+## Props
+
+<TypeTable
+  type={{
+    zoomInProps: {
+      description: (
+        <>
+          Props for the zoomed-in image, such as a higher-resolution{" "}
+          <code>{"src"}</code>.
+        </>
+      ),
+      type: 'ComponentProps<"img">',
+    },
+    rmiz: {
+      description: <>Props for react-medium-image-zoom.</>,
+      type: "UncontrolledProps",
+    },
+  }}
+/>

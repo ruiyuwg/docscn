@@ -39,14 +39,37 @@ npm install next-themes
 
 ## Props
 
-| Prop             | Type                   | Description                                              |
-| ---------------- | ---------------------- | -------------------------------------------------------- |
-| `title`          | `ReactNode`            | The title bar's text.                                    |
-| `icon`           | `ReactNode`            | The title bar's icon. A string is treated as SVG markup. |
-| `allowCopy`      | `boolean`              | Show the copy button. Defaults to `true`.                |
-| `keepBackground` | `boolean`              | Keep the background colour of the Shiki theme.           |
-| `viewportProps`  | `HTMLAttributes`       | Props for the scrolling area.                            |
-| `Actions`        | `(props) => ReactNode` | Replace the area that holds the copy button.             |
+<TypeTable
+  type={{
+    title: {
+      description: <>The title bar's text.</>,
+      type: "ReactNode",
+    },
+    icon: {
+      description: (
+        <>The title bar's icon. A string is treated as SVG markup.</>
+      ),
+      type: "ReactNode",
+    },
+    allowCopy: {
+      description: <>Show the copy button.</>,
+      type: "boolean",
+      default: "true",
+    },
+    keepBackground: {
+      description: <>Keep the background colour of the Shiki theme.</>,
+      type: "boolean",
+    },
+    viewportProps: {
+      description: <>Props for the scrolling area.</>,
+      type: "HTMLAttributes",
+    },
+    Actions: {
+      description: <>Replace the area that holds the copy button.</>,
+      type: "(props) => ReactNode",
+    },
+  }}
+/>
 
 `CodeBlockTabs` also accepts `groupId` and `persist`, to keep the same tab selected across code tabs and page loads.
 

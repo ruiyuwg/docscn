@@ -1,0 +1,119 @@
+---
+title: Type table
+description: A table of props or fields that expand to show their details.
+---
+
+import { TypeTable } from "@/components/docs/components/type-table";
+
+<TypeTable
+  type={{
+    title: {
+      description: <>The card's title.</>,
+      type: "ReactNode",
+      required: true,
+    },
+    href: {
+      description: <>Makes the card a link.</>,
+      type: "string",
+    },
+    icon: {
+      description: <>An icon shown above the title.</>,
+      type: "ReactNode",
+      default: "undefined",
+    },
+  }}
+/>
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/type-table
+```
+
+## Usage
+
+```mdx
+import { TypeTable } from "@/components/docs/components/type-table";
+
+<TypeTable
+  type={{
+    title: {
+      description: <>The card's title.</>,
+      type: "ReactNode",
+      required: true,
+    },
+    href: {
+      description: <>Makes the card a link.</>,
+      type: "string",
+    },
+  }}
+/>
+```
+
+The `docs` block adds `TypeTable` to your MDX components.
+
+Give the table an `id` to make each field linkable: a field gets the id `{id}-{name}`, and opening it updates the URL hash.
+
+## Props
+
+<TypeTable
+  type={{
+    type: {
+      description: <>The fields, by name.</>,
+      type: "Record<string, TypeNode>",
+      required: true,
+    },
+    id: {
+      description: <>Prefix for the fields' ids, which makes them linkable.</>,
+      type: "string",
+    },
+  }}
+/>
+
+### `TypeNode`
+
+<TypeTable
+  type={{
+    type: {
+      description: <>The short type, shown in the row.</>,
+      type: "ReactNode",
+      required: true,
+    },
+    description: {
+      description: <>What the field does.</>,
+      type: "ReactNode",
+    },
+    typeDescription: {
+      description: <>The full type, shown when the field is open.</>,
+      type: "ReactNode",
+    },
+    typeDescriptionLink: {
+      description: <>Makes the short type a link.</>,
+      type: "string",
+    },
+    default: {
+      description: <>The default value.</>,
+      type: "ReactNode",
+    },
+    required: {
+      description: (
+        <>
+          Leaves the <code>{"?"}</code> off the field's name.
+        </>
+      ),
+      type: "boolean",
+    },
+    deprecated: {
+      description: <>Strikes through the field's name.</>,
+      type: "boolean",
+    },
+    parameters: {
+      description: <>For functions, each parameter's name and description.</>,
+      type: "{ name: string; description: ReactNode }[]",
+    },
+    returns: {
+      description: <>For functions, what they return.</>,
+      type: "ReactNode",
+    },
+  }}
+/>

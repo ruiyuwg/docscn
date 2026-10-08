@@ -31,30 +31,144 @@ Because it uses the shadcn/ui sidebar, `useSidebar()` from `@/components/ui/side
 
 ## Props
 
-| Prop             | Type                                           | Description                                                                                                                     |
-| ---------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `tree`           | `PageTree.Root`                                | The page tree, usually `source.getPageTree()`.                                                                                  |
-| `nav`            | `NavOptions`                                   | `title`, `url` (defaults to `/`), `enabled`, `children` (extra navbar content) and `transparentMode`.                           |
-| `links`          | `LinkItemType[]`                               | Links shown in the sidebar. Icon links show in the sidebar footer. `on: "nav" \| "menu" \| "all"` restricts where a link shows. |
-| `githubUrl`      | `string`                                       | Adds a GitHub icon link.                                                                                                        |
-| `sidebar`        | `SidebarOptions`                               | See below.                                                                                                                      |
-| `tabs`           | `LayoutTab[] \| GetLayoutTabsOptions \| false` | Layout tabs, by default one per root folder (`"root": true` in `meta.json`).                                                    |
-| `tabMode`        | `"auto" \| "top"`                              | Show tabs as a dropdown in the sidebar (`auto`), or above the page on desktop (`top`).                                          |
-| `themeSwitch`    | `{ enabled?, mode? }`                          | The theme switch in the sidebar footer. `mode: "light-dark-system"` adds a system option.                                       |
-| `searchToggle`   | `{ enabled?, sm?, full? }`                     | The search triggers, with props for the small and full variants.                                                                |
-| `containerProps` | `ComponentProps<"main">`                       | Props for the `SidebarInset` that wraps the page.                                                                               |
+<TypeTable
+  type={{
+    tree: {
+      description: (
+        <>
+          The page tree, usually <code>{"source.getPageTree()"}</code>.
+        </>
+      ),
+      type: "PageTree.Root",
+      required: true,
+    },
+    nav: {
+      description: (
+        <>
+          <code>{"title"}</code>, <code>{"url"}</code> (defaults to{" "}
+          <code>{"/"}</code>), <code>{"enabled"}</code>,{" "}
+          <code>{"children"}</code> (extra navbar content) and{" "}
+          <code>{"transparentMode"}</code>.
+        </>
+      ),
+      type: "NavOptions",
+    },
+    links: {
+      description: (
+        <>
+          Links shown in the sidebar. Icon links show in the sidebar footer.{" "}
+          <code>{'on: "nav" | "menu" | "all"'}</code> restricts where a link
+          shows.
+        </>
+      ),
+      type: "LinkItemType[]",
+    },
+    githubUrl: {
+      description: <>Adds a GitHub icon link.</>,
+      type: "string",
+    },
+    sidebar: {
+      description: <>See below.</>,
+      type: "SidebarOptions",
+    },
+    tabs: {
+      description: (
+        <>
+          Layout tabs, by default one per root folder (
+          <code>{'"root": true'}</code> in <code>{"meta.json"}</code>).
+        </>
+      ),
+      type: "LayoutTab[] | GetLayoutTabsOptions | false",
+    },
+    tabMode: {
+      description: (
+        <>
+          Show tabs as a dropdown in the sidebar (<code>{"auto"}</code>), or
+          above the page on desktop (<code>{"top"}</code>).
+        </>
+      ),
+      type: '"auto" | "top"',
+    },
+    themeSwitch: {
+      description: (
+        <>
+          The theme switch in the sidebar footer.{" "}
+          <code>{'mode: "light-dark-system"'}</code> adds a system option.
+        </>
+      ),
+      type: "{ enabled?, mode? }",
+    },
+    searchToggle: {
+      description: (
+        <>The search triggers, with props for the small and full variants.</>
+      ),
+      type: "{ enabled?, sm?, full? }",
+    },
+    containerProps: {
+      description: (
+        <>
+          Props for the <code>{"SidebarInset"}</code> that wraps the page.
+        </>
+      ),
+      type: 'ComponentProps<"main">',
+    },
+  }}
+/>
 
 ### `sidebar`
 
-| Option                 | Type                             | Description                                                                                                                       |
-| ---------------------- | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `enabled`              | `boolean`                        | Show the sidebar. Defaults to `true`.                                                                                             |
-| `banner`, `footer`     | `ReactNode`                      | Content above the page tree, and in the sidebar footer.                                                                           |
-| `collapsible`          | `boolean`                        | Allow collapsing the sidebar on desktop. Defaults to `true`.                                                                      |
-| `defaultOpenLevel`     | `number`                         | Open folders up to this depth by default. Defaults to `0`.                                                                        |
-| `prefetch`             | `boolean`                        | Prefetch pages linked from the sidebar.                                                                                           |
-| `defaultOpen`          | `boolean`                        | Whether the desktop sidebar starts open. Read shadcn/ui's `sidebar_state` cookie and pass it to keep the state across page loads. |
-| `open`, `onOpenChange` | `boolean`, `(open) => void`      | Control the desktop open state.                                                                                                   |
-| `components`           | `{ Item?, Folder?, Separator? }` | Replace how page tree nodes render.                                                                                               |
+<TypeTable
+  type={{
+    enabled: {
+      description: <>Show the sidebar.</>,
+      type: "boolean",
+      default: "true",
+    },
+    banner: {
+      description: <>Content above the page tree.</>,
+      type: "ReactNode",
+    },
+    footer: {
+      description: <>Content in the sidebar footer.</>,
+      type: "ReactNode",
+    },
+    collapsible: {
+      description: <>Allow collapsing the sidebar on desktop.</>,
+      type: "boolean",
+      default: "true",
+    },
+    defaultOpenLevel: {
+      description: <>Open folders up to this depth by default.</>,
+      type: "number",
+      default: "0",
+    },
+    prefetch: {
+      description: <>Prefetch pages linked from the sidebar.</>,
+      type: "boolean",
+    },
+    defaultOpen: {
+      description: (
+        <>
+          Whether the desktop sidebar starts open. Read shadcn/ui's{" "}
+          <code>{"sidebar_state"}</code> cookie and pass it to keep the state
+          across page loads.
+        </>
+      ),
+      type: "boolean",
+    },
+    open: {
+      description: <>Control the desktop open state.</>,
+      type: "boolean",
+    },
+    onOpenChange: {
+      description: <>Called when the desktop open state changes.</>,
+      type: "(open: boolean) => void",
+    },
+    components: {
+      description: <>Replace how page tree nodes render.</>,
+      type: "{ Item?, Folder?, Separator? }",
+    },
+  }}
+/>
 
 The rest are passed to the shadcn/ui `Sidebar` (e.g. `variant`, `side`, `className`).

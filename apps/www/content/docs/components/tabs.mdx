@@ -58,13 +58,57 @@ Give a `Tab` an `id`, and a link to `#id` opens that tab. A link to an element i
 
 ## Props
 
-| Prop           | Type        | Description                                                       |
-| -------------- | ----------- | ----------------------------------------------------------------- |
-| `items`        | `string[]`  | The tabs' labels, rendered as the tabs list.                      |
-| `defaultIndex` | `number`    | The tab selected at first, with `items`. Defaults to `0`.         |
-| `label`        | `ReactNode` | Extra content at the start of the tabs list, with `items`.        |
-| `groupId`      | `string`    | Share the selection with other tabs that have the same `groupId`. |
-| `persist`      | `boolean`   | Keep the selection in `localStorage` (with `groupId`).            |
-| `updateAnchor` | `boolean`   | Update the URL hash to the selected tab's `id`.                   |
+<TypeTable
+  type={{
+    items: {
+      description: <>The tabs' labels, rendered as the tabs list.</>,
+      type: "string[]",
+    },
+    defaultIndex: {
+      description: (
+        <>
+          The tab selected at first, with <code>{"items"}</code>.
+        </>
+      ),
+      type: "number",
+      default: "0",
+    },
+    label: {
+      description: (
+        <>
+          Extra content at the start of the tabs list, with{" "}
+          <code>{"items"}</code>.
+        </>
+      ),
+      type: "ReactNode",
+    },
+    groupId: {
+      description: (
+        <>
+          Share the selection with other tabs that have the same{" "}
+          <code>{"groupId"}</code>.
+        </>
+      ),
+      type: "string",
+    },
+    persist: {
+      description: (
+        <>
+          Keep the selection in <code>{"localStorage"}</code> (with{" "}
+          <code>{"groupId"}</code>).
+        </>
+      ),
+      type: "boolean",
+    },
+    updateAnchor: {
+      description: (
+        <>
+          Update the URL hash to the selected tab's <code>{"id"}</code>.
+        </>
+      ),
+      type: "boolean",
+    },
+  }}
+/>
 
 `Tabs` is built on shadcn/ui `tabs`, and also accepts its props, such as `defaultValue`, `value` and `onValueChange`.
