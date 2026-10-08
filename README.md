@@ -1,16 +1,13 @@
 <p align="center">
   <a href="https://docscn.dev">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/header/dots.svg?title=docscn&subtitle=Fumadocs+UI%2C+built+the+shadcn%2Fui+way&font=geist&mode=dark" />
-      <img src="https://shieldcn.dev/header/dots.svg?title=docscn&subtitle=Fumadocs+UI%2C+built+the+shadcn%2Fui+way&font=geist&mode=light" alt="docscn" />
-    </picture>
+    <img alt="docscn" src="https://shieldcn.dev/header/surface.svg?title=docscn&subtitle=Docs+components+for+shadcn%2Fui&logo=data%3Aimage%2Fsvg%2Bxml%2C%3Csvg+xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27+fill%3D%27none%27+viewBox%3D%270+0+24+24%27%3E%3Cpath+fill%3D%27%2523fff%27+d%3D%27M16+0h8v8h-8zM8+8h8v8H8zm-8+8h8v8H0zm16+0h8v8h-8z%27%2F%3E%3C%2Fsvg%3E&mode=dark">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/ruiyuwg/docscn/actions/workflows/ci.yml"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/ci.svg?variant=outline&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/ci.svg?variant=outline&font=geist&mode=light" alt="CI" /></picture></a>
-  <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/license.svg?variant=outline&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/license.svg?variant=outline&font=geist&mode=light" alt="License" /></picture></a>
-  <a href="https://github.com/ruiyuwg/docscn"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/stars.svg?variant=outline&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/stars.svg?variant=outline&font=geist&mode=light" alt="GitHub stars" /></picture></a>
+  <a href="https://github.com/ruiyuwg/docscn/actions/workflows/ci.yml"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/ci.svg?variant=secondary&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/ci.svg?variant=secondary&font=geist&mode=light" alt="CI" /></picture></a>
+  <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/license.svg?variant=secondary&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/license.svg?variant=secondary&font=geist&mode=light" alt="License" /></picture></a>
+  <a href="https://github.com/ruiyuwg/docscn"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ruiyuwg/docscn/stars.svg?variant=secondary&font=geist&mode=dark" /><img src="https://shieldcn.dev/github/ruiyuwg/docscn/stars.svg?variant=secondary&font=geist&mode=light" alt="GitHub stars" /></picture></a>
 </p>
 
 # docscn
