@@ -3,6 +3,16 @@ title: Kitchen sink
 description: Every element Fumadocs MDX's default preset emits, plus the docscn MDX components.
 ---
 
+import { Accordion, Accordions } from "@/components/docs/components/accordion";
+import { File, Files, Folder } from "@/components/docs/components/files";
+import { Step, Steps } from "@/components/docs/components/steps";
+import {
+  Tab,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+} from "@/components/docs/components/tabs";
+
 This page is copied into test apps by `scripts/test-registry-install.ts`. It uses **bold**, _italic_, `inline code`, <kbd>Ctrl</kbd> and a [relative link](./index.mdx).
 
 ## Code blocks
@@ -90,3 +100,77 @@ npm install next-themes
   <Card title="Internal" href="/docs" description="A link within the site." />
   <Card title="No link">A card with children.</Card>
 </Cards>
+
+<CalloutContainer type="success">
+  <CalloutTitle>From remark-directive-admonition</CalloutTitle>
+  <CalloutDescription>
+    The parts the `:::success` directive becomes.
+  </CalloutDescription>
+</CalloutContainer>
+
+## Tabs
+
+<Tabs items={["pnpm", "npm"]}>
+  <Tab>Install with `pnpm add next-themes`.</Tab>
+  <Tab>Install with `npm install next-themes`.</Tab>
+</Tabs>
+
+<Tabs defaultValue="first" groupId="kitchen-sink" persist>
+  <TabsList>
+    <TabsTrigger value="first">First</TabsTrigger>
+    <TabsTrigger value="second">Second</TabsTrigger>
+  </TabsList>
+  <Tab value="first">A tab with an explicit value.</Tab>
+  <Tab value="second" id="second-tab">
+    The second tab, linked from `#second-tab`.
+  </Tab>
+</Tabs>
+
+## Steps
+
+<Steps>
+  <Step>
+    ### Install
+
+    Add the registry.
+
+  </Step>
+  <Step>
+    ### Configure
+
+    Wrap the layout in `RootProvider`.
+
+  </Step>
+</Steps>
+
+<div className="fd-steps">
+  <div className="fd-step">
+    ### From remark-steps
+
+    The wrappers remark-steps generates.
+
+  </div>
+</div>
+
+## Accordions
+
+<Accordions>
+  <Accordion title="What is docscn?" id="what-is-docscn">
+    A shadcn/ui registry of documentation components.
+  </Accordion>
+  <Accordion title="Does it need Fumadocs UI?">
+    No, only Fumadocs Core.
+  </Accordion>
+</Accordions>
+
+## Files
+
+<Files>
+  <Folder name="app" defaultOpen>
+    <File name="layout.tsx" />
+    <Folder name="docs">
+      <File name="page.tsx" />
+    </Folder>
+  </Folder>
+  <File name="package.json" />
+</Files>

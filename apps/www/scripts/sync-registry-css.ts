@@ -18,6 +18,7 @@ const check = process.argv.includes("--check");
 const stylesheets: Record<string, string> = {
   typography: "registry/base/docs/styles/typography.css",
   codeblock: "registry/base/docs/styles/codeblock.css",
+  steps: "registry/base/docs/styles/steps.css",
 };
 
 type CssTree = { [key: string]: string | CssTree };

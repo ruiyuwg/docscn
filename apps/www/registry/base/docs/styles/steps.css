@@ -1,0 +1,42 @@
+/* Styles for Steps and the fd-steps / fd-step classes that remark-steps adds.
+   A numbered circle sits on a line beside each step. */
+@layer components {
+  .fd-steps {
+    position: relative;
+    margin-inline-start: 1rem;
+    padding-inline-start: 1.75rem;
+    border-inline-start: 1px solid var(--border);
+    counter-reset: step;
+  }
+
+  .fd-step {
+    position: relative;
+  }
+
+  .fd-step::before {
+    position: absolute;
+    inset-inline-start: calc(-1.75rem - 1rem - 0.5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    content: counter(step);
+    counter-increment: step;
+  }
+
+  .fd-step > :first-child {
+    margin-top: 0;
+  }
+
+  .fd-step + .fd-step {
+    margin-top: 2rem;
+  }
+}

@@ -7,7 +7,7 @@
       "name": "docs-utils",
       "type": "registry:lib",
       "title": "Docs utilities",
-      "description": "Shared helpers used by docscn components: URL matching, ref merging, hotkeys and copy-button state.",
+      "description": "Shared helpers used by docscn components: URL matching, ref merging, hotkeys, copy-button state and tab groups that share a selection.",
       "files": [
         {
           "path": "registry/base/docs/utils/urls.ts",
@@ -33,6 +33,11 @@
           "path": "registry/base/docs/utils/use-is-scroll-top.ts",
           "type": "registry:lib",
           "target": "@components/docs/utils/use-is-scroll-top.ts"
+        },
+        {
+          "path": "registry/base/docs/utils/tabs-group.ts",
+          "type": "registry:lib",
+          "target": "@components/docs/utils/tabs-group.ts"
         }
       ]
     },
@@ -797,6 +802,102 @@
       ]
     },
     {
+      "name": "docs-tabs",
+      "type": "registry:component",
+      "title": "Tabs",
+      "description": "Tabs and Tab for MDX content: tabs from a list of items or with explicit values, with selections shared between tab groups, persisted, or linked from the URL hash.",
+      "dependencies": ["cn"],
+      "registryDependencies": ["tabs", "@docscn/docs-utils"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/tabs.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/tabs.tsx"
+        }
+      ]
+    },
+    {
+      "name": "steps",
+      "type": "registry:component",
+      "title": "Steps",
+      "description": "Steps and Step: numbered steps on a line, plus the styles for the fd-steps and fd-step classes that remark-steps adds.",
+      "files": [
+        {
+          "path": "registry/base/docs/components/steps.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/steps.tsx"
+        }
+      ],
+      "css": {
+        "@layer components": {
+          ".fd-steps": {
+            "position": "relative",
+            "margin-inline-start": "1rem",
+            "padding-inline-start": "1.75rem",
+            "border-inline-start": "1px solid var(--border)",
+            "counter-reset": "step"
+          },
+          ".fd-step": {
+            "position": "relative"
+          },
+          ".fd-step::before": {
+            "position": "absolute",
+            "inset-inline-start": "calc(-1.75rem - 1rem - 0.5px)",
+            "display": "flex",
+            "align-items": "center",
+            "justify-content": "center",
+            "width": "2rem",
+            "height": "2rem",
+            "border": "1px solid var(--border)",
+            "border-radius": "9999px",
+            "background-color": "var(--background)",
+            "color": "var(--foreground)",
+            "font-size": "0.875rem",
+            "font-weight": "500",
+            "line-height": "1.25rem",
+            "content": "counter(step)",
+            "counter-increment": "step"
+          },
+          ".fd-step > :first-child": {
+            "margin-top": "0"
+          },
+          ".fd-step + .fd-step": {
+            "margin-top": "2rem"
+          }
+        }
+      }
+    },
+    {
+      "name": "docs-accordion",
+      "type": "registry:component",
+      "title": "Accordion",
+      "description": "Accordions and Accordion: collapsible sections that open from the URL hash and have a copy-link button.",
+      "dependencies": ["cn", "lucide-react"],
+      "registryDependencies": ["accordion", "button", "@docscn/docs-utils"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/accordion.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/accordion.tsx"
+        }
+      ]
+    },
+    {
+      "name": "files",
+      "type": "registry:component",
+      "title": "Files",
+      "description": "Files, Folder and File: a file tree with collapsible folders, also rendered from remark-mdx-files output.",
+      "dependencies": ["class-variance-authority", "cn", "lucide-react"],
+      "registryDependencies": ["collapsible"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/files.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/files.tsx"
+        }
+      ]
+    },
+    {
       "name": "docs",
       "type": "registry:block",
       "title": "Docs",
@@ -812,7 +913,11 @@
         "@docscn/docs-layout",
         "@docscn/docs-page",
         "@docscn/mdx",
-        "@docscn/layout-shared"
+        "@docscn/layout-shared",
+        "@docscn/docs-tabs",
+        "@docscn/steps",
+        "@docscn/docs-accordion",
+        "@docscn/files"
       ],
       "files": [
         {
@@ -886,7 +991,11 @@
         "@docscn/search-dialog",
         "@docscn/search-dialog-default",
         "@docscn/home-layout",
-        "@docscn/og"
+        "@docscn/og",
+        "@docscn/docs-tabs",
+        "@docscn/steps",
+        "@docscn/docs-accordion",
+        "@docscn/files"
       ]
     }
   ]
