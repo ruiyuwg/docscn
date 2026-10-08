@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://docscn.dev/docs
+    about: Getting started, the migration guide and a page for each component.
+  - name: Report a security vulnerability
+    url: https://github.com/ruiyuwg/docscn/security/advisories/new
+    about: Report vulnerabilities privately, not in a public issue.
