@@ -39,3 +39,9 @@ export function getPageMarkdownUrl(page: { slugs: string[] }) {
 
   return { segments, url: `/llms.mdx/docs/${segments.join("/")}` };
 }
+
+export function getPageImageUrl(page: { slugs: string[] }) {
+  const segments = [...page.slugs, "image.png"];
+
+  return { segments, url: `/og/docs/${segments.join("/")}` };
+}

@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMDXComponents } from "@/components/mdx";
-import { getPageMarkdownUrl, gitConfig, source } from "@/lib/source";
+import {
+  getPageImageUrl,
+  getPageMarkdownUrl,
+  gitConfig,
+  source,
+} from "@/lib/source";
 import {
   DocsBody,
   DocsDescription,
@@ -59,5 +64,8 @@ export async function generateMetadata(
   return {
     title: page.data.title,
     description: page.data.description,
+    openGraph: {
+      images: getPageImageUrl(page).url,
+    },
   };
 }

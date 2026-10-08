@@ -72,7 +72,7 @@ export function Sidebar({
         <div className="flex items-center gap-2">
           <NavTitle
             nav={nav}
-            className="me-auto inline-flex items-center gap-2.5 text-[0.9375rem] font-medium"
+            className="ms-2 me-auto inline-flex items-center gap-2.5 text-[0.9375rem] font-medium"
           />
           {nav?.children}
           {collapsible && (
