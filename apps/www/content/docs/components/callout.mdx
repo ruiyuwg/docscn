@@ -46,3 +46,7 @@ npx shadcn@latest add @docscn/callout
 | `icon`  | `ReactNode`                                                       | Replace the type's icon. |
 
 `Callout` is built on shadcn/ui `alert`. `CalloutContainer`, `CalloutTitle` and `CalloutDescription` are exported to compose your own.
+
+## Admonitions
+
+Fumadocs' opt-in admonition plugins render with `Callout` too: `remark-admonition` turns blocks such as `:::warn` into a `Callout`, and `remark-directive-admonition` turns `:::note` directives into `CalloutContainer`, `CalloutTitle` and `CalloutDescription`. Their `note`, `tip`, `warning`, `danger` and `success` types map onto the types above.

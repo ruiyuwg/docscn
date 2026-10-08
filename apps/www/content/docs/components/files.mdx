@@ -1,0 +1,50 @@
+---
+title: Files
+description: A file tree with collapsible folders.
+---
+
+import { File, Files, Folder } from "@/components/docs/components/files";
+
+<Files>
+  <Folder name="app" defaultOpen>
+    <File name="layout.tsx" />
+    <Folder name="docs" defaultOpen>
+      <File name="layout.tsx" />
+      <File name="[[...slug]]/page.tsx" />
+    </Folder>
+  </Folder>
+  <File name="package.json" />
+</Files>
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/files
+```
+
+## Usage
+
+```mdx
+import { File, Files, Folder } from "@/components/docs/components/files";
+
+<Files>
+  <Folder name="app" defaultOpen>
+    <File name="layout.tsx" />
+  </Folder>
+  <File name="package.json" />
+</Files>
+```
+
+The `docs` block adds `Files`, `Folder` and `File` to your MDX components, which Fumadocs' opt-in `remark-mdx-files` plugin needs: it turns `files` code blocks into these components.
+
+## Props
+
+| Component | Prop          | Type        | Description                   |
+| --------- | ------------- | ----------- | ----------------------------- |
+| `Folder`  | `name`        | `string`    | The folder's name.            |
+| `Folder`  | `defaultOpen` | `boolean`   | Open the folder at first.     |
+| `Folder`  | `disabled`    | `boolean`   | Keep the folder from opening. |
+| `File`    | `name`        | `string`    | The file's name.              |
+| `File`    | `icon`        | `ReactNode` | Replace the file icon.        |
+
+Folders are built on shadcn/ui `collapsible`.

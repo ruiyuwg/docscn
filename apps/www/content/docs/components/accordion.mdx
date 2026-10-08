@@ -1,0 +1,49 @@
+---
+title: Accordion
+description: Collapsible sections that can be linked to.
+---
+
+import { Accordion, Accordions } from "@/components/docs/components/accordion";
+
+<Accordions>
+  <Accordion title="What is docscn?" id="what-is-docscn">
+    A shadcn/ui registry of documentation components, built on Fumadocs Core.
+  </Accordion>
+  <Accordion title="Do I need Fumadocs UI?">
+    No. docscn replaces it, and only needs Fumadocs Core and Fumadocs MDX.
+  </Accordion>
+</Accordions>
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/docs-accordion
+```
+
+## Usage
+
+```mdx
+import { Accordion, Accordions } from "@/components/docs/components/accordion";
+
+<Accordions>
+  <Accordion title="What is docscn?" id="what-is-docscn">
+    A shadcn/ui registry of documentation components.
+  </Accordion>
+  <Accordion title="Do I need Fumadocs UI?">No.</Accordion>
+</Accordions>
+```
+
+The `docs` block adds `Accordions` and `Accordion` to your MDX components.
+
+An `Accordion` with an `id` can be linked to: a link to `#id` opens it, and it shows a button that copies the link. Closed content stays searchable with the browser's find-in-page, which opens the matching item.
+
+## Props
+
+| Component    | Prop    | Type        | Description                                                         |
+| ------------ | ------- | ----------- | ------------------------------------------------------------------- |
+| `Accordion`  | `title` | `ReactNode` | The item's title.                                                   |
+| `Accordion`  | `id`    | `string`    | Makes the item linkable, with a copy-link button.                   |
+| `Accordion`  | `value` | `string`    | The item's value. Defaults to the title.                            |
+| `Accordions` | ...     |             | shadcn/ui `accordion` props, such as `defaultValue` and `multiple`. |
+
+Built on shadcn/ui `accordion`.

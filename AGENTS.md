@@ -64,6 +64,7 @@ docscn aims to be a drop-in replacement for Fumadocs UI (`fumadocs-ui` / `@fumad
 - Name items in kebab-case after the Fumadocs UI component or module, with a `docs-` prefix where the plain name would read as a shadcn/ui primitive (`docs-layout`, `docs-page`, `docs-sidebar`).
 - Import other docscn modules with relative paths (`../utils/urls`), which the CLI leaves unchanged and which resolve because files install with the same layout. Don't use `@/registry/base/docs/...`: the CLI rewrites any such path containing a `/components`, `/lib`, `/hooks` or `/ui` segment to the matching alias and drops `docs/`, so `@/registry/base/docs/components/card` would become `@/components/card`.
 - Import shadcn/ui primitives with `@/components/ui/...`. The CLI rewrites them to the user's `ui` alias.
+- Files outside `components/docs/` import docscn modules as `@/components/docs/...`, the path users have. `apps/www/tsconfig.json` maps that alias to `registry/base/docs/`, so the same imports work in the `docs` block's source, docscn.dev's MDX content and the kitchen-sink fixture.
 - Files outside `components/docs/` (the `docs` block's routes and `lib/` files) use plain targets such as `app/docs/layout.tsx` or `lib/source.ts`, which the CLI places under `src/` when the project has one. Content uses `~/content/docs/...`, because Fumadocs MDX resolves `content/docs` from the project root.
 - Reference other docscn items in `registryDependencies` as `@docscn/<name>`.
 - Give every item a clear `description`.

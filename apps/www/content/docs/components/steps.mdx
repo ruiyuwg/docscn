@@ -1,0 +1,54 @@
+---
+title: Steps
+description: Numbered steps for guides and tutorials.
+---
+
+import { Step, Steps } from "@/components/docs/components/steps";
+
+<Steps>
+  <Step>
+    ### Install the registry
+
+    Add `@docscn` to your `components.json`.
+
+  </Step>
+  <Step>
+    ### Add the components
+
+    Install `@docscn/docs`.
+
+  </Step>
+</Steps>
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/steps
+```
+
+## Usage
+
+```mdx
+import { Step, Steps } from "@/components/docs/components/steps";
+
+<Steps>
+  <Step>
+    ### Install the registry
+
+    Add `@docscn` to your `components.json`.
+
+  </Step>
+  <Step>
+    ### Add the components
+
+    Install `@docscn/docs`.
+
+  </Step>
+</Steps>
+```
+
+The `docs` block adds `Steps` and `Step` to your MDX components.
+
+## remark-steps
+
+Fumadocs' opt-in `remark-steps` plugin turns headings such as `### 1. Install` into steps, by wrapping them in `div`s with the `fd-steps` and `fd-step` classes. Installing `steps` adds the styles for those classes to your global stylesheet, so the plugin's output renders the same as the components.
