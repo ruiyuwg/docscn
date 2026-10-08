@@ -5,7 +5,8 @@
 //
 // Run `shadcn build` first. Pass `--keep` to keep the generated app for
 // inspection, and `--registry <url>` to install from a deployed registry
-// (e.g. https://docscn.dev/r/{name}.json) instead of the local build.
+// (e.g. https://docscn.dev/r/{name}.json) instead of the local build. For a
+// protected Vercel preview, also set VERCEL_AUTOMATION_BYPASS_SECRET.
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
