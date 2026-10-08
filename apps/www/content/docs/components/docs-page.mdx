@@ -66,16 +66,20 @@ Use it inside [`DocsLayout`](/docs/components/docs-layout). `DocsBody` adds the 
       description: (
         <>
           The TOC beside the page on wide screens. <code>{"single: true"}</code>{" "}
-          highlights one heading at a time.
+          highlights one heading at a time, and <code>{"style"}</code> picks one
+          of the <a href="/docs/components/toc#styles">TOC styles</a>.
         </>
       ),
-      type: "{ enabled?, single?, header?, footer?, container?, list? }",
+      type: "{ enabled?, single?, style?, header?, footer?, container?, list? }",
     },
     tableOfContentPopover: {
       description: (
-        <>The TOC popover at the top of the page on smaller screens.</>
+        <>
+          The TOC popover at the top of the page on smaller screens, with the
+          same <code>{"style"}</code> option.
+        </>
       ),
-      type: "{ enabled?, header?, footer?, ... }",
+      type: "{ enabled?, style?, header?, footer?, ... }",
     },
     breadcrumb: {
       description: (

@@ -1,0 +1,62 @@
+---
+title: Server code block
+description: A code block highlighted in a React Server Component.
+---
+
+import { ServerCodeBlock } from "@/components/docs/components/codeblock.rsc";
+
+<ServerCodeBlock lang="ts" code={'const greeting = "Hello, world!";'} />
+
+## Installation
+
+```npm
+npx shadcn@latest add @docscn/server-codeblock
+```
+
+## Usage
+
+```tsx
+import { ServerCodeBlock } from "@/components/docs/components/codeblock.rsc";
+
+<ServerCodeBlock lang="ts" code={code} />;
+```
+
+`ServerCodeBlock` is an async React Server Component. It highlights the code with Shiki on the server, using the same [code block](/docs/components/codeblock) as your content, and sends no highlighting code to the browser.
+
+For code that's only known in the browser, use [`DynamicCodeBlock`](/docs/components/dynamic-codeblock).
+
+## Props
+
+<TypeTable
+  type={{
+    lang: {
+      description: <>The code's language.</>,
+      type: "string",
+      required: true,
+    },
+    code: {
+      type: "string",
+      required: true,
+    },
+    themes: {
+      description: (
+        <>
+          Shiki's light and dark themes. The other options of{" "}
+          <code>{"highlight()"}</code> from{" "}
+          <code>{"fumadocs-core/highlight"}</code> work too.
+        </>
+      ),
+      type: "{ light: string; dark: string }",
+      default: '{ light: "github-light", dark: "github-dark" }',
+    },
+    codeblock: {
+      description: (
+        <>
+          Props for the underlying <code>{"CodeBlock"}</code>, such as{" "}
+          <code>{"title"}</code>.
+        </>
+      ),
+      type: "CodeBlockProps",
+    },
+  }}
+/>

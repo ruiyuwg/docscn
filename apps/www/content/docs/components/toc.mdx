@@ -30,4 +30,24 @@ import { TOCItem, TOCItems } from "@/components/docs/components/toc/default";
 
 The active headings are highlighted with a thumb on a line that follows the heading levels. `useActiveAnchor`, `useActiveAnchors`, `useItems` and `useTOCItems` are re-exported from `components/toc`.
 
-Fumadocs UI's `clerk` and `block` TOC styles aren't available yet ([#8](https://github.com/ruiyuwg/docscn/issues/8)).
+## Styles
+
+Pick a style for `DocsPage`'s TOC and TOC popover with `style`:
+
+```tsx
+<DocsPage
+  toc={page.data.toc}
+  tableOfContent={{ style: "clerk" }}
+  tableOfContentPopover={{ style: "clerk" }}
+>
+  {/* ... */}
+</DocsPage>
+```
+
+| Style              | Module                   | Looks like                                                                         |
+| ------------------ | ------------------------ | ---------------------------------------------------------------------------------- |
+| `normal` (default) | `components/toc/default` | A line that curves with the heading levels, and a thumb on the active headings.    |
+| `clerk`            | `components/toc/clerk`   | A line that steps with the heading levels, highlighted beside the active headings. |
+| `block`            | `components/toc/block`   | A highlight behind the active headings.                                            |
+
+Each module exports `TOCItems`, `TOCItem` and `TOCEmpty`, so you can swap them in the example above.
