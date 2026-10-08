@@ -1,33 +1,52 @@
 "use client";
 
 import { cn } from "cn";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, RotateCcw } from "lucide-react";
 import {
+  type CSSProperties,
   type ReactNode,
   useEffect,
   useRef,
   useState,
   useSyncExternalStore,
 } from "react";
-import { buttonVariants } from "@/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   baseColorOptions,
-  type BaseColorName,
+  basePrimary,
   fontOptions,
-  type PreviewTheme,
-  type PrimaryColorName,
-  type PrimaryName,
-  primaryOptions,
+  type PreviewOptions,
   previewThemeCss,
   radiusOptions,
   swatch,
+  type ThemeColorName,
+  type ThemeName,
+  themeOptions,
 } from "./preview-themes";
 
 const src = "/docs";
 const styleId = "docscn-preview-theme";
 /** The width the preview renders at on large screens, so the TOC column shows. */
 const desktopWidth = 1280;
+const defaultOptions: PreviewOptions = {
+  baseColor: "neutral",
+  theme: "default",
+  radius: "0.625rem",
+};
 
 function applyTheme(frame: HTMLIFrameElement, css: string) {
   const doc = frame.contentDocument;
@@ -56,11 +75,7 @@ function capitalize(value: string) {
  * dark mode through next-themes' storage events.
  */
 export function ThemePreview() {
-  const [theme, setTheme] = useState<PreviewTheme>({
-    baseColor: "neutral",
-    primary: "default",
-    radius: "0.625rem",
-  });
+  const [options, setOptions] = useState<PreviewOptions>(defaultOptions);
   const [size, setSize] = useState<{ width: number; height: number }>();
   const [loaded, setLoaded] = useState(false);
   // don't load the preview inside itself when the docs link back home
@@ -71,7 +86,12 @@ export function ThemePreview() {
   );
   const viewportRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLIFrameElement>(null);
-  const css = previewThemeCss(theme);
+  const css = previewThemeCss(options);
+  const isDefault =
+    options.baseColor === defaultOptions.baseColor &&
+    options.theme === defaultOptions.theme &&
+    options.radius === defaultOptions.radius &&
+    options.font === defaultOptions.font;
 
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -99,111 +119,103 @@ export function ThemePreview() {
 
   return (
     <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b px-4 py-3">
-        <Control label="Base color">
-          <ToggleGroup
-            size="sm"
-            spacing={0}
-            value={[theme.baseColor]}
-            onValueChange={([baseColor]) => {
-              if (baseColor)
-                setTheme((t) => ({
-                  ...t,
-                  baseColor: baseColor as BaseColorName,
-                }));
-            }}
-          >
-            {baseColorOptions.map((baseColor) => (
-              <SwatchItem
-                key={baseColor}
-                value={baseColor}
-                label={capitalize(baseColor)}
-              />
-            ))}
-          </ToggleGroup>
-        </Control>
-        <Control label="Primary">
-          <ToggleGroup
-            size="sm"
-            spacing={0}
-            value={[theme.primary]}
-            onValueChange={([primary]) => {
-              if (primary)
-                setTheme((t) => ({ ...t, primary: primary as PrimaryName }));
-            }}
-          >
-            {primaryOptions.map((primary) => (
-              <SwatchItem
-                key={primary}
-                value={primary}
-                label={
-                  primary === "default"
-                    ? "Default (from the base color)"
-                    : capitalize(primary)
-                }
-              />
-            ))}
-          </ToggleGroup>
-        </Control>
-        <Control label="Radius">
-          <ToggleGroup
-            size="sm"
-            variant="outline"
-            spacing={0}
-            value={[theme.radius]}
-            onValueChange={([radius]) => {
-              if (radius) setTheme((t) => ({ ...t, radius }));
-            }}
-          >
-            {radiusOptions.map((option) => (
-              <ToggleGroupItem
-                key={option.value}
-                value={option.value}
-                aria-label={`Radius ${option.label}rem`}
-                className="font-mono text-xs"
-              >
-                {option.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </Control>
-        <Control label="Font">
-          <ToggleGroup
-            size="sm"
-            variant="outline"
-            spacing={0}
-            value={[theme.font ?? "sans"]}
-            onValueChange={([font]) => {
-              if (font)
-                setTheme((t) => ({
-                  ...t,
-                  font: font === "sans" ? undefined : font,
-                }));
-            }}
-          >
-            {fontOptions.map((option) => (
-              <ToggleGroupItem
-                key={option.label}
-                value={option.value ?? "sans"}
-                className="text-xs"
-              >
-                {option.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </Control>
-        <a
-          href={src}
-          target="_blank"
-          rel="noreferrer"
-          className={cn(
-            buttonVariants({ variant: "ghost", size: "icon-sm" }),
-            "ms-auto text-muted-foreground",
-          )}
-        >
-          <ExternalLink />
-          <span className="sr-only">Open the docs in a new tab</span>
-        </a>
+      <div className="flex items-start gap-2 border-b p-2">
+        <div className="flex flex-1 flex-wrap items-center gap-2">
+          <Picker
+            label="Base color"
+            value={options.baseColor}
+            onValueChange={(baseColor) =>
+              setOptions((o) => ({ ...o, baseColor }))
+            }
+            items={baseColorOptions.map((baseColor) => ({
+              value: baseColor,
+              label: capitalize(baseColor),
+              icon: <Swatch light={swatch(baseColor)} />,
+            }))}
+          />
+          <Picker<ThemeName>
+            label="Theme"
+            value={options.theme}
+            onValueChange={(theme) => setOptions((o) => ({ ...o, theme }))}
+            items={themeOptions.map((theme) =>
+              theme === "default"
+                ? {
+                    value: theme,
+                    label: capitalize(options.baseColor),
+                    icon: <Swatch {...basePrimary(options.baseColor)} />,
+                  }
+                : {
+                    value: theme,
+                    label: capitalize(theme),
+                    icon: <Swatch light={swatch(theme as ThemeColorName)} />,
+                  },
+            )}
+          />
+          <Picker
+            label="Radius"
+            value={options.radius}
+            onValueChange={(radius) => setOptions((o) => ({ ...o, radius }))}
+            items={radiusOptions.map((option) => ({
+              value: option.value,
+              label: option.label,
+              detail: option.value,
+              icon: <RadiusIcon radius={option.value} />,
+            }))}
+          />
+          <Picker
+            label="Font"
+            value={options.font ?? "sans"}
+            onValueChange={(font) =>
+              setOptions((o) => ({
+                ...o,
+                font: font === "sans" ? undefined : font,
+              }))
+            }
+            items={fontOptions.map((option) => ({
+              value: option.value ?? "sans",
+              label: option.label,
+              icon: <FontIcon font={option.value} />,
+            }))}
+          />
+        </div>
+        <div className="flex items-center">
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="text-muted-foreground"
+                  disabled={isDefault}
+                  onClick={() => setOptions(defaultOptions)}
+                />
+              }
+            >
+              <RotateCcw />
+              <span className="sr-only">Reset theme</span>
+            </TooltipTrigger>
+            <TooltipContent>Reset theme</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <a
+                  href={src}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={cn(
+                    buttonVariants({ variant: "ghost", size: "icon-sm" }),
+                    "text-muted-foreground",
+                  )}
+                />
+              }
+            >
+              <ExternalLink />
+              <span className="sr-only">Open the docs in a new tab</span>
+            </TooltipTrigger>
+            <TooltipContent>Open in a new tab</TooltipContent>
+          </Tooltip>
+        </div>
       </div>
       <div
         ref={viewportRef}
@@ -238,38 +250,98 @@ export function ThemePreview() {
   );
 }
 
-function Control({ label, children }: { label: string; children: ReactNode }) {
+interface PickerItem<T extends string> {
+  value: T;
+  label: string;
+  /** shown after the label in the menu, e.g. the radius in rem */
+  detail?: string;
+  icon: ReactNode;
+}
+
+function Picker<T extends string>({
+  label,
+  value,
+  onValueChange,
+  items,
+}: {
+  label: string;
+  value: T;
+  onValueChange: (value: T) => void;
+  items: PickerItem<T>[];
+}) {
+  const selected = items.find((item) => item.value === value);
+
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs font-medium text-muted-foreground">{label}</span>
-      {children}
-    </div>
+    <Select
+      value={value}
+      onValueChange={(next) => {
+        if (next !== null) onValueChange(next as T);
+      }}
+    >
+      <SelectTrigger size="sm" className="bg-background">
+        <span className="text-muted-foreground max-sm:sr-only">{label}</span>
+        <SelectValue>
+          {() =>
+            selected && (
+              <>
+                {selected.icon}
+                {selected.label}
+              </>
+            )
+          }
+        </SelectValue>
+      </SelectTrigger>
+      <SelectContent align="start" alignItemWithTrigger={false}>
+        <SelectGroup>
+          <SelectLabel>{label}</SelectLabel>
+          {items.map((item) => (
+            <SelectItem key={item.value} value={item.value}>
+              <span className="flex items-center gap-2">
+                {item.icon}
+                {item.label}
+                {item.detail && (
+                  <span className="text-muted-foreground">{item.detail}</span>
+                )}
+              </span>
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 }
 
-function SwatchItem({ value, label }: { value: string; label: string }) {
+/** A colour dot, with an optional different colour in dark mode. */
+function Swatch({ light, dark = light }: { light: string; dark?: string }) {
   return (
-    <ToggleGroupItem
-      value={value}
-      aria-label={label}
-      title={label}
-      className="size-7 min-w-7 px-0"
+    <span
+      aria-hidden="true"
+      className="size-3.5 shrink-0 rounded-full bg-(--swatch-light) ring-1 ring-foreground/15 ring-inset dark:bg-(--swatch-dark)"
+      style={
+        { "--swatch-light": light, "--swatch-dark": dark } as CSSProperties
+      }
+    />
+  );
+}
+
+function RadiusIcon({ radius }: { radius: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="size-3.5 shrink-0 border-t-2 border-l-2 border-current text-muted-foreground"
+      style={{ borderTopLeftRadius: `calc(${radius} * 0.75)` }}
+    />
+  );
+}
+
+function FontIcon({ font }: { font?: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="w-4 shrink-0 text-center text-xs font-medium text-muted-foreground"
+      style={{ fontFamily: font }}
     >
-      <span
-        className={cn(
-          "size-4 rounded-full border border-black/10 dark:border-white/15",
-          value === "default" && "bg-foreground",
-        )}
-        style={
-          value === "default"
-            ? undefined
-            : {
-                backgroundColor: swatch(
-                  value as BaseColorName | PrimaryColorName,
-                ),
-              }
-        }
-      />
-    </ToggleGroupItem>
+      Aa
+    </span>
   );
 }

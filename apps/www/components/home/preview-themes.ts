@@ -1,9 +1,9 @@
 /**
  * Theme presets for the landing page's live preview, following shadcn/ui's
  * theming (https://ui.shadcn.com/docs/theming). A base color sets every token
- * the way shadcn/ui's registry does (`/r/colors/{name}.json`), and a primary
- * color changes only `primary`, `primary-foreground` and `ring` (and their
- * sidebar equivalents), like shadcn/ui's color themes.
+ * the way shadcn/ui's registry does (`/r/colors/{name}.json`), and a theme
+ * changes only `primary`, `primary-foreground` and `ring` (and their sidebar
+ * equivalents), like shadcn/ui's color themes.
  */
 
 type Scale = Record<
@@ -106,7 +106,7 @@ const baseColors = {
   },
 } satisfies Record<string, Scale>;
 
-interface PrimaryColor {
+interface ThemeColor {
   /** `primary` and `primary-foreground` in light mode */
   light: { primary: string; foreground: string };
   /** `primary` in dark mode, with the base color's darkest shade as foreground */
@@ -114,10 +114,10 @@ interface PrimaryColor {
 }
 
 /**
- * Primary colors from Tailwind's palette. The shades are picked so that
+ * Theme colors from Tailwind's palette. The shades are picked so that
  * `primary-foreground` on `primary` meets WCAG AA (4.5:1) in both modes.
  */
-const primaryColors = {
+const themeColors = {
   blue: {
     light: {
       primary: "oklch(0.546 0.245 262.881)", // blue-600
@@ -153,32 +153,40 @@ const primaryColors = {
     },
     dark: "oklch(0.702 0.183 293.541)", // violet-400
   },
-} satisfies Record<string, PrimaryColor>;
+} satisfies Record<string, ThemeColor>;
 
 /** shadcn/ui's dark `sidebar-primary`, the same for every base color. */
 const darkSidebarPrimary = "oklch(0.488 0.243 264.376)";
 
 export type BaseColorName = keyof typeof baseColors;
-export type PrimaryColorName = keyof typeof primaryColors;
-export type PrimaryName = PrimaryColorName | "default";
+export type ThemeColorName = keyof typeof themeColors;
+export type ThemeName = ThemeColorName | "default";
 
 export const baseColorOptions = Object.keys(baseColors) as BaseColorName[];
-export const primaryOptions = [
+export const themeOptions = [
   "default",
-  ...Object.keys(primaryColors),
-] as PrimaryName[];
+  ...Object.keys(themeColors),
+] as ThemeName[];
 
 /** A colour to show on an option's swatch. */
-export function swatch(option: BaseColorName | PrimaryColorName) {
+export function swatch(option: BaseColorName | ThemeColorName) {
   if (option in baseColors) return baseColors[option as BaseColorName][500];
-  return primaryColors[option as PrimaryColorName].light.primary;
+  return themeColors[option as ThemeColorName].light.primary;
+}
+
+/** The base color's own `primary` in each mode, shown on the default theme's swatch. */
+export function basePrimary(baseColor: BaseColorName) {
+  return {
+    light: baseColors[baseColor][900],
+    dark: baseColors[baseColor][200],
+  };
 }
 
 export const radiusOptions = [
-  { label: "0", value: "0rem" },
-  { label: "0.3", value: "0.3rem" },
-  { label: "0.625", value: "0.625rem" },
-  { label: "1", value: "1rem" },
+  { label: "None", value: "0rem" },
+  { label: "Small", value: "0.3rem" },
+  { label: "Default", value: "0.625rem" },
+  { label: "Large", value: "1rem" },
 ];
 
 /**
@@ -197,16 +205,17 @@ export const fontOptions = [
   },
 ];
 
-export interface PreviewTheme {
+export interface PreviewOptions {
   baseColor: BaseColorName;
-  primary: PrimaryName;
+  /** `default` takes `primary` from the base color */
+  theme: ThemeName;
   radius: string;
   font?: string;
 }
 
 type Variables = Record<string, string>;
 
-function lightVariables(g: Scale, p?: PrimaryColor): Variables {
+function lightVariables(g: Scale, p?: ThemeColor): Variables {
   const primary = p?.light.primary ?? g[900];
   const primaryForeground = p?.light.foreground ?? g[50];
   const ring = p?.light.primary ?? g[400];
@@ -240,7 +249,7 @@ function lightVariables(g: Scale, p?: PrimaryColor): Variables {
   };
 }
 
-function darkVariables(g: Scale, p?: PrimaryColor): Variables {
+function darkVariables(g: Scale, p?: ThemeColor): Variables {
   const ring = p?.dark ?? g[500];
 
   return {
@@ -283,16 +292,16 @@ function block(selector: string, variables: Variables) {
  * The preview theme as CSS. The selectors beat the site's own `:root` and
  * `.dark` rules, so the order of stylesheets in the document doesn't matter.
  */
-export function previewThemeCss(theme: PreviewTheme) {
-  const g = baseColors[theme.baseColor];
+export function previewThemeCss(options: PreviewOptions) {
+  const g = baseColors[options.baseColor];
   const p =
-    theme.primary === "default" ? undefined : primaryColors[theme.primary];
+    options.theme === "default" ? undefined : themeColors[options.theme];
 
   return [
     block("html:root", {
       ...lightVariables(g, p),
-      "--radius": theme.radius,
-      ...(theme.font ? { "--font-sans": theme.font } : {}),
+      "--radius": options.radius,
+      ...(options.font ? { "--font-sans": options.font } : {}),
     }),
     block("html.dark", darkVariables(g, p)),
   ].join("\n");
