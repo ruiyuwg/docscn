@@ -13,6 +13,8 @@ import {
   TabsTrigger,
 } from "@/components/docs/components/tabs";
 import { ImageZoom } from "@/components/docs/components/image-zoom";
+import { ServerCodeBlock } from "@/components/docs/components/codeblock.rsc";
+import { DynamicCodeBlock } from "@/components/docs/components/dynamic-codeblock";
 import { InlineTOC } from "@/components/docs/components/inline-toc";
 import { TypeTable } from "@/components/docs/components/type-table";
 import gradient from "./kitchen-sink.png";
@@ -204,3 +206,15 @@ npm install next-themes
 ## Image zoom
 
 <ImageZoom src={gradient} alt="A gradient you can zoom into" />
+
+## Highlighted at runtime
+
+<ServerCodeBlock
+  lang="ts"
+  code={'const fromServer = "highlighted on the server";'}
+/>
+
+<DynamicCodeBlock
+  lang="ts"
+  code={'const fromClient = "highlighted in the browser";'}
+/>

@@ -2,6 +2,8 @@
 // Copyright (c) 2023 Fuma, MIT License
 "use client";
 import * as TocDefault from "../../../../components/toc/default";
+import * as TocClerk from "../../../../components/toc/clerk";
+import * as TocBlock from "../../../../components/toc/block";
 import * as Base from "../../../../components/toc";
 import { cn } from "cn";
 import { ChevronDown, Text } from "lucide-react";
@@ -24,6 +26,8 @@ import {
 } from "@/components/ui/collapsible";
 import { useDocsLayout } from "../../client";
 
+const variants = { normal: TocDefault, clerk: TocClerk, block: TocBlock };
+
 export type TOCProviderProps = Base.TOCProviderProps;
 
 export function TOCProvider(props: TOCProviderProps) {
@@ -41,17 +45,30 @@ export type TOCProps = {
    * Custom content in TOC container, after the main TOC
    */
   footer?: ReactNode;
+} & (
+  | {
+      style?: "normal";
+      list?: TocDefault.TOCItemsProps;
+    }
+  | {
+      style: "clerk";
+      list?: TocClerk.TOCItemsProps;
+    }
+  | {
+      style: "block";
+      list?: TocBlock.TOCItemsProps;
+    }
+);
 
-  /**
-   * The style of the TOC (only `normal` is available in docscn for now)
-   */
-  style?: "normal";
-  list?: TocDefault.TOCItemsProps;
-};
-
-export function TOC({ container, header, footer, list }: TOCProps) {
+export function TOC({
+  container,
+  header,
+  footer,
+  style = "normal",
+  list,
+}: TOCProps) {
   const items = Base.useTOCItems();
-  const { TOCItems, TOCEmpty, TOCItem } = TocDefault;
+  const { TOCItems, TOCEmpty, TOCItem } = variants[style];
 
   if (items.length === 0 && !header && !footer) {
     return (
@@ -111,13 +128,20 @@ export type TOCPopoverProps = {
    * Custom content in TOC container, after the main TOC
    */
   footer?: ReactNode;
-
-  /**
-   * The style of the TOC (only `normal` is available in docscn for now)
-   */
-  style?: "normal";
-  list?: TocDefault.TOCItemsProps;
-};
+} & (
+  | {
+      style?: "normal";
+      list?: TocDefault.TOCItemsProps;
+    }
+  | {
+      style: "clerk";
+      list?: TocClerk.TOCItemsProps;
+    }
+  | {
+      style: "block";
+      list?: TocBlock.TOCItemsProps;
+    }
+);
 
 export function TOCPopover({
   container,
@@ -125,13 +149,14 @@ export function TOCPopover({
   content,
   header,
   footer,
+  style = "normal",
   list,
 }: TOCPopoverProps) {
   const items = Base.useTOCItems();
   const ref = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const { isNavTransparent } = useDocsLayout();
-  const { TOCItems, TOCItem, TOCEmpty } = TocDefault;
+  const { TOCItems, TOCItem, TOCEmpty } = variants[style];
 
   const onClickOutside = useEffectEvent((e: Event) => {
     if (!open || !(e.target instanceof HTMLElement)) return;

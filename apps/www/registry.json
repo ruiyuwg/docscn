@@ -616,7 +616,7 @@
       "name": "toc",
       "type": "registry:component",
       "title": "Table of contents",
-      "description": "TOCProvider, TOCScrollArea and the default TOC items, with a thumb that follows the headings in view.",
+      "description": "TOCProvider, TOCScrollArea and the TOC items in three styles: the default, with a thumb that follows the headings in view, clerk and block.",
       "dependencies": ["cn", "fumadocs-core@^16.16.2"],
       "registryDependencies": ["@docscn/docs-utils"],
       "files": [
@@ -629,6 +629,16 @@
           "path": "registry/base/docs/components/toc/default.tsx",
           "type": "registry:component",
           "target": "@components/docs/components/toc/default.tsx"
+        },
+        {
+          "path": "registry/base/docs/components/toc/clerk.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/toc/clerk.tsx"
+        },
+        {
+          "path": "registry/base/docs/components/toc/block.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/toc/block.tsx"
         }
       ]
     },
@@ -1039,6 +1049,41 @@
       ]
     },
     {
+      "name": "dynamic-codeblock",
+      "type": "registry:component",
+      "title": "Dynamic code block",
+      "description": "DynamicCodeBlock: a code block highlighted with Shiki in the browser, for code that's only known at runtime.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2", "shiki@^4.5.0"],
+      "registryDependencies": ["@docscn/codeblock"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/dynamic-codeblock.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/dynamic-codeblock.tsx"
+        },
+        {
+          "path": "registry/base/docs/components/dynamic-codeblock.core.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/dynamic-codeblock.core.tsx"
+        }
+      ]
+    },
+    {
+      "name": "server-codeblock",
+      "type": "registry:component",
+      "title": "Server code block",
+      "description": "ServerCodeBlock: a code block highlighted with Shiki in a React Server Component.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2"],
+      "registryDependencies": ["@docscn/codeblock"],
+      "files": [
+        {
+          "path": "registry/base/docs/components/codeblock.rsc.tsx",
+          "type": "registry:component",
+          "target": "@components/docs/components/codeblock.rsc.tsx"
+        }
+      ]
+    },
+    {
       "name": "docs",
       "type": "registry:block",
       "title": "Docs",
@@ -1142,7 +1187,9 @@
         "@docscn/image-zoom",
         "@docscn/inline-toc",
         "@docscn/banner",
-        "@docscn/github-info"
+        "@docscn/github-info",
+        "@docscn/dynamic-codeblock",
+        "@docscn/server-codeblock"
       ]
     }
   ]

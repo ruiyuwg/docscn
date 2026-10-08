@@ -205,6 +205,15 @@ export async function smokeTest(
     );
     check(pageHtml.includes("Table of Contents"), "the inline TOC renders");
     check(
+      /> ?fromServer<\/span>/.test(pageHtml) &&
+        pageHtml.includes("--shiki-light"),
+      "the server code block renders highlighted",
+    );
+    check(
+      pageHtml.includes("fromClient"),
+      "the dynamic code block renders its code",
+    );
+    check(
       pageHtml.includes("data-rmiz") &&
         pageHtml.includes('alt="A gradient you can zoom into"'),
       "the zoomable image renders",
