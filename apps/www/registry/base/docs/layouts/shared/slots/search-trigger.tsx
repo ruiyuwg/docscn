@@ -56,8 +56,9 @@ export function FullSearchTrigger({
       render={<Button variant="outline" />}
       data-search-full=""
       {...props}
+      // ps-1.75 plus the 1px border lines the icon up with sidebar item text
       className={cn(
-        "justify-start gap-2 bg-muted/50 px-2 font-normal text-muted-foreground shadow-none dark:bg-input/30",
+        "justify-start gap-2 bg-muted/50 ps-1.75 pe-2 font-normal text-muted-foreground shadow-none dark:bg-input/30",
         className,
       )}
     >

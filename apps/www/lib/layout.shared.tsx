@@ -7,7 +7,7 @@ export function baseOptions(): BaseLayoutProps {
       title: (
         <>
           <Logo className="size-5" />
-          <span className="sr-only">docscn</span>
+          docscn
         </>
       ),
     },

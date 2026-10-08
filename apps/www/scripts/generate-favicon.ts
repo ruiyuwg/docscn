@@ -1,8 +1,8 @@
-// Generates app/favicon.ico (16, 32 and 48px) from the mark in app/icon.svg,
-// for browsers without SVG favicon support. The mark is made of axis-aligned
-// rectangles, so each pixel's coverage is computed exactly, without an SVG
-// renderer. The icon is the dark mark on a light tile, so it stays visible on
-// both light and dark tab bars. Run it after changing app/icon.svg:
+// Generates the favicons from the mark in components/logo.tsx: app/icon.svg,
+// and app/favicon.ico (16, 32 and 48px) for browsers without SVG favicons.
+// Both show the white mark on a black tile with padding and rounded corners.
+// The ICO is rasterized with supersampling, so no SVG renderer is needed. Run
+// it after changing the mark or the values below:
 //
 //   node scripts/generate-favicon.ts
 import { readFile, writeFile } from "node:fs/promises";
@@ -10,17 +10,34 @@ import path from "node:path";
 import zlib from "node:zlib";
 
 const root = path.resolve(import.meta.dirname, "..");
+
+/** The icon's grid, in SVG units. */
+const canvas = 32;
+/** Space between the tile's edge and the mark. */
+const padding = 4;
+/** Corner radius of the tile. */
+const radius = 5;
+const tileColor = "#0a0a0a";
+const markColor = "#fafafa";
 const sizes = [16, 32, 48];
-const viewBox = 24;
-const ink = [0x0a, 0x0a, 0x0a];
-const tile = [0xff, 0xff, 0xff];
+const samples = 8; // per pixel and axis, for anti-aliasing
+
+/** The mark's grid in components/logo.tsx. */
+const markGrid = 24;
+const markScale = (canvas - 2 * padding) / markGrid;
 
 type Rect = { x0: number; y0: number; x1: number; y1: number };
 
-/** Reads the `M x yH x V y H x V y Z` rectangle paths from the SVG. */
-function parseRects(svg: string): Rect[] {
-  const rects = [...svg.matchAll(/<path[^>]*\sd="([^"]+)"/g)].map(([, d]) => {
-    const match = d!.match(
+/** Reads the mark's `M x yH x V y H x V y Z` rectangle paths from logo.tsx. */
+async function readMark(): Promise<{ paths: string[]; rects: Rect[] }> {
+  const source = await readFile(path.join(root, "components/logo.tsx"), "utf8");
+  const array = source.match(/markPaths = \[([\s\S]*?)\]/)?.[1];
+  const paths = [...(array ?? "").matchAll(/"([^"]+)"/g)].map(([, d]) => d!);
+  if (paths.length === 0)
+    throw new Error("No markPaths in components/logo.tsx");
+
+  const rects = paths.map((d) => {
+    const match = d.match(
       /^M([\d.]+) ([\d.]+)H([\d.]+)V([\d.]+)H([\d.]+)V([\d.]+)Z$/,
     );
     if (!match) throw new Error(`Not a rectangle path: ${d}`);
@@ -32,31 +49,61 @@ function parseRects(svg: string): Rect[] {
       y1: Math.max(y0!, y1!),
     };
   });
-  if (rects.length === 0) throw new Error("No paths found in app/icon.svg");
-  return rects;
+  return { paths, rects };
 }
 
-/** RGBA pixels with each pixel's colour blended by its covered area. */
-function rasterize(rects: Rect[], size: number) {
-  const scale = size / viewBox;
-  const pixels = Buffer.alloc(size * size * 4);
+function svg(paths: string[]) {
+  const scale = Number(markScale.toFixed(6));
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvas} ${canvas}"><rect width="${canvas}" height="${canvas}" rx="${radius}" fill="${tileColor}"/><g fill="${markColor}" transform="translate(${padding} ${padding}) scale(${scale})">${paths
+    .map((d) => `<path d="${d}"/>`)
+    .join("")}</g></svg>\n`;
+}
 
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      let coverage = 0;
-      for (const r of rects) {
-        const w = Math.min(x + 1, r.x1 * scale) - Math.max(x, r.x0 * scale);
-        const h = Math.min(y + 1, r.y1 * scale) - Math.max(y, r.y0 * scale);
-        if (w > 0 && h > 0) coverage += w * h;
+function insideTile(x: number, y: number) {
+  const cx = Math.min(Math.max(x, radius), canvas - radius);
+  const cy = Math.min(Math.max(y, radius), canvas - radius);
+  return (x - cx) ** 2 + (y - cy) ** 2 <= radius ** 2;
+}
+
+function insideMark(rects: Rect[], x: number, y: number) {
+  const mx = (x - padding) / markScale;
+  const my = (y - padding) / markScale;
+  return rects.some((r) => mx >= r.x0 && mx < r.x1 && my >= r.y0 && my < r.y1);
+}
+
+function hex(color: string) {
+  return [1, 3, 5].map((i) => parseInt(color.slice(i, i + 2), 16));
+}
+
+/** RGBA pixels: the tile's coverage is the alpha, the mark's blends the colour. */
+function rasterize(rects: Rect[], size: number) {
+  const tile = hex(tileColor);
+  const mark = hex(markColor);
+  const pixels = Buffer.alloc(size * size * 4);
+  const unit = canvas / size;
+
+  for (let py = 0; py < size; py++) {
+    for (let px = 0; px < size; px++) {
+      let inTile = 0;
+      let inMark = 0;
+      for (let sy = 0; sy < samples; sy++) {
+        for (let sx = 0; sx < samples; sx++) {
+          const x = (px + (sx + 0.5) / samples) * unit;
+          const y = (py + (sy + 0.5) / samples) * unit;
+          if (!insideTile(x, y)) continue;
+          inTile++;
+          if (insideMark(rects, x, y)) inMark++;
+        }
       }
-      coverage = Math.min(coverage, 1);
-      const i = (y * size + x) * 4;
+
+      const i = (py * size + px) * 4;
+      const markShare = inTile === 0 ? 0 : inMark / inTile;
       for (let c = 0; c < 3; c++) {
         pixels[i + c] = Math.round(
-          ink[c]! * coverage + tile[c]! * (1 - coverage),
+          mark[c]! * markShare + tile[c]! * (1 - markShare),
         );
       }
-      pixels[i + 3] = 0xff;
+      pixels[i + 3] = Math.round((inTile / samples ** 2) * 255);
     }
   }
 
@@ -117,13 +164,12 @@ function encodeIco(images: { size: number; png: Buffer }[]) {
   return Buffer.concat([header, ...entries, ...images.map(({ png }) => png)]);
 }
 
-const rects = parseRects(
-  await readFile(path.join(root, "app/icon.svg"), "utf8"),
-);
+const { paths, rects } = await readMark();
+await writeFile(path.join(root, "app/icon.svg"), svg(paths));
 const ico = encodeIco(
   sizes.map((size) => ({ size, png: encodePng(rasterize(rects, size), size) })),
 );
 await writeFile(path.join(root, "app/favicon.ico"), ico);
 console.log(
-  `Wrote app/favicon.ico (${sizes.join(", ")}px, ${ico.length} bytes)`,
+  `Wrote app/icon.svg and app/favicon.ico (${sizes.join(", ")}px, ${ico.length} bytes)`,
 );

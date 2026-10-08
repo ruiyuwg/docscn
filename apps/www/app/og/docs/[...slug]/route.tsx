@@ -18,7 +18,8 @@ export async function GET(
     description: page.data.description,
     site: "docscn",
     icon: <Mark size={56} color="#fafafa" />,
-    primaryColor: "rgba(250, 250, 250, 0.2)",
+    // no dashed divider or bottom bar: a plain black background
+    primaryColor: "transparent",
     primaryTextColor: "#fafafa",
     fonts: await loadGeist(),
   });
