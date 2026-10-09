@@ -1,6 +1,9 @@
+import { getBreadcrumbItems } from "fumadocs-core/breadcrumb";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/json-ld";
 import { getMDXComponents } from "@/components/mdx";
+import { siteName, siteUrl, websiteId } from "@/lib/site";
 import {
   getPageImageUrl,
   getPageMarkdownUrl,
@@ -24,9 +27,45 @@ export default async function Page(props: PageProps<"/docs/[[...slug]]">) {
 
   const MDX = page.data.body;
   const markdownUrl = getPageMarkdownUrl(page).url;
+  const url = `${siteUrl}${page.url}`;
+  // folders without an index page have no URL, so they're left out
+  const breadcrumbs = [
+    { name: "Docs", url: "/docs" },
+    ...getBreadcrumbItems(page.url, source.getPageTree(), {
+      includePage: true,
+    }).filter(
+      (item): item is { name: string; url: string } =>
+        typeof item.name === "string" && !!item.url && item.url !== "/docs",
+    ),
+  ];
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        headline: page.data.title,
+        description: page.data.description,
+        url,
+        image: `${siteUrl}${getPageImageUrl(page).url}`,
+        dateModified: page.data.lastModified?.toISOString(),
+        inLanguage: "en",
+        isPartOf: { "@id": websiteId },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbs.map((item, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: item.name,
+          item: `${siteUrl}${item.url}`,
+        })),
+      },
+    ],
+  };
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
+      <JsonLd data={jsonLd} />
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription className="mb-0">
         {page.data.description}
@@ -70,9 +109,17 @@ export async function generateMetadata(
         "text/markdown": getPageMarkdownUrl(page).url,
       },
     },
+    // replaces the root layout's Open Graph fields, so repeat the site name
     openGraph: {
       type: "article",
-      images: getPageImageUrl(page).url,
+      siteName,
+      url: page.url,
+      images: {
+        url: getPageImageUrl(page).url,
+        width: 1200,
+        height: 630,
+        alt: page.data.title,
+      },
     },
   };
 }
