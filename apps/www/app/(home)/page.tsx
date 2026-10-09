@@ -11,13 +11,51 @@ import {
   Search,
   SquareStack,
 } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { Code, PackageCommand } from "@/components/home/code";
+import { JsonLd } from "@/components/json-ld";
 import { ThemePreview } from "@/components/home/theme-preview";
 import { Logo } from "@/components/logo";
+import { siteDescription, siteName, siteUrl, websiteId } from "@/lib/site";
 import { Card, Cards } from "@/registry/base/docs/components/card";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", siteName, url: "/" },
+};
+
+const githubUrl = "https://github.com/ruiyuwg/docscn";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      name: siteName,
+      url: siteUrl,
+      description: siteDescription,
+      inLanguage: "en",
+    },
+    {
+      "@type": ["SoftwareApplication", "SoftwareSourceCode"],
+      name: siteName,
+      description: siteDescription,
+      url: siteUrl,
+      codeRepository: githubUrl,
+      programmingLanguage: "TypeScript",
+      runtimePlatform: "Next.js",
+      applicationCategory: "DeveloperApplication",
+      operatingSystem: "Any",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      license: "https://opensource.org/licenses/MIT",
+      sameAs: [githubUrl],
+    },
+  ],
+};
 
 const installCommand = "npx shadcn@latest add @docscn/docs";
 
@@ -113,8 +151,6 @@ const features = [
   },
 ];
 
-const githubUrl = "https://github.com/ruiyuwg/docscn";
-
 const footerLinks = [
   { text: "Docs", href: "/docs" },
   { text: "Components", href: "/docs#whats-included" },
@@ -126,6 +162,7 @@ const footerLinks = [
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={jsonLd} />
       <section className="pb-20">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center px-4 pt-12 pb-12 text-center sm:pt-18 sm:pb-16">
           <Link

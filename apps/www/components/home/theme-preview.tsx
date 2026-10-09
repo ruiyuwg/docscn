@@ -258,7 +258,8 @@ function Picker<T extends string>({
         if (next !== null) onValueChange(next as T);
       }}
     >
-      <SelectTrigger size="sm" className="bg-background">
+      {/* a combobox doesn't take its name from its content */}
+      <SelectTrigger size="sm" className="bg-background" aria-label={label}>
         <span className="text-muted-foreground max-sm:sr-only">{label}</span>
         <SelectValue>
           {() =>
