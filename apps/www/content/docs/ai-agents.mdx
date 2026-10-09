@@ -15,6 +15,26 @@ npx skills add ruiyuwg/docscn
 
 The CLI asks which agents to install it for. The skill's source is in [`skills/docscn`](https://github.com/ruiyuwg/docscn/tree/main/skills/docscn).
 
+## shadcn/ui's MCP server
+
+shadcn/ui's [MCP server](https://ui.shadcn.com/docs/mcp) lets agents browse, search and install registry items, including docscn's. The CLI finds `@docscn` items through the registry index, but the MCP server only searches registries listed in `components.json`, so add docscn's:
+
+```json title="components.json"
+{
+  "registries": {
+    "@docscn": "https://docscn.dev/r/{name}.json"
+  }
+}
+```
+
+Then set up the server for your agent (`claude`, `cursor`, `vscode`, `codex` or `opencode`):
+
+```npm
+npx shadcn@latest mcp init --client claude
+```
+
+Agents can then answer requests like "show me docscn's sidebar components" or "add docscn's docs block".
+
 ## The docs as Markdown
 
 These docs are also available as Markdown, for agents and LLMs to read:
@@ -25,6 +45,6 @@ These docs are also available as Markdown, for agents and LLMs to read:
 | [`/llms-full.txt`](https://docscn.dev/llms-full.txt) | Every page in one file                                                                         |
 | `/docs/<page>.md`                                    | One page, for example [`/docs/getting-started.md`](https://docscn.dev/docs/getting-started.md) |
 
-A request for a docs page that prefers Markdown (`Accept: text/markdown`) also gets the Markdown. The **Copy Markdown** button at the top of each page copies it, and the menu next to it opens the page in ChatGPT, Claude and other AI tools.
+A request for the homepage or a docs page that prefers Markdown (`Accept: text/markdown`) also gets the Markdown: `llms.txt` for the homepage. The skill is also published for the [Agent Skills discovery RFC](https://github.com/cloudflare/agent-skills-discovery-rfc) at [`/.well-known/agent-skills/index.json`](https://docscn.dev/.well-known/agent-skills/index.json). The **Copy Markdown** button at the top of each page copies it, and the menu next to it opens the page in ChatGPT, Claude and other AI tools.
 
 To add the same to your own docs, see [Page actions](/docs/components/page-actions) and Fumadocs' [LLM guide](https://fumadocs.dev/docs/integrations/llms). To let your readers ask questions about your docs, add the [AI chat](/docs/components/ai-chat).

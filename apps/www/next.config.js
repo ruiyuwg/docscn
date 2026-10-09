@@ -2,6 +2,12 @@ import { createMDX } from "fumadocs-mdx/next";
 
 const withMDX = createMDX();
 
+const markdownAccepted = {
+  type: "header",
+  key: "accept",
+  value: "(.*)text/markdown(.*)",
+};
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -9,6 +15,9 @@ const nextConfig = {
     return {
       // before files, or the docs catch-all route would match `/docs/*.md`
       beforeFiles: [
+        // the homepage's Markdown is llms.txt
+        { source: "/index.md", destination: "/llms.txt" },
+        { source: "/", destination: "/llms.txt", has: [markdownAccepted] },
         // each page's Markdown at its URL plus `.md`
         { source: "/docs.md", destination: "/llms.mdx/docs/content.md" },
         {
@@ -27,14 +36,51 @@ const nextConfig = {
           has: [markdownAccepted],
         },
       ],
+      // a Markdown 404 for any other missing page
+      fallback: [
+        {
+          source: "/:path*",
+          destination: "/llms.mdx/not-found",
+          has: [markdownAccepted],
+        },
+      ],
     };
   },
-};
-
-const markdownAccepted = {
-  type: "header",
-  key: "accept",
-  value: "(.*)text/markdown(.*)",
+  headers() {
+    return [
+      {
+        source: "/",
+        headers: [
+          { key: "Vary", value: "Accept" },
+          {
+            key: "Link",
+            value: '</llms.txt>; rel="alternate"; type="text/markdown"',
+          },
+        ],
+      },
+      {
+        source: "/docs",
+        headers: [
+          { key: "Vary", value: "Accept" },
+          {
+            key: "Link",
+            value: '</docs.md>; rel="alternate"; type="text/markdown"',
+          },
+        ],
+      },
+      {
+        // pages, not their `.md` URLs: slugs have no dots
+        source: "/docs/:path([^.]+)",
+        headers: [
+          { key: "Vary", value: "Accept" },
+          {
+            key: "Link",
+            value: '</docs/:path.md>; rel="alternate"; type="text/markdown"',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withMDX(nextConfig);
