@@ -118,7 +118,8 @@ export function ThemePreview() {
     size && size.width >= 1024 ? Math.min(1, size.width / desktopWidth) : 1;
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+    // fade out at the bottom, so the cut-off page reads as a preview
+    <div className="overflow-hidden rounded-xl border bg-card [mask-image:linear-gradient(to_bottom,black_calc(100%-8rem),transparent)]">
       <div className="flex items-start gap-2 border-b p-2">
         <div className="flex flex-1 flex-wrap items-center gap-2">
           <Picker
@@ -141,7 +142,7 @@ export function ThemePreview() {
               theme === "default"
                 ? {
                     value: theme,
-                    label: capitalize(options.baseColor),
+                    label: "Default",
                     icon: <Swatch {...basePrimary(options.baseColor)} />,
                   }
                 : {
@@ -264,7 +265,8 @@ function Picker<T extends string>({
             selected && (
               <>
                 {selected.icon}
-                {selected.label}
+                {/* only the icons on phones, so the pickers fit on one row */}
+                <span className="max-sm:sr-only">{selected.label}</span>
               </>
             )
           }

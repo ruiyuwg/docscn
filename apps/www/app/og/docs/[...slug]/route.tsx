@@ -16,7 +16,7 @@ export async function GET(
   return generateOGImage({
     title: page.data.title,
     description: page.data.description,
-    site: "Docscn",
+    site: "docscn",
     icon: <Mark size={56} color="#fafafa" />,
     // no dashed divider or bottom bar: a plain black background
     primaryColor: "transparent",

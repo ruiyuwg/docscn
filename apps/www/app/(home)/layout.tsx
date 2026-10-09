@@ -7,6 +7,7 @@ export default function Layout({ children }: LayoutProps<"/">) {
       {...baseOptions()}
       links={[
         { text: "Docs", url: "/docs", active: "nested-url" },
+        { text: "Components", url: "/docs#whats-included" },
         { text: "Compatibility", url: "/docs/compatibility" },
       ]}
     >
