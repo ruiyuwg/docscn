@@ -6,6 +6,12 @@ import { defineDocs } from "fumadocs-mdx/macro";
 
 const docs = defineDocs({
   dir: "content/docs",
+  docs: {
+    postprocess: {
+      // each page's Markdown, which the AI chat route searches
+      includeProcessedMarkdown: true,
+    },
+  },
 });
 
 // See https://fumadocs.dev/docs/headless/source-api for more info

@@ -38,6 +38,8 @@ import { translations } from "@/lib/layout.shared";
 
 Each key is the English string, followed by notes in parentheses that say where it appears. `uiTranslations()` registers the keys, so TypeScript checks them; the full list is in `components/docs/.translations/index.ts`.
 
+The [AI chat](/docs/components/ai-chat)'s strings have their own keys, in `components/ai/chat/.translations/index.ts`. Register them with `.extend(aiChatTranslations())` from `@/components/ai/chat/i18n`.
+
 ## Several languages
 
 For docs in several languages, follow Fumadocs' [Next.js internationalization guide](https://fumadocs.dev/docs/internationalization/next): it defines the languages in `lib/i18n.ts`, adds the locale middleware, moves your routes under `app/[lang]`, and passes `i18n` to `loader()`. Then add the translations for each language, and pass the current one to `RootProvider`:

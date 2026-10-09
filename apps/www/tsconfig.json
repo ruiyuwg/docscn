@@ -8,6 +8,7 @@
     ],
     "paths": {
       "@/components/docs/*": ["./registry/base/docs/*"],
+      "@/components/ai/*": ["./registry/base/ai/*"],
       "@/*": ["./*"]
     },
     "allowImportingTsExtensions": true

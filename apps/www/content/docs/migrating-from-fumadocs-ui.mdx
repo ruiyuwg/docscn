@@ -29,6 +29,12 @@ Install `@docscn/fumadocs-ui`, which installs every docscn component into `compo
 npx shadcn@latest add @docscn/fumadocs-ui
 ```
 
+If you added AI chat with `fumadocs add ai`, its UI in `components/ai/chat/` imports from `fumadocs-ui`. Replace it with docscn's:
+
+```npm
+npx shadcn@latest add @docscn/ai-chat --overwrite
+```
+
 ### 3. Change the imports
 
 Replace `fumadocs-ui/` with `@/components/docs/` in your imports, in `app/`, `components/` and `lib/`:
@@ -81,7 +87,6 @@ These are deliberate differences from Fumadocs UI:
 
 ## Not supported yet
 
-- **AI chat UI.** The chat that `fumadocs add ai` installs into `components/ai/` imports from `fumadocs-ui`. The layouts' `aiChat` option works, so you can pass your own chat panel.
 - **More layouts:** the flux, glass and spacious layouts.
 - **Search dialogs** for Algolia and Orama Cloud. Build one from the [search dialog parts](/docs/components/search-dialog).
 

@@ -114,4 +114,10 @@ npm install @base-ui/react @fuma-translate/react@^1.0.2 class-variance-authority
 npm install -D @types/hast @types/mdx
 ```
 
-These are the packages the `docs` block needs. If you install components one by one, add the packages the CLI added to `packages/ui/package.json` instead. You can also delete the unused `hooks/use-mobile.ts` the CLI adds to your app.
+These are the packages the `docs` block needs. The [AI chat](/docs/components/ai-chat) needs these too:
+
+```npm
+npm install @ai-sdk/react@^4.0.0 ai@^7.0.0 @openrouter/ai-sdk-provider@^3.1.0 flexsearch@^0.8.212 hast-util-to-jsx-runtime@^2.3.6 remark@^15.0.1 remark-gfm@^4.0.1 remark-rehype@^11.1.2 remend@^1.4.0 zod@^4.0.0
+```
+
+If you install components one by one, add the packages the CLI added to `packages/ui/package.json` instead. You can also delete the unused `hooks/use-mobile.ts` the CLI adds to your app.

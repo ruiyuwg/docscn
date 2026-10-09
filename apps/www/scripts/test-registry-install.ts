@@ -16,7 +16,6 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import {
   addFixturePage,
-  addAIChat,
   addI18n,
   addNotebookRoute,
   allowBuild,
@@ -28,6 +27,7 @@ import {
   setRegistry,
   shadcn,
   smokeTest,
+  importAILayout,
 } from "./utils.ts";
 
 const keep = process.argv.includes("--keep");
@@ -71,26 +71,27 @@ async function getMonorepoSteps() {
     line.startsWith("npx shadcn@latest add"),
   );
   const installs = lines.filter((line) => line.startsWith("npm install "));
-  const install = installs.find((line) => !line.includes(" -D "));
-  const installDev = installs.find((line) => line.includes(" -D "));
-  if (!sidebar || !install || !installDev) {
+  const install = installs.filter((line) => !line.includes(" -D "));
+  const installDev = installs.filter((line) => line.includes(" -D "));
+  if (!sidebar || install.length === 0 || installDev.length === 0) {
     throw new Error("Getting started has no Monorepos section to follow");
   }
 
   const source = JSON.parse(
     await readFile(path.join(root, "registry.json"), "utf8"),
   ) as { items: SourceItem[] };
-  const listed = (line: string) => new Set(line.split(" ").slice(2));
-  for (const [line, key] of [
+  const listed = (lines: string[]) =>
+    new Set(lines.flatMap((line) => line.split(" ").slice(2)));
+  for (const [lines, key] of [
     [install, "dependencies"],
     [installDev, "devDependencies"],
   ] as const) {
     const missing = source.items
       .flatMap((item) => item[key] ?? [])
-      .filter((dependency) => !listed(line).has(dependency));
+      .filter((dependency) => !listed(lines).has(dependency));
     if (missing.length > 0) {
       throw new Error(
-        `Getting started's monorepo install command is missing ${[...new Set(missing)].join(", ")}`,
+        `Getting started's monorepo install commands are missing ${[...new Set(missing)].join(", ")}`,
       );
     }
   }
@@ -100,7 +101,7 @@ async function getMonorepoSteps() {
   const toPnpm = (line: string) => ["add", ...line.split(" ").slice(2)];
   return {
     sidebarArgs: sidebar.split(" ").slice(2),
-    installArgs: [toPnpm(install), toPnpm(installDev)],
+    installArgs: [...install, ...installDev].map(toPnpm),
   };
 }
 
@@ -164,7 +165,8 @@ try {
     'nav={{ ...baseOptions().nav, mode: "top" }} tabMode="navbar"',
   );
   await addI18n(app, "@/components/docs");
-  await addAIChat(app, "@/components/docs");
+  // the ai-chat-openrouter block's note
+  await importAILayout(app, "@/components/docs");
 
   // Lint docscn's files only: shadcn/ui's own hooks/use-mobile.ts fails
   // eslint-config-next's react-hooks rules in a fresh app. The monorepo
@@ -193,7 +195,7 @@ try {
     );
   }
   await run("pnpm", ["run", "build"], app);
-  await smokeTest(app, { i18n: true, aiChat: true });
+  await smokeTest(app, { i18n: true, aiChat: "openrouter" });
   console.log(
     `\nInstalled, built and smoke-tested ${items.length} registry item(s)${monorepo ? " in a monorepo" : ""}.`,
   );
