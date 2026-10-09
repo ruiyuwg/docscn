@@ -112,6 +112,15 @@ Because it uses the shadcn/ui sidebar, `useSidebar()` from `@/components/ui/side
       ),
       type: 'ComponentProps<"main">',
     },
+    aiChat: {
+      description: (
+        <>
+          An AI chat panel and whether it's open. See{" "}
+          <a href="#ai-chat">AI chat</a>.
+        </>
+      ),
+      type: "{ open, onOpenChange, panel? }",
+    },
   }}
 />
 
@@ -172,3 +181,39 @@ Because it uses the shadcn/ui sidebar, `useSidebar()` from `@/components/ui/side
 />
 
 The rest are passed to the shadcn/ui `Sidebar` (e.g. `variant`, `side`, `className`).
+
+## AI chat
+
+Pass your chat as `aiChat.panel`, with its open state. While it's open, the layout docks the panel against the right edge of the window from the `xl` breakpoint, narrowing the page and hiding the table of contents. Below `xl`, it floats over the page. The panel renders the first time it opens.
+
+The open state lives on the client, so render the layout from a client component:
+
+```tsx title="components/ai/layout.tsx"
+"use client";
+
+import { useState } from "react";
+import {
+  DocsLayout as Layout,
+  type DocsLayoutProps,
+} from "@/components/docs/layouts/docs";
+import { Chat } from "@/components/chat"; // your chat UI
+
+export function DocsLayout(props: DocsLayoutProps) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Layout
+      {...props}
+      aiChat={{
+        open,
+        onOpenChange: setOpen,
+        panel: <Chat onClose={() => setOpen(false)} />,
+      }}
+    />
+  );
+}
+```
+
+Then import `DocsLayout` from `@/components/ai/layout` in `app/docs/layout.tsx`. The layout has no button to open the chat, so add one to your chat UI, for example a floating button or a link in `nav.children`.
+
+docscn doesn't ship a chat UI yet ([#13](https://github.com/ruiyuwg/docscn/issues/13)). Fumadocs UI's, installed by `fumadocs add ai`, depends on `fumadocs-ui`.
