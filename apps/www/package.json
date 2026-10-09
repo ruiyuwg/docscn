@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit",
-    "registry:build": "node scripts/sync-registry-css.ts --check && node scripts/check-translation-keys.ts && shadcn build",
+    "registry:build": "node scripts/sync-registry-css.ts --check && node scripts/check-translation-keys.ts && node scripts/check-skill.ts && shadcn build",
     "registry:css": "node scripts/sync-registry-css.ts",
     "test:registry": "node scripts/test-registry-install.ts",
     "test:migration": "node scripts/test-fumadocs-migration.ts"
