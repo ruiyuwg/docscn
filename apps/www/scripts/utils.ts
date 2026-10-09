@@ -251,7 +251,20 @@ export function DocsLayout(props: DocsLayoutProps) {
 }
 `,
   );
+  await importAILayout(app, modules);
+}
 
+/**
+ * Makes the /docs route import DocsLayout from `components/ai/layout`, the
+ * client layout that passes the chat to `aiChat`, instead of from
+ * `${modules}/layouts/docs`. The `ai-chat-openrouter` block's notes ask for
+ * this edit.
+ */
+export async function importAILayout(app: string, modules: string) {
+  const src = await access(path.join(app, "src/app")).then(
+    () => path.join(app, "src"),
+    () => app,
+  );
   const layoutPath = path.join(src, "app/docs/layout.tsx");
   const layout = await readFile(layoutPath, "utf8");
   const docsImport = new RegExp(`(["'])${modules}/layouts/docs\\1`);
@@ -294,8 +307,11 @@ export async function smokeTest(
     extraPaths?: string[];
     /** Check the translations `addI18n()` sets up. */
     i18n?: boolean;
-    /** Check the chat panel `addAIChat()` sets up. */
-    aiChat?: boolean;
+    /**
+     * Check the chat panel: `stub` for the one `addAIChat()` sets up,
+     * `openrouter` for the `ai-chat-openrouter` block's.
+     */
+    aiChat?: false | "stub" | "openrouter";
   } = {},
 ) {
   const port = await getFreePort();
@@ -335,6 +351,13 @@ export async function smokeTest(
         docsHtml.includes('<aside data-state="closed"') &&
           !docsHtml.includes("Close the chat"),
         "/docs renders the closed AI chat panel, without mounting the chat",
+      );
+    }
+    if (aiChat === "openrouter") {
+      check(
+        docsHtml.includes(">Ask AI<") &&
+          !docsHtml.includes("What do you want to know?"),
+        "/docs renders the Ask AI button, and the chat stays unmounted",
       );
     }
 

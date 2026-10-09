@@ -145,7 +145,7 @@ try {
   await run("pnpm", ["run", "build"], app);
   await smokeTest(app, {
     i18n: true,
-    aiChat: true,
+    aiChat: "stub",
     extraPaths: ["/", "/og/docs/image.png", "/llms.mdx/docs/content.md"],
   });
   console.log("\nMigrated, built and smoke-tested the stock Fumadocs app.");
