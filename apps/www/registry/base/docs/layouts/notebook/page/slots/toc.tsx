@@ -72,12 +72,17 @@ export function TOC({
   const t = useTranslations({ note: "table of contents" });
   const items = Base.useTOCItems();
   const { TOCItems, TOCEmpty, TOCItem } = variants[style];
+  const {
+    props: { aiChat },
+  } = useNotebookLayout();
+  // AI chat takes its place
+  const chatOpen = Boolean(aiChat?.open && aiChat.panel);
 
   if (items.length === 0 && !header && !footer) {
     return (
       <div
         id="nd-toc-placeholder"
-        className="w-[268px] shrink-0 max-xl:hidden"
+        className={cn("w-[268px] shrink-0 max-xl:hidden", chatOpen && "hidden")}
       />
     );
   }
@@ -88,6 +93,7 @@ export function TOC({
       {...container}
       className={cn(
         "sticky top-[calc(var(--docs-banner-height,0px)+var(--docs-header-height))] flex h-[calc(100svh-var(--docs-banner-height,0px)-var(--docs-header-height))] w-[268px] shrink-0 flex-col pe-4 pt-12 pb-2 max-xl:hidden",
+        chatOpen && "hidden",
         container?.className,
       )}
     >

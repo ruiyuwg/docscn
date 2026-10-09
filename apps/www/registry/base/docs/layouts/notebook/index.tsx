@@ -4,6 +4,7 @@ import type * as PageTree from "fumadocs-core/page-tree";
 import type { ComponentProps } from "react";
 import type { SidebarTreeOptions } from "../../components/sidebar/page-tree";
 import {
+  type AIChatOptions,
   type BaseLayoutProps,
   getLayoutTabs,
   type GetLayoutTabsOptions,
@@ -34,6 +35,7 @@ export interface DocsLayoutProps extends Omit<BaseLayoutProps, "nav"> {
     mode?: "top" | "auto";
   };
   containerProps?: ComponentProps<"div">;
+  aiChat?: AIChatOptions;
 }
 
 export interface SidebarOptions extends SidebarProps, SidebarTreeOptions {

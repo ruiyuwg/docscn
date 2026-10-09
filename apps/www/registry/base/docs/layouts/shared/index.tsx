@@ -54,6 +54,15 @@ export interface ThemeSwitchOptions extends ThemeSwitchProps {
   enabled?: boolean;
 }
 
+export interface AIChatOptions {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  /**
+   * The chat panel, placed beside the page on wide viewports, and floating over it on smaller ones.
+   */
+  panel?: ReactNode;
+}
+
 export interface LayoutTab {
   /**
    * Redirect URL of the folder, usually the index page
