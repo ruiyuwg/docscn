@@ -46,12 +46,13 @@ const nextConfig = {
       ],
     };
   },
+  // Next.js replaces a `Vary` header set here, so the Markdown routes set
+  // `Vary: Accept` themselves
   headers() {
     return [
       {
         source: "/",
         headers: [
-          { key: "Vary", value: "Accept" },
           {
             key: "Link",
             value: '</llms.txt>; rel="alternate"; type="text/markdown"',
@@ -61,7 +62,6 @@ const nextConfig = {
       {
         source: "/docs",
         headers: [
-          { key: "Vary", value: "Accept" },
           {
             key: "Link",
             value: '</docs.md>; rel="alternate"; type="text/markdown"',
@@ -72,7 +72,6 @@ const nextConfig = {
         // pages, not their `.md` URLs: slugs have no dots
         source: "/docs/:path([^.]+)",
         headers: [
-          { key: "Vary", value: "Accept" },
           {
             key: "Link",
             value: '</docs/:path.md>; rel="alternate"; type="text/markdown"',
