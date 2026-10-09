@@ -207,6 +207,65 @@ ${notebook.replace(layout, (match) => `<I18nProvider {...i18nProvider(translatio
   await writeFile(notebookPath, notebook);
 }
 
+/**
+ * Passes a stub chat panel to the /docs route's layout through `aiChat`, the
+ * way the DocsLayout page's "AI chat" section describes: a client component at
+ * `components/ai/layout.tsx` renders the layout with the open state. `modules`
+ * is where the UI components are imported from, as for `addI18n()`. Call it
+ * after `addNotebookRoute()`, which copies the docs layout.
+ */
+export async function addAIChat(app: string, modules: string) {
+  const src = await access(path.join(app, "src/app")).then(
+    () => path.join(app, "src"),
+    () => app,
+  );
+
+  await mkdir(path.join(src, "components/ai"), { recursive: true });
+  await writeFile(
+    path.join(src, "components/ai/layout.tsx"),
+    `"use client";
+
+import { useState } from "react";
+import {
+  DocsLayout as Layout,
+  type DocsLayoutProps,
+} from "${modules}/layouts/docs";
+
+export function DocsLayout(props: DocsLayoutProps) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Layout
+      {...props}
+      aiChat={{
+        open,
+        onOpenChange: setOpen,
+        panel: (
+          <button type="button" onClick={() => setOpen(false)}>
+            Close the chat
+          </button>
+        ),
+      }}
+    />
+  );
+}
+`,
+  );
+
+  const layoutPath = path.join(src, "app/docs/layout.tsx");
+  const layout = await readFile(layoutPath, "utf8");
+  const docsImport = new RegExp(`(["'])${modules}/layouts/docs\\1`);
+  if (!docsImport.test(layout)) {
+    throw new Error(
+      `app/docs/layout.tsx doesn't import DocsLayout from ${modules}/layouts/docs`,
+    );
+  }
+  await writeFile(
+    layoutPath,
+    layout.replace(docsImport, "$1@/components/ai/layout$1"),
+  );
+}
+
 async function getFreePort() {
   const server = createServer();
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
@@ -230,10 +289,13 @@ export async function smokeTest(
   {
     extraPaths = [],
     i18n = false,
+    aiChat = false,
   }: {
     extraPaths?: string[];
     /** Check the translations `addI18n()` sets up. */
     i18n?: boolean;
+    /** Check the chat panel `addAIChat()` sets up. */
+    aiChat?: boolean;
   } = {},
 ) {
   const port = await getFreePort();
@@ -268,6 +330,13 @@ export async function smokeTest(
       docsHtml.includes('href="/docs/kitchen-sink"'),
       "the sidebar links to the fixture page",
     );
+    if (aiChat) {
+      check(
+        docsHtml.includes('<aside data-state="closed"') &&
+          !docsHtml.includes("Close the chat"),
+        "/docs renders the closed AI chat panel, without mounting the chat",
+      );
+    }
 
     const page = await fetch(`${base}/docs/kitchen-sink`);
     const pageHtml = await page.text();
