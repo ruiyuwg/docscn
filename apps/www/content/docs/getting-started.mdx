@@ -13,17 +13,9 @@ If you don't have a project yet, create one with shadcn/ui and Base UI:
 npx shadcn@latest init --template=next --base=base
 ```
 
-## Add the registry
-
-Add the `@docscn` registry to your `components.json`:
-
-```npm
-npx shadcn@latest registry add @docscn=https://docscn.dev/r/{name}.json
-```
-
 ## Install the docs block
 
-The `docs` block installs every docscn component, plus everything a docs site needs:
+docscn is listed in the [shadcn/ui registry index](https://ui.shadcn.com/docs/registry/registry-index), so the CLI finds `@docscn` items without any setup. The `docs` block installs every docscn component, plus everything a docs site needs:
 
 - `lib/source.ts`: loads `content/docs` with [Fumadocs MDX](https://fumadocs.dev/docs/mdx)
 - `lib/layout.shared.tsx`: shared layout options (title, links, GitHub URL)
