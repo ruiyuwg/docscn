@@ -1,4 +1,6 @@
 {
+  "title": "docscn",
+  "description": "A shadcn/ui registry of documentation components built on Fumadocs Core, and a drop-in replacement for Fumadocs UI. Each page is also available as Markdown at its URL plus .md, and all pages together at https://docscn.dev/llms-full.txt.",
   "pages": [
     "index",
     "getting-started",

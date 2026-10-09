@@ -23,9 +23,14 @@ export const source = loader({
 });
 
 export const docsLlms = llms(source, {
-  renderPage: async (page) => `# ${page.data.title} (${page.url})
+  renderPage: async (page) => {
+    const text = (await page.data.getText("processed")).trim();
+    const description = page.data.description
+      ? `> ${page.data.description}\n\n`
+      : "";
 
-${await page.data.getText("processed")}`,
+    return `# ${page.data.title} (${page.url})\n\n${description}${text}`;
+  },
 });
 
 export const gitConfig = {
@@ -34,10 +39,12 @@ export const gitConfig = {
   branch: "main",
 };
 
-export function getPageMarkdownUrl(page: { slugs: string[] }) {
+// `segments` are the Markdown route's params. `url` is the page's URL plus
+// `.md`, which next.config.js rewrites to that route.
+export function getPageMarkdownUrl(page: { slugs: string[]; url: string }) {
   const segments = [...page.slugs, "content.md"];
 
-  return { segments, url: `/llms.mdx/docs/${segments.join("/")}` };
+  return { segments, url: `${page.url}.md` };
 }
 
 export function getPageImageUrl(page: { slugs: string[] }) {
