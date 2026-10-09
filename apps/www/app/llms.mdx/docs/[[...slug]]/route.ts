@@ -1,5 +1,9 @@
-import { notFound } from "next/navigation";
-import { docsLlms, getPageMarkdownUrl, source } from "@/lib/source";
+import {
+  docsLlms,
+  getPageMarkdownUrl,
+  markdownNotFound,
+  source,
+} from "@/lib/source";
 
 export const revalidate = false;
 
@@ -9,11 +13,12 @@ export async function GET(
 ) {
   const { slug } = await params;
   const page = source.getPage(slug?.slice(0, -1));
-  if (!page) notFound();
+  if (!page) return markdownNotFound();
 
   return new Response(await docsLlms.page(page), {
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
+      Vary: "Accept",
     },
   });
 }

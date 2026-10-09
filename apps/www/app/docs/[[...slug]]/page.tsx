@@ -65,11 +65,13 @@ export async function generateMetadata(
     title: page.data.title,
     description: page.data.description,
     alternates: {
+      canonical: page.url,
       types: {
         "text/markdown": getPageMarkdownUrl(page).url,
       },
     },
     openGraph: {
+      type: "article",
       images: getPageImageUrl(page).url,
     },
   };

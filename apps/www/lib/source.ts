@@ -33,6 +33,23 @@ export const docsLlms = llms(source, {
   },
 });
 
+/** The 404 for requests that ask for Markdown. */
+export function markdownNotFound() {
+  return new Response(
+    `# Page not found
+
+There's no page at this URL. See https://docscn.dev/llms.txt for every docs page, each available as Markdown at its URL plus \`.md\`.
+`,
+    {
+      status: 404,
+      headers: {
+        "Content-Type": "text/markdown; charset=utf-8",
+        Vary: "Accept",
+      },
+    },
+  );
+}
+
 export const gitConfig = {
   user: "ruiyuwg",
   repo: "docscn",
