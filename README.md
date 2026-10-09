@@ -26,11 +26,7 @@ docscn targets Next.js projects using shadcn/ui with [Base UI](https://base-ui.c
 
 ## Usage
 
-Add the `@docscn` registry to your project:
-
-```sh
-pnpm dlx shadcn@latest registry add @docscn=https://docscn.dev/r/{name}.json
-```
+docscn is listed in the shadcn/ui registry index, so the shadcn CLI finds `@docscn` items with no setup.
 
 For a new docs site, install the `docs` block, which adds every component plus the routes, a search API and a first page:
 
