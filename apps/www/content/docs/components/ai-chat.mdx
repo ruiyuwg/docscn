@@ -1,0 +1,161 @@
+---
+title: AI chat
+description: Let readers ask questions about your docs, answered from your pages.
+---
+
+import { TryAIChat } from "@/components/ai-chat-demo";
+
+<TryAIChat />
+
+The demo above has no backend, so it plays a canned answer. Press <kbd>⌘</kbd> <kbd>/</kbd> to open the chat and <kbd>Esc</kbd> to close it.
+
+## Installation
+
+The `ai-chat-openrouter` block adds the chat to your docs layout, with a chat route that searches your pages and answers through [OpenRouter](https://openrouter.ai):
+
+```npm
+npx shadcn@latest add @docscn/ai-chat-openrouter
+```
+
+It installs:
+
+- `components/ai/chat/`: the chat UI (`@docscn/ai-chat`), where Fumadocs' CLI puts it
+- `components/ai/search.tsx`: the chat state, from the AI SDK's `useChat`
+- `components/ai/layout.tsx`: a client `DocsLayout` that passes the chat to `aiChat` and adds a floating **Ask AI** button
+- `app/api/chat/route.ts`: the chat route
+
+Then finish the setup:
+
+1. Import `DocsLayout` from the client layout in `app/docs/layout.tsx`:
+
+   ```tsx title="app/docs/layout.tsx"
+   import { DocsLayout } from "@/components/docs/layouts/docs"; // [!code --]
+   import { DocsLayout } from "@/components/ai/layout"; // [!code ++]
+   ```
+
+   For the [notebook layout](/docs/components/notebook-layout), change the import in `components/ai/layout.tsx` to `@/components/docs/layouts/notebook`.
+
+2. Set your OpenRouter API key in `.env.local`. `OPENROUTER_MODEL` picks the model, `anthropic/claude-sonnet-5.5` by default:
+
+   ```bash title=".env.local"
+   OPENROUTER_API_KEY=...
+   ```
+
+The route searches each page's processed Markdown, so `lib/source.ts` needs `includeProcessedMarkdown`. The [`docs` block](/docs/getting-started) and `create-fumadocs-app` both turn it on:
+
+```ts title="lib/source.ts"
+const docs = defineDocs({
+  dir: "content/docs",
+  docs: {
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
+});
+```
+
+To use another model provider, edit `app/api/chat/route.ts`. It's an [AI SDK](https://ai-sdk.dev) route, so any AI SDK provider works.
+
+## Usage
+
+The chat UI is in `components/ai/chat`, and works with any AI SDK chat. `AIChatProvider` holds the open state and the chat, from `useChat`:
+
+```tsx title="components/ai/search.tsx"
+"use client";
+
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
+import { AIChatProvider } from "./chat";
+
+export function AIChat({ children }: { children: React.ReactNode }) {
+  const chat = useChat({
+    transport: new DefaultChatTransport({ api: "/api/chat" }),
+  });
+
+  return <AIChatProvider chat={chat}>{children}</AIChatProvider>;
+}
+```
+
+Inside it, `useAIChat()` returns `{ open, setOpen }`. Pass `<AIChatPanel />` to the layout's [`aiChat`](/docs/components/docs-layout#ai-chat) option, as `components/ai/layout.tsx` does, and add `<AIChatTrigger />` for the floating button.
+
+Each question is sent with the page it was asked from (`location` and `title`), as a `data-client` part. The chat route passes it to the model, so readers can ask about "this page".
+
+### Parts
+
+The panel is built from parts you can arrange yourself:
+
+- `AIChatHeader`: the chat's title, and buttons for a new chat and to close it
+- `AIChatMessages`: the conversation. A new chat shows a description and suggested questions
+- `AIChatInput`: the question form. Its draft is kept in `localStorage`
+- `AIChatSearch`: a call of the route's `search` tool, which expands to the pages it found
+- `AIChatSources`: a list of links to sources
+
+## Props
+
+### `AIChatProvider`
+
+<TypeTable
+  type={{
+    chat: {
+      description: (
+        <>
+          The chat, from the AI SDK's <code>{"useChat()"}</code>.
+        </>
+      ),
+      type: "UseChatHelpers<Message>",
+      required: true,
+    },
+    toMessage: {
+      description: (
+        <>
+          The message to send for a question. By default, its text with the page
+          it was asked from.
+        </>
+      ),
+      type: '(text: string) => Parameters<UseChatHelpers<Message>["sendMessage"]>[0]',
+    },
+    renderPart: {
+      description: (
+        <>
+          Renders a message part other than text, such as a tool call. Keep it
+          stable, so settled messages skip re-rendering.
+        </>
+      ),
+      type: "(part, live: boolean) => ReactNode",
+    },
+    description: {
+      description: <>Shown under the title of a new chat.</>,
+      type: "ReactNode",
+    },
+    suggestions: {
+      description: <>Questions suggested in a new chat.</>,
+      type: "string[]",
+    },
+  }}
+/>
+
+## Translations
+
+The chat's strings use their own keys, as in Fumadocs' `@fumadocs/ai-chat`. Add them to your translations with `aiChatTranslations()`:
+
+```ts title="lib/i18n.ts"
+import { aiChatTranslations } from "@/components/ai/chat/i18n";
+import { uiTranslations } from "@/components/docs/i18n";
+
+export const translations = i18n
+  .translations()
+  .extend(uiTranslations())
+  .extend(aiChatTranslations());
+```
+
+See [Internationalization](/docs/internationalization).
+
+## Migrating from Fumadocs
+
+A Fumadocs project that ran `fumadocs add ai` has the chat UI in `components/ai/chat/`, importing from `fumadocs-ui`. Install docscn's over it:
+
+```npm
+npx shadcn@latest add @docscn/ai-chat --overwrite
+```
+
+Your `components/ai/search.tsx`, `components/ai/layout.tsx` and chat route keep working: replacing `fumadocs-ui/` with `@/components/docs/` in your imports also updates the layout's.
