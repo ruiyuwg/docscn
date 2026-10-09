@@ -1,0 +1,30 @@
+---
+title: AI agents
+description: Help coding agents use docscn, with the docscn skill and the docs as Markdown.
+---
+
+## The docscn skill
+
+docscn has an [agent skill](https://agentskills.io) for coding agents such as Claude Code, Cursor and Codex. It tells the agent how to set up docs in a shadcn/ui project, migrate from Fumadocs UI, add the AI chat, and follow docscn's conventions: the `@/components/docs/` import paths, shadcn/ui theme tokens instead of Fumadocs UI's, and editing components instead of using `slots`. For anything else, it reads these docs.
+
+Install it into your project with the [skills CLI](https://github.com/vercel-labs/skills):
+
+```npm
+npx skills add ruiyuwg/docscn
+```
+
+The CLI asks which agents to install it for. The skill's source is in [`skills/docscn`](https://github.com/ruiyuwg/docscn/tree/main/skills/docscn).
+
+## The docs as Markdown
+
+These docs are also available as Markdown, for agents and LLMs to read:
+
+| URL                                                  | Content                                                                                        |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [`/llms.txt`](https://docscn.dev/llms.txt)           | An index of every page, with its description                                                   |
+| [`/llms-full.txt`](https://docscn.dev/llms-full.txt) | Every page in one file                                                                         |
+| `/docs/<page>.md`                                    | One page, for example [`/docs/getting-started.md`](https://docscn.dev/docs/getting-started.md) |
+
+A request for a docs page that prefers Markdown (`Accept: text/markdown`) also gets the Markdown. The **Copy Markdown** button at the top of each page copies it, and the menu next to it opens the page in ChatGPT, Claude and other AI tools.
+
+To add the same to your own docs, see [Page actions](/docs/components/page-actions) and Fumadocs' [LLM guide](https://fumadocs.dev/docs/integrations/llms). To let your readers ask questions about your docs, add the [AI chat](/docs/components/ai-chat).
