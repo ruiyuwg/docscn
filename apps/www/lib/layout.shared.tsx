@@ -8,7 +8,7 @@ export function baseOptions(): BaseLayoutProps {
       title: (
         <span className="inline-flex items-center gap-1.5">
           <Logo className="size-3.5" />
-          Docscn
+          docscn
         </span>
       ),
     },

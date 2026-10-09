@@ -1,5 +1,6 @@
 import { highlight, type HighlightOptions } from "fumadocs-core/highlight";
 import type { HTMLAttributes, ReactNode } from "react";
+import type { DecorationItem } from "shiki";
 import {
   CodeBlock,
   CodeBlockTab,
@@ -22,6 +23,21 @@ function diffLines(diff: { add?: number[]; remove?: number[] }): Transformer {
   };
 }
 
+/** Mutes each line from a column onwards, e.g. the notes beside a file tree. */
+function muteFrom(code: string, column: number): DecorationItem[] {
+  return code.split("\n").flatMap((text, line) =>
+    text.length > column
+      ? [
+          {
+            start: { line, character: column },
+            end: { line, character: text.length },
+            properties: { class: "text-muted-foreground!" },
+          },
+        ]
+      : [],
+  );
+}
+
 /**
  * Code highlighted on the server with Fumadocs Core's Shiki, in the same
  * CodeBlock that renders Fumadocs MDX's code blocks.
@@ -32,6 +48,7 @@ export async function Code({
   title,
   icon,
   diff,
+  muted,
   allowCopy,
   className,
 }: {
@@ -40,12 +57,17 @@ export async function Code({
   title?: string;
   icon?: ReactNode;
   diff?: { add?: number[]; remove?: number[] };
+  /** The column each line's muted notes start at. */
+  muted?: number;
   allowCopy?: boolean;
   className?: string;
 }) {
-  return highlight(code.trim(), {
+  const source = code.trim();
+
+  return highlight(source, {
     lang,
     transformers: diff ? [diffLines(diff)] : undefined,
+    decorations: muted ? muteFrom(source, muted) : undefined,
     components: {
       pre: (props: HTMLAttributes<HTMLPreElement>) => (
         <CodeBlock
