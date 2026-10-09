@@ -24,13 +24,16 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "SoftwareSourceCode",
+  "@type": ["SoftwareApplication", "SoftwareSourceCode"],
   name: "docscn",
   description,
   url: "https://docscn.dev",
   codeRepository: "https://github.com/ruiyuwg/docscn",
   programmingLanguage: "TypeScript",
   runtimePlatform: "Next.js",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Any",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   license: "https://opensource.org/licenses/MIT",
   sameAs: ["https://github.com/ruiyuwg/docscn"],
 };

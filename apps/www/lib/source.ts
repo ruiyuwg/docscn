@@ -7,6 +7,9 @@ const docs = defineDocs({
   dir: "content/docs",
   docs: {
     schema: pageSchema,
+    // each page's last commit date, for the sitemap and Markdown frontmatter.
+    // Vercel needs `VERCEL_DEEP_CLONE=true` for the full git history.
+    lastModified: true,
     postprocess: {
       includeProcessedMarkdown: true,
     },
