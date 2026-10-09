@@ -1282,6 +1282,63 @@
       ]
     },
     {
+      "name": "ai-chat",
+      "type": "registry:component",
+      "title": "AI chat",
+      "description": "The AI chat UI for the layouts' aiChat option, built on the AI SDK: AIChatProvider, AIChatPanel, AIChatTrigger and AIChatSearch, with streamed Markdown answers and translated strings. Installs into components/ai/chat, where Fumadocs' CLI puts it.",
+      "dependencies": [
+        "@ai-sdk/react@^4.0.0",
+        "ai@^7.0.0",
+        "cn",
+        "@fuma-translate/react@^1.0.2",
+        "fumadocs-core@^16.16.2",
+        "hast-util-to-jsx-runtime@^2.3.6",
+        "lucide-react",
+        "remark@^15.0.1",
+        "remark-gfm@^4.0.1",
+        "remark-rehype@^11.1.2",
+        "remend@^1.4.0",
+        "unist-util-visit"
+      ],
+      "devDependencies": ["@types/hast"],
+      "registryDependencies": [
+        "button",
+        "collapsible",
+        "tooltip",
+        "@docscn/codeblock",
+        "@docscn/dynamic-codeblock",
+        "@docscn/mdx",
+        "@docscn/docs-utils"
+      ],
+      "files": [
+        {
+          "path": "registry/base/ai/chat/index.tsx",
+          "type": "registry:component",
+          "target": "components/ai/chat/index.tsx"
+        },
+        {
+          "path": "registry/base/ai/chat/conversation.tsx",
+          "type": "registry:component",
+          "target": "components/ai/chat/conversation.tsx"
+        },
+        {
+          "path": "registry/base/ai/chat/markdown.tsx",
+          "type": "registry:component",
+          "target": "components/ai/chat/markdown.tsx"
+        },
+        {
+          "path": "registry/base/ai/chat/i18n.ts",
+          "type": "registry:component",
+          "target": "components/ai/chat/i18n.ts"
+        },
+        {
+          "path": "registry/base/ai/chat/.translations/index.ts",
+          "type": "registry:component",
+          "target": "components/ai/chat/.translations/index.ts"
+        }
+      ]
+    },
+    {
       "name": "docs",
       "type": "registry:block",
       "title": "Docs",
@@ -1347,6 +1404,39 @@
         }
       ],
       "docs": "Finish the setup with two edits. 1) In app/layout.tsx, import { RootProvider } from \"@/components/docs/provider/next\" and wrap {children} in <RootProvider>. RootProvider includes next-themes, so it replaces the ThemeProvider from shadcn/ui's template or dark mode guide. Keep suppressHydrationWarning on <html>. 2) In next.config.ts, import { createMDX } from \"fumadocs-mdx/next\" and change the export to export default createMDX()(nextConfig). Then start the dev server and open /docs. See https://docscn.dev/docs/getting-started."
+    },
+    {
+      "name": "ai-chat-openrouter",
+      "type": "registry:block",
+      "title": "AI chat (OpenRouter)",
+      "description": "Ask AI for your docs: the AI chat wired into DocsLayout, with a chat route that searches your pages and answers through OpenRouter.",
+      "dependencies": [
+        "@ai-sdk/react@^4.0.0",
+        "ai@^7.0.0",
+        "@openrouter/ai-sdk-provider@^3.1.0",
+        "flexsearch@^0.8.212",
+        "fumadocs-core@^16.16.2",
+        "zod@^4.0.0"
+      ],
+      "registryDependencies": ["@docscn/ai-chat", "@docscn/docs-layout"],
+      "files": [
+        {
+          "path": "registry/base/ai/search.tsx",
+          "type": "registry:component",
+          "target": "components/ai/search.tsx"
+        },
+        {
+          "path": "registry/base/ai/layout.tsx",
+          "type": "registry:component",
+          "target": "components/ai/layout.tsx"
+        },
+        {
+          "path": "registry/base/blocks/ai-chat-openrouter/app/api/chat/route.ts",
+          "type": "registry:page",
+          "target": "app/api/chat/route.ts"
+        }
+      ],
+      "docs": "Finish the setup with two edits. 1) In app/docs/layout.tsx, import DocsLayout from \"@/components/ai/layout\" instead of \"@/components/docs/layouts/docs\". 2) Set OPENROUTER_API_KEY in .env.local (and optionally OPENROUTER_MODEL, which defaults to anthropic/claude-sonnet-5.5). The chat route reads each page's processed Markdown, so lib/source.ts needs postprocess: { includeProcessedMarkdown: true } in its docs options, as the docs block sets it. See https://docscn.dev/docs/components/ai-chat."
     },
     {
       "name": "fumadocs-ui",
