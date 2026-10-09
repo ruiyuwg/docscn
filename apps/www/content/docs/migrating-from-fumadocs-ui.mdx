@@ -77,10 +77,11 @@ These are deliberate differences from Fumadocs UI:
 | Hovering the edge of a collapsed sidebar shows it                | Not supported: the shadcn/ui sidebar slides away completely. Reopen it with the sidebar button or ⌘B.                                       |
 | `Banner`'s layout offset                                         | Set as `--docs-banner-height` instead of `--fd-banner-height`.                                                                              |
 | The notebook layout's width (centred, up to 97rem)               | The full width of the window, with the sidebar against its edge.                                                                            |
+| The `aiChat` panel takes the table of contents' place            | Docked against the right edge of the window, beside the whole page. The table of contents hides while it's open.                            |
 
 ## Not supported yet
 
-- **AI chat.** The `aiChat` option of the docs and notebook layouts.
+- **AI chat UI.** The chat that `fumadocs add ai` installs into `components/ai/` imports from `fumadocs-ui`. The layouts' `aiChat` option works, so you can pass your own chat panel.
 - **More layouts:** the flux, glass and spacious layouts.
 - **Search dialogs** for Algolia and Orama Cloud. Build one from the [search dialog parts](/docs/components/search-dialog).
 

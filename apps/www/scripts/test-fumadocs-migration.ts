@@ -11,6 +11,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import {
   addFixturePage,
+  addAIChat,
   addI18n,
   addNotebookRoute,
   allowBuild,
@@ -133,6 +134,8 @@ try {
   await addNotebookRoute(app);
   // Fumadocs UI's translations, for the migration to carry over
   await addI18n(app, "fumadocs-ui");
+  // Fumadocs UI's AI chat panel, for the migration to carry over
+  await addAIChat(app, "fumadocs-ui");
 
   await migrate();
   await assertNoFumadocsUi();
@@ -142,6 +145,7 @@ try {
   await run("pnpm", ["run", "build"], app);
   await smokeTest(app, {
     i18n: true,
+    aiChat: true,
     extraPaths: ["/", "/og/docs/image.png", "/llms.mdx/docs/content.md"],
   });
   console.log("\nMigrated, built and smoke-tested the stock Fumadocs app.");

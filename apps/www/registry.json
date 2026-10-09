@@ -191,8 +191,8 @@
       "name": "layout-shared",
       "type": "registry:component",
       "title": "Shared layout options",
-      "description": "BaseLayoutProps, link items, layout tabs and helpers shared by the docs, notebook and home layouts.",
-      "dependencies": ["fumadocs-core@^16.16.2"],
+      "description": "BaseLayoutProps, link items, layout tabs, the AI chat panel and helpers shared by the docs, notebook and home layouts.",
+      "dependencies": ["cn", "fumadocs-core@^16.16.2"],
       "registryDependencies": [
         "@docscn/docs-utils",
         "@docscn/theme-switch",

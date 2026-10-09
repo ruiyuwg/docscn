@@ -20,6 +20,7 @@ import {
   type LinkItemType,
   useLinkItems,
 } from "../shared";
+import { AIChatPanel } from "../shared/client";
 import type { DocsLayoutProps } from ".";
 import { Container } from "./slots/container";
 import { CollapsedSidebarPanel, Header } from "./slots/header";
@@ -28,7 +29,7 @@ import { findLast } from "../../utils/array";
 
 interface LayoutProps extends Pick<
   DocsLayoutProps,
-  "nav" | "themeSwitch" | "searchToggle"
+  "nav" | "themeSwitch" | "searchToggle" | "aiChat"
 > {
   tabs: LayoutTab[];
   tabMode: NonNullable<DocsLayoutProps["tabMode"]>;
@@ -78,6 +79,7 @@ export function LayoutBody(
     tabMode = "auto",
     tree,
     containerProps,
+    aiChat,
     children,
   } = props;
   const { enabled: navEnabled = true, transparentMode = "none" } = nav ?? {};
@@ -90,7 +92,7 @@ export function LayoutBody(
     <TreeContextProvider tree={tree}>
       <LayoutContext
         value={{
-          props: { tabMode, tabs, nav, themeSwitch, searchToggle },
+          props: { tabMode, tabs, nav, themeSwitch, searchToggle, aiChat },
           isNavTransparent,
           sidebarEnabled,
           ...linkItems,
@@ -123,6 +125,14 @@ export function LayoutBody(
               )}
               {children}
             </Container>
+            {aiChat?.panel && (
+              <AIChatPanel
+                open={aiChat.open}
+                className="xl:sticky xl:top-(--docs-banner-height,0px) xl:h-[calc(100svh-var(--docs-banner-height,0px))] xl:data-[state=open]:border-s"
+              >
+                {aiChat.panel}
+              </AIChatPanel>
+            )}
           </SidebarProvider>
         </SidebarTreeOptionsProvider>
       </LayoutContext>
