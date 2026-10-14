@@ -51,7 +51,7 @@
     "@tailwindcss/postcss": "4.3.3",
     "@types/hast": "3.0.5",
     "@types/mdx": "2.0.14",
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@typescript/native": "npm:typescript@7.0.2",
@@ -59,7 +59,7 @@
     "eslint-config-next": "16.3.8",
     "eslint-config-prettier": "10.1.8",
     "eslint-config-turbo": "2.11.7",
-    "shadcn": "4.21.3",
+    "shadcn": "4.21.4",
     "tailwindcss": "4.3.3",
     "typescript": "npm:@typescript/typescript6@6.0.2"
   }
