@@ -89,14 +89,14 @@ const mdComponents = {
   mark(props: ComponentProps<"mark">) {
     return <span {...props} className="text-primary underline" />;
   },
-  a: "span",
+  a: "span" as const,
   p(props: ComponentProps<"p">) {
     return <p {...props} className="min-w-0" />;
   },
   strong(props: ComponentProps<"strong">) {
     return <strong {...props} className="font-medium text-accent-foreground" />;
   },
-  code(props: ComponentProps<"pre">) {
+  code(props: ComponentProps<"code">) {
     // eslint-disable-next-line react-hooks/rules-of-hooks -- this is a component
     const inPre = use(PreContext);
     if (inPre)
