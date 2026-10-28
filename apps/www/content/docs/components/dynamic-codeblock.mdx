@@ -21,9 +21,19 @@ import { DynamicCodeBlock } from "@/components/docs/components/dynamic-codeblock
 <DynamicCodeBlock lang="ts" code={code} />;
 ```
 
-It loads Shiki in the browser and highlights the code with the GitHub light and dark themes, using the same [code block](/docs/components/codeblock) as your content. Until Shiki has loaded, it shows the code without colours.
+It highlights the code with Shiki and the GitHub light and dark themes, using the same [code block](/docs/components/codeblock) as your content. It's highlighted on the server when it renders there, and in the browser after Shiki has loaded otherwise, showing the code without colours until then.
 
-Shiki's full bundle is large. To load less, use `DynamicCodeBlock` from `components/dynamic-codeblock.core` with your own highlighter, built with only the languages and themes you need.
+Shiki's full bundle is large. To load less, use `DynamicCodeBlock` from `components/dynamic-codeblock.core` with your own Shiki highlighter, built with only the languages and themes you need, or create one with `createDynamicCodeBlock`:
+
+```tsx title="components/dynamic-codeblock.tsx"
+"use client";
+import { createDynamicCodeBlock } from "@/components/docs/components/dynamic-codeblock.core";
+import { highlighter } from "@/lib/highlighter";
+
+export const DynamicCodeBlock = createDynamicCodeBlock({ highlighter });
+```
+
+`highlighter` is a `Highlighter` from Fumadocs Core, created like the one for [`createServerCodeBlock`](/docs/components/server-codeblock#your-own-highlighter).
 
 For code that's known on the server, [`ServerCodeBlock`](/docs/components/server-codeblock) sends no JavaScript to the browser.
 

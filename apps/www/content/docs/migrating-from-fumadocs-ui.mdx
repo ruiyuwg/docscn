@@ -71,7 +71,7 @@ These are deliberate differences from Fumadocs UI:
 | The `slots` prop on layouts and pages                            | Not supported. Edit your copy of the component instead.                                                                                     |
 | `--color-fd-*` variables and `fd-*` utility classes              | Your shadcn/ui theme tokens (`--background`, `--primary`, `--sidebar-*`, ...). See [Theming and typography](/docs/theming).                 |
 | Colour themes and CSS presets (`neutral.css`, `preset.css`, ...) | Not shipped. Change your shadcn/ui theme instead.                                                                                           |
-| The `prose` class (`not-prose` to opt out)                       | `docs-typeset` (`not-docs-typeset` to opt out).                                                                                             |
+| The `prose` class (`not-prose` to opt out)                       | `docs-typeset` (`not-docs-typeset` to opt out). Its sizes are relative, so `prose prose-sm` becomes `docs-typeset text-sm`.                 |
 | `fumadocs-ui/components/ui/*` (button, tabs, popover, ...)       | Your own shadcn/ui primitives in `components/ui/`.                                                                                          |
 | `fumadocs-ui/components/sidebar/base`                            | The shadcn/ui `sidebar`. The docs and notebook layouts use `SidebarProvider` and `SidebarInset`, so `useSidebar()` works inside docs pages. |
 | `createPageTreeRenderer` and `createLinkItemRenderer`            | `SidebarPageTree` and `SidebarLinkItem`, rendered with the shadcn/ui sidebar menu.                                                          |

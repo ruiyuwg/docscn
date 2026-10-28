@@ -3,8 +3,10 @@ title: Image zoom
 description: An image that zooms in to fill the screen when clicked.
 ---
 
-import { ImageZoom } from "@/components/docs/components/image-zoom";
+import { ImageZoom, Lightbox } from "@/components/docs/components/image-zoom";
 import gradient from "./image-zoom.png";
+import notebookLight from "./notebook-layout-light.png";
+import notebookDark from "./notebook-layout-dark.png";
 
 <ImageZoom src={gradient} alt="A gradient" />
 
@@ -35,6 +37,41 @@ export function getMDXComponents(components?: MDXComponents) {
 
 It's built on [react-medium-image-zoom](https://github.com/rpearce/react-medium-image-zoom). Installing it adds the styles the zoomed image needs to your global stylesheet, with the page's `--background` behind the image.
 
+## Lightbox
+
+Zoomable images inside `Lightbox` open in one viewer instead. Browse them with the arrow keys, by swiping, or with the side buttons.
+
+<Lightbox>
+  <div className="not-docs-typeset grid grid-cols-2 gap-2">
+    <ImageZoom
+      src={notebookLight}
+      alt="The notebook layout in light mode"
+      title="Light mode"
+    />
+    <ImageZoom
+      src={notebookDark}
+      alt="The notebook layout in dark mode"
+      title="Dark mode"
+    />
+  </div>
+</Lightbox>
+
+Wrap your page content to browse every image on the page:
+
+```tsx title="app/docs/[[...slug]]/page.tsx"
+import { Lightbox } from "@/components/docs/components/image-zoom";
+
+<DocsBody>
+  <Lightbox>
+    <MDX components={getMDXComponents()} />
+  </Lightbox>
+</DocsBody>;
+```
+
+The viewer shows an image's title as its caption, like `"Light mode"` in `![Notebook layout](/notebook.png "Light mode")`. Pass `caption` to `ImageZoom` for rich content such as links. To browse a set of images on its own, wrap them in another `Lightbox`.
+
+The viewer is a native `<dialog>` with shadcn/ui `button`s, and morphs the image in and out with a view transition where the browser supports them.
+
 ## Props
 
 <TypeTable
@@ -49,8 +86,22 @@ It's built on [react-medium-image-zoom](https://github.com/rpearce/react-medium-
       type: 'ComponentProps<"img">',
     },
     rmiz: {
-      description: <>Props for react-medium-image-zoom.</>,
+      description: (
+        <>
+          Props for react-medium-image-zoom, unused inside{" "}
+          <code>{"Lightbox"}</code>.
+        </>
+      ),
       type: "UncontrolledProps",
+    },
+    caption: {
+      description: (
+        <>
+          The caption inside <code>{"Lightbox"}</code>.
+        </>
+      ),
+      type: "ReactNode",
+      default: "title",
     },
   }}
 />

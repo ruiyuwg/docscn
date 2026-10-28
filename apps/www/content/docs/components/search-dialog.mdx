@@ -20,7 +20,9 @@ import { source } from "@/lib/source";
 export const { GET } = createFromSource(source);
 ```
 
-Results show pages, headings and text with the matches highlighted. Use the arrow keys and <kbd>Enter</kbd> to open one, and <kbd>Esc</kbd> to close the dialog.
+Results show pages, headings, text and table rows. Use the arrow keys and <kbd>Enter</kbd> to open one, and <kbd>Esc</kbd> to close the dialog. If a search fails, the dialog says so above the results of the last search that worked.
+
+Matches are highlighted with the [CSS Custom Highlight API](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_Highlight_API), in your `--primary` colour and underlined. Style them with `::highlight(fd-search)`.
 
 ## Options
 
@@ -51,10 +53,10 @@ Pass options to the default dialog through `RootProvider`:
 
 ## Build your own dialog
 
-The `search-dialog` component exports the parts the default dialog is made of, for other search clients:
+The `search-dialog` component exports the parts the default dialog is made of, for other search clients. Fumadocs Core has a search hook for each client, like `useAlgoliaSearch()` or `useOramaCloudSearch()`, and `experimental_useSearch()` for others. They return the dialog's props:
 
 ```tsx
-import { useDocsSearch } from "fumadocs-core/search/client";
+import { useFetchSearch } from "fumadocs-core/search/client";
 import {
   SearchDialog,
   SearchDialogClose,
@@ -68,15 +70,10 @@ import {
 } from "@/components/docs/components/dialog/search";
 
 export default function CustomSearchDialog(props: SharedProps) {
-  const { search, setSearch, query } = useDocsSearch({ client: myClient });
+  const search = useFetchSearch({ api: "/api/search" });
 
   return (
-    <SearchDialog
-      search={search}
-      onSearchChange={setSearch}
-      isLoading={query.isLoading}
-      {...props}
-    >
+    <SearchDialog {...search} {...props}>
       <SearchDialogOverlay />
       <SearchDialogContent>
         <SearchDialogHeader>
@@ -84,11 +81,13 @@ export default function CustomSearchDialog(props: SharedProps) {
           <SearchDialogInput />
           <SearchDialogClose />
         </SearchDialogHeader>
-        <SearchDialogList items={query.data !== "empty" ? query.data : null} />
+        <SearchDialogList />
       </SearchDialogContent>
     </SearchDialog>
   );
 }
 ```
+
+`SearchDialogList` shows the results of the last search, or its `defaultItems` before the reader types. Pass `Item` or `Table` to render results your own way.
 
 Pass it to `RootProvider` as `search={{ SearchDialog: CustomSearchDialog }}`. The dialog is built on Base UI's `Dialog`, the primitive under shadcn/ui's `dialog`, with shadcn/ui `kbd`.

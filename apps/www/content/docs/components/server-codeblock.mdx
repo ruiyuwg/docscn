@@ -25,6 +25,29 @@ import { ServerCodeBlock } from "@/components/docs/components/codeblock.rsc";
 
 For code that's only known in the browser, use [`DynamicCodeBlock`](/docs/components/dynamic-codeblock).
 
+## Your own highlighter
+
+`createServerCodeBlock` creates a server code block that highlights with your own highlighter, such as one with other themes or Shiki options:
+
+```tsx title="components/codeblock.tsx"
+import { createServerCodeBlock } from "@/components/docs/components/codeblock.rsc";
+import { createShikiHighlighter } from "fumadocs-core/highlight/shiki";
+import { defaultShikiFactory } from "fumadocs-core/highlight/shiki/full";
+
+const highlighter = createShikiHighlighter(
+  () => defaultShikiFactory.getOrInit(),
+  {
+    themes: { light: "github-light", dark: "github-dark" },
+    // the code block colours tokens with CSS variables
+    defaultColor: false,
+  },
+);
+
+export const ServerCodeBlock = createServerCodeBlock({ highlighter });
+```
+
+It takes `lang`, `code` and `codeblock`. See [Highlighter](https://fumadocs.dev/docs/headless/utils/shiki) in Fumadocs' docs for the highlighters Fumadocs Core can create.
+
 ## Props
 
 <TypeTable
