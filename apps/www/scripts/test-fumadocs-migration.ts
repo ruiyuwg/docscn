@@ -27,7 +27,7 @@ import {
  * The create-fumadocs-app release that shipped with the fumadocs-core version
  * docscn targets. Bump it together with fumadocs-core.
  */
-const CREATE_FUMADOCS_APP = "create-fumadocs-app@16.2.16";
+const CREATE_FUMADOCS_APP = "create-fumadocs-app@16.2.26";
 
 const keep = process.argv.includes("--keep");
 const registryOption = getOption("--registry");

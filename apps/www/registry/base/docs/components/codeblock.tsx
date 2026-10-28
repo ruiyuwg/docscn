@@ -110,7 +110,7 @@ export function CodeBlock({
           ? "-mx-px -mb-px bg-muted/50 last:rounded-b-xl"
           : "my-4 rounded-xl bg-card",
         keepBackground && "bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg)",
-        "shiki not-docs-typeset relative overflow-hidden border text-sm shadow-xs",
+        "shiki not-docs-typeset relative overflow-hidden border text-sm",
         props.className,
       )}
     >

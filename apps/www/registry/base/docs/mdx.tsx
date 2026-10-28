@@ -56,7 +56,7 @@ function Image(props: ImgHTMLAttributes<HTMLImageElement>) {
 
 function Table(props: TableHTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="relative my-6 overflow-auto *:my-0">
+    <div className="relative my-6 overflow-auto *:my-0" tabIndex={0}>
       <table {...props} />
     </div>
   );

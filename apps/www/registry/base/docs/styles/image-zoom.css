@@ -1,5 +1,5 @@
 /* Styles for ImageZoom (react-medium-image-zoom), with the zoomed image shown
-   over the page background. */
+   over the page background, and for the view transition of <Lightbox />. */
 @layer components {
   [data-rmiz] {
     display: block;
@@ -73,5 +73,12 @@
     [data-rmiz-modal-img] {
       transition-duration: 0.01ms !important;
     }
+  }
+
+  /* the image morphing between the page and <Lightbox /> */
+  ::view-transition-old(fd-lightbox),
+  ::view-transition-new(fd-lightbox) {
+    height: 100%;
+    object-fit: cover;
   }
 }

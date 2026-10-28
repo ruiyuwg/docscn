@@ -46,16 +46,16 @@ docscn keeps Fumadocs UI's component names, props and module paths, so a Fumadoc
 
 ## What changes
 
-| Fumadocs UI                                        | docscn                                                                              |
-| -------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `slots` on layouts and pages                       | Edit the installed component instead.                                               |
-| `--color-fd-*` variables, `fd-*` classes           | shadcn/ui theme tokens (`--background`, `--primary`, `--sidebar-*`, ...).           |
-| Colour themes and CSS presets                      | Change the shadcn/ui theme.                                                         |
-| `prose` / `not-prose`                              | `docs-typeset` / `not-docs-typeset`.                                                |
-| `fumadocs-ui/components/ui/*`                      | The project's shadcn/ui primitives in `components/ui/`.                             |
-| `fumadocs-ui/components/sidebar/base`              | The shadcn/ui `sidebar`. `useSidebar()` works inside docs pages.                    |
-| `createPageTreeRenderer`, `createLinkItemRenderer` | `SidebarPageTree`, `SidebarLinkItem`.                                               |
-| `--fd-banner-height`                               | `--docs-banner-height`.                                                             |
-| Sidebar collapse state                             | shadcn/ui's `sidebar_state` cookie. Pass it to `sidebar.defaultOpen` to restore it. |
+| Fumadocs UI                                        | docscn                                                                                |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `slots` on layouts and pages                       | Edit the installed component instead.                                                 |
+| `--color-fd-*` variables, `fd-*` classes           | shadcn/ui theme tokens (`--background`, `--primary`, `--sidebar-*`, ...).             |
+| Colour themes and CSS presets                      | Change the shadcn/ui theme.                                                           |
+| `prose` / `not-prose`                              | `docs-typeset` / `not-docs-typeset`. `prose prose-sm` becomes `docs-typeset text-sm`. |
+| `fumadocs-ui/components/ui/*`                      | The project's shadcn/ui primitives in `components/ui/`.                               |
+| `fumadocs-ui/components/sidebar/base`              | The shadcn/ui `sidebar`. `useSidebar()` works inside docs pages.                      |
+| `createPageTreeRenderer`, `createLinkItemRenderer` | `SidebarPageTree`, `SidebarLinkItem`.                                                 |
+| `--fd-banner-height`                               | `--docs-banner-height`.                                                               |
+| Sidebar collapse state                             | shadcn/ui's `sidebar_state` cookie. Pass it to `sidebar.defaultOpen` to restore it.   |
 
 The notebook layout spans the full width of the window, and the AI chat panel docks against the window's right edge. ⌘B toggles the sidebar.

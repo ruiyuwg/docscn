@@ -1,7 +1,13 @@
 // Adapted from Fumadocs UI (https://github.com/fuma-nama/fumadocs)
 // Copyright (c) 2023 Fuma, MIT License
+import type { ComponentProps } from "react";
+import { toJsx } from "fumadocs-core/utils/hast-to-jsx";
 import { CodeBlock, type CodeBlockProps, Pre } from "./codeblock";
-import { highlight, type HighlightOptions } from "fumadocs-core/highlight";
+import {
+  highlight,
+  type Highlighter,
+  type HighlightOptions,
+} from "fumadocs-core/highlight";
 import { cn } from "cn";
 
 export type ServerCodeBlockProps = HighlightOptions & {
@@ -24,16 +30,43 @@ export async function ServerCodeBlock({
     defaultColor: false,
     ...options,
     components: {
-      pre: (props) => (
-        <CodeBlock
-          {...props}
-          {...codeblock}
-          className={cn("my-0", props.className, codeblock?.className)}
-        >
-          <Pre>{props.children}</Pre>
-        </CodeBlock>
-      ),
+      pre: createPre(codeblock),
       ...options.components,
     },
   });
+}
+
+/**
+ * Create a server code block that highlights with your own highlighter.
+ */
+export function createServerCodeBlock({
+  highlighter,
+}: {
+  highlighter: Highlighter;
+}) {
+  return async function ServerCodeBlock({
+    code,
+    lang,
+    codeblock,
+  }: Pick<ServerCodeBlockProps, "code" | "lang" | "codeblock">) {
+    await highlighter.loadLanguage?.(lang);
+
+    return toJsx(highlighter.codeToHast(code, { lang }), {
+      components: { pre: createPre(codeblock) },
+    });
+  };
+}
+
+function createPre(codeblock?: CodeBlockProps) {
+  return function ServerPre(props: ComponentProps<"pre">) {
+    return (
+      <CodeBlock
+        {...props}
+        {...codeblock}
+        className={cn("my-0", props.className, codeblock?.className)}
+      >
+        <Pre>{props.children}</Pre>
+      </CodeBlock>
+    );
+  };
 }

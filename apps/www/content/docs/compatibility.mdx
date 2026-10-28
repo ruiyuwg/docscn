@@ -3,7 +3,7 @@ title: Compatibility
 description: The status of every Fumadocs UI module in docscn.
 ---
 
-This table lists every module that Fumadocs UI ([`@fumadocs/base-ui`](https://github.com/fuma-nama/fumadocs/tree/fumadocs@16.16.2/packages/base-ui) 16.16.2) exports, and its docscn equivalent at `@/components/docs/…`. Supported modules keep Fumadocs UI's exports and main props, apart from the differences listed in [Migrating from Fumadocs UI](/docs/migrating-from-fumadocs-ui#whats-different).
+This table lists every module that Fumadocs UI ([`@fumadocs/base-ui`](https://github.com/fuma-nama/fumadocs/tree/fumadocs@16.17.8/packages/base-ui) 16.17.8) exports, and its docscn equivalent at `@/components/docs/…`. Supported modules keep Fumadocs UI's exports and main props, apart from the differences listed in [Migrating from Fumadocs UI](/docs/migrating-from-fumadocs-ui#whats-different).
 
 | `fumadocs-ui/…`                                | Status         | Notes                                                                                                       |
 | ---------------------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -12,7 +12,7 @@ This table lists every module that Fumadocs UI ([`@fumadocs/base-ui`](https://gi
 | `components/callout`                           | ✅ Supported   | `Callout` on shadcn/ui `alert`                                                                              |
 | `components/card`                              | ✅ Supported   | `Cards` / `Card` on shadcn/ui `card`                                                                        |
 | `components/codeblock`                         | ✅ Supported   | Code tabs on shadcn/ui `tabs`                                                                               |
-| `components/codeblock.rsc`                     | ✅ Supported   | `ServerCodeBlock`                                                                                           |
+| `components/codeblock.rsc`                     | ✅ Supported   | `ServerCodeBlock`, `createServerCodeBlock`                                                                  |
 | `components/dialog/search`                     | ✅ Supported   | On Base UI `Dialog`                                                                                         |
 | `components/dialog/search-algolia`             | ➖ Not planned | Build one from the dialog parts                                                                             |
 | `components/dialog/search-default`             | ✅ Supported   |                                                                                                             |
@@ -22,7 +22,7 @@ This table lists every module that Fumadocs UI ([`@fumadocs/base-ui`](https://gi
 | `components/files`                             | ✅ Supported   | On shadcn/ui `collapsible`; renders `remark-mdx-files` output                                               |
 | `components/github-info`                       | ✅ Supported   |                                                                                                             |
 | `components/heading`                           | ✅ Supported   |                                                                                                             |
-| `components/image-zoom`                        | ✅ Supported   | Ships react-medium-image-zoom's styles                                                                      |
+| `components/image-zoom`                        | ✅ Supported   | `ImageZoom` and `Lightbox`; ships react-medium-image-zoom's styles                                          |
 | `components/inline-toc`                        | ✅ Supported   | On shadcn/ui `collapsible`                                                                                  |
 | `components/sidebar/base`                      | ➖ Not planned | Replaced by the shadcn/ui `sidebar`; docscn's file only holds translated `SidebarTrigger` and `SidebarRail` |
 | `components/sidebar/link-item`                 | ✅ Supported   | Exports `SidebarLinkItem` instead of `createLinkItemRenderer`                                               |
