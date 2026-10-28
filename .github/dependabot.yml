@@ -33,11 +33,29 @@ updates:
         update-types:
           - minor
           - patch
+        # the groups above overlap these, exclude their dependencies so
+        # they don't arrive twice
+        exclude-patterns:
+          - "fumadocs-*"
+          - "next"
+          - "eslint-config-next"
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
       development:
         dependency-type: development
         update-types:
           - minor
           - patch
+        exclude-patterns:
+          - "fumadocs-*"
+          - "next"
+          - "eslint-config-next"
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
     ignore:
       # ESLint stays on 9 until eslint-config-next's plugins support 10, and
       # TypeScript majors change the tsc/typescript-eslint split (AGENTS.md).
