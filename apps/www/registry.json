@@ -191,13 +191,15 @@
       "name": "layout-shared",
       "type": "registry:component",
       "title": "Shared layout options",
-      "description": "BaseLayoutProps, link items, layout tabs, the AI chat panel, the skip link and helpers shared by the docs, notebook and home layouts.",
+      "description": "BaseLayoutProps, link items, layout tabs, the AI chat panel and button, the skip link and helpers shared by the docs, notebook and home layouts.",
       "dependencies": [
         "@fuma-translate/react@^1.0.2",
         "cn",
-        "fumadocs-core@^16.17.8"
+        "fumadocs-core@^16.17.8",
+        "lucide-react"
       ],
       "registryDependencies": [
+        "button",
         "@docscn/docs-utils",
         "@docscn/theme-switch",
         "@docscn/search-trigger"

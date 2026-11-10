@@ -20,7 +20,7 @@ import {
   type LinkItemType,
   useLinkItems,
 } from "../shared";
-import { AIChatPanel, SkipToContent } from "../shared/client";
+import { AIChatPanel, AIChatTrigger, SkipToContent } from "../shared/client";
 import type { DocsLayoutProps } from ".";
 import { Container } from "./slots/container";
 import { CollapsedSidebarPanel, Header } from "./slots/header";
@@ -134,6 +134,7 @@ export function LayoutBody(
                 {aiChat.panel}
               </AIChatPanel>
             )}
+            {aiChat?.trigger && <AIChatTrigger {...aiChat} />}
           </SidebarProvider>
         </SidebarTreeOptionsProvider>
       </LayoutContext>
