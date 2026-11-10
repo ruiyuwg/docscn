@@ -1263,7 +1263,7 @@
       "type": "registry:component",
       "title": "Dynamic code block",
       "description": "DynamicCodeBlock: a code block highlighted with Shiki in the browser, for code that's only known at runtime.",
-      "dependencies": ["cn", "fumadocs-core@^16.17.8", "shiki@^4.5.0"],
+      "dependencies": ["cn", "fumadocs-core@^16.17.8", "shiki@^4.6.0"],
       "registryDependencies": ["@docscn/codeblock"],
       "files": [
         {
