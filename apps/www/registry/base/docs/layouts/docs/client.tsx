@@ -20,7 +20,7 @@ import {
   type LinkItemType,
   useLinkItems,
 } from "../shared";
-import { AIChatPanel } from "../shared/client";
+import { AIChatPanel, SkipToContent } from "../shared/client";
 import type { DocsLayoutProps } from ".";
 import { Container } from "./slots/container";
 import { CollapsedSidebarPanel, Header } from "./slots/header";
@@ -107,6 +107,7 @@ export function LayoutBody(
             open={collapsible ? open : true}
             onOpenChange={onOpenChange}
           >
+            <SkipToContent />
             {sidebarEnabled && (
               <Sidebar collapsible={collapsible} {...sidebarProps} />
             )}

@@ -9,7 +9,7 @@ import { SidebarTreeOptionsProvider } from "../../components/sidebar/page-tree";
 import { TreeContextProvider } from "../../contexts/tree";
 import { useIsScrollTop } from "../../utils/use-is-scroll-top";
 import { type LayoutTab, type LinkItemType, useLinkItems } from "../shared";
-import { AIChatPanel } from "../shared/client";
+import { AIChatPanel, SkipToContent } from "../shared/client";
 import type { DocsLayoutProps } from ".";
 import { Container } from "./slots/container";
 import { Header } from "./slots/header";
@@ -101,6 +101,7 @@ export function LayoutBody(
             open={collapsible ? open : true}
             onOpenChange={onOpenChange}
           >
+            <SkipToContent />
             <Container navEnabled={navEnabled} {...containerProps}>
               {navEnabled && navMode === "top" && <Header />}
               <div className="flex flex-1">

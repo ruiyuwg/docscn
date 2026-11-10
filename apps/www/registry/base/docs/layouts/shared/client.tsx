@@ -4,6 +4,7 @@
 
 import { usePathname } from "fumadocs-core/framework";
 import Link from "fumadocs-core/link";
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
 import { type ComponentProps, type ReactNode, useState } from "react";
 import { isLinkItemActive, type LinkItemType, type NavOptions } from ".";
@@ -82,5 +83,15 @@ export function AIChatPanel({
         {mounted && children}
       </div>
     </aside>
+  );
+}
+
+export function SkipToContent() {
+  const t = useTranslations({ note: "skip link" });
+
+  return (
+    <a href="#nd-page" className="sr-only">
+      {t("Skip to Content")}
+    </a>
   );
 }
