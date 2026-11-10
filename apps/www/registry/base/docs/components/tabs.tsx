@@ -71,7 +71,7 @@ const TabsContext = createContext<{
   collection: CollectionKey[];
   /** Mounted panels by value, to open the tab containing a hash target */
   panels: Map<string, HTMLElement>;
-  /** Tab values by their panel's `id`, including panels that aren't mounted */
+  /** Tab values by their `id` (URL hash), including panels that aren't mounted */
   ids: Map<string, string>;
 } | null>(null);
 
@@ -251,11 +251,13 @@ export function Tab({ value, ...props }: TabProps) {
 export function TabsContent({
   ref,
   value,
+  id,
   className,
   ...props
 }: WithStringClassName<ComponentProps<typeof TabsContentPrimitive>>) {
   const { panels, ids } = useTabContext();
-  if (props.id) ids.set(props.id, value as string);
+  // `id` is the tab's URL hash, the panel keeps the primitive's id that triggers point `aria-controls` at
+  if (id) ids.set(id, value as string);
 
   return (
     <TabsContentPrimitive
@@ -300,5 +302,5 @@ function useCollectionIndex() {
  * only escape whitespaces in values in simple mode
  */
 function escapeValue(v: string): string {
-  return v.toLowerCase().replace(/\s/, "-");
+  return v.toLowerCase().replace(/\s+/g, "-");
 }

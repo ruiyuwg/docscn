@@ -4,9 +4,17 @@
 
 import { usePathname } from "fumadocs-core/framework";
 import Link from "fumadocs-core/link";
+import { useTranslations } from "@fuma-translate/react";
 import { cn } from "cn";
+import { MessageCircleIcon } from "lucide-react";
 import { type ComponentProps, type ReactNode, useState } from "react";
-import { isLinkItemActive, type LinkItemType, type NavOptions } from ".";
+import { Button } from "@/components/ui/button";
+import {
+  type AIChatOptions,
+  isLinkItemActive,
+  type LinkItemType,
+  type NavOptions,
+} from ".";
 
 export function LinkItem({
   ref,
@@ -82,5 +90,36 @@ export function AIChatPanel({
         {mounted && children}
       </div>
     </aside>
+  );
+}
+
+/** a floating button toggling the chat, for layouts without one of their own */
+export function AIChatTrigger({ open, onOpenChange }: AIChatOptions) {
+  const t = useTranslations({ note: "AI chat button" });
+
+  return (
+    <Button
+      variant="secondary"
+      aria-expanded={open}
+      className={cn(
+        "fixed inset-e-4 bottom-4 z-20 gap-2 rounded-2xl text-muted-foreground shadow-lg transition-[translate,opacity] motion-reduce:transition-none",
+        open && "translate-y-10 opacity-0",
+      )}
+      inert={open}
+      onClick={() => onOpenChange(!open)}
+    >
+      <MessageCircleIcon aria-hidden className="size-4.5" />
+      {t("Ask AI")}
+    </Button>
+  );
+}
+
+export function SkipToContent() {
+  const t = useTranslations({ note: "skip link" });
+
+  return (
+    <a href="#nd-page" className="sr-only">
+      {t("Skip to Content")}
+    </a>
   );
 }

@@ -64,6 +64,7 @@ export const keys = [
   "Search(search dialog)",
   "Search(search trigger)",
   "Show Sidebar(sidebar)",
+  "Skip to Content(skip link)",
   "System(theme switcher)(aria-label)",
   "Table of Contents(inline table of contents)",
   "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.(404 not found page)",

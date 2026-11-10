@@ -119,7 +119,7 @@ Because it uses the shadcn/ui sidebar, `useSidebar()` from `@/components/ui/side
           <a href="#ai-chat">AI chat</a>.
         </>
       ),
-      type: "{ open, onOpenChange, panel? }",
+      type: "{ open, onOpenChange, panel?, trigger? }",
     },
   }}
 />
@@ -184,7 +184,7 @@ The rest are passed to the shadcn/ui `Sidebar` (e.g. `variant`, `side`, `classNa
 
 ## AI chat
 
-Pass your chat as `aiChat.panel`, with its open state. While it's open, the layout docks the panel against the right edge of the window from the `xl` breakpoint, narrowing the page and hiding the table of contents. Below `xl`, it floats over the page. The panel renders the first time it opens.
+Pass your chat as `aiChat.panel`, with its open state. While it's open, the layout docks the panel against the right edge of the window from the `xl` breakpoint, narrowing the page and hiding the table of contents. Below `xl`, it floats over the page. The panel renders the first time it opens. Set `aiChat.trigger` to add a floating **Ask AI** button that toggles it, unless your chat has its own button.
 
 The open state lives on the client, so render the layout from a client component:
 
